@@ -111,12 +111,16 @@ h1{font-size:20px;margin:0;font-weight:750;letter-spacing:-.01em}
 .kpi.hero .lab,.kpi.hero .note{color:#e6fffb}
 .kpi.hero .ic{background:rgba(255,255,255,.2)!important}
 .kpi.hero .ic svg{stroke:#fff!important}
-.chartnav{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:0 0 4px}
-.navtile{display:flex;align-items:center;gap:8px;padding:10px 12px;border-radius:11px;cursor:pointer;color:#fff;background:linear-gradient(135deg,#0f766e,#0d9488);border:none;box-shadow:var(--sh);transition:transform .15s,box-shadow .15s;font:inherit;text-align:left;width:100%}
+.chartnav{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:9px;margin:0 0 4px}
+.navtile{display:block;padding:9px 11px;border-radius:11px;cursor:pointer;color:#fff;background:linear-gradient(135deg,#0f766e,#0d9488);border:none;box-shadow:var(--sh);transition:transform .15s,box-shadow .15s;font:inherit;text-align:left;width:100%}
 .navtile:hover{transform:translateY(-2px);box-shadow:var(--sh2)}
-.navtile .nic{width:24px;height:24px;border-radius:7px;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.navtile .nic svg{width:14px;height:14px;stroke:#fff;fill:none;stroke-width:2}
-.navtile .nlab{font-size:10.5px;font-weight:600;line-height:1.15;letter-spacing:.02em;text-transform:uppercase;color:#eafff9}
+.navtile .ntop{display:flex;align-items:center;gap:7px;margin-bottom:5px}
+.navtile .nic{width:22px;height:22px;border-radius:6px;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.navtile .nic svg{width:13px;height:13px;stroke:#fff;fill:none;stroke-width:2}
+.navtile .nlab{font-size:9px;font-weight:600;line-height:1.15;letter-spacing:.03em;text-transform:uppercase;color:#eafff9}
+.navtile .nval{font-size:17px;font-weight:750;letter-spacing:-.01em;line-height:1;color:#fff}
+.ftag{display:inline-block;margin-left:9px;padding:2px 8px;border-radius:999px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;background:#0f766e26;color:#5eead4;vertical-align:middle;border:1px solid #0f766e55}
+:root[data-theme="light"] .ftag{background:#0f766e14;color:#0f766e;border-color:#0f766e44}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 @media(max-width:820px){.grid{grid-template-columns:1fr}}
 .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;box-shadow:var(--sh);transition:box-shadow .15s}
@@ -297,11 +301,7 @@ tbody tr:hover{background:#0f766e08}
         <div class="hint">Where each property's revenue goes: platform commission and cleaning (both modelled), leaving net contribution. Margin % shown per property. Excludes fixed overheads.</div>
         <div class="chartbox tall"><canvas id="chMargin"></canvas></div>
       </div>
-      <div class="card full">
-        <h3>Channel summary</h3>
-        <div class="hint">Per-channel revenue, nights, reservations, ADR and average booking value.</div>
-        <table id="tblChannel"><thead></thead><tbody></tbody></table>
-      </div>
+      
     </div>
 
     <div class="sec"><span>Guest &amp; booking behaviour</span></div>
@@ -635,6 +635,32 @@ function render(){
     _cms.forEach(function(i){ var m=CBRK[i], rt=m.rev[0]+m.rev[1]; var w=(_hs?(rt>0?m.rev[0]/rt:0.5):0)+(_ha?(rt>0?m.rev[1]/rt:0.5):0);
       _opcost += (_hs?m.comm[0]:0)+(_ha?m.comm[1]:0)+(_hs?m.clean[0]:0)+(_ha?m.clean[1]:0)+(m.elec+m.gas+m.supplies+m.maint+m.ins+m.rates+m.bband+m.pms+m.dyn+m.solar)*w; });
   } }catch(e){}
+  // ---- per-chart headline values (filter-responsive) ----
+  try{
+    var _mRev={},_qRev={},_yRev={};
+    booked.forEach(function(r){var d=new Date(r.start_date),y=d.getUTCFullYear(),mo=d.getUTCMonth();
+      var mk=y+'-'+mo; _mRev[mk]=(_mRev[mk]||0)+(+r.rental_revenue||0);
+      var qk=y+'Q'+(Math.floor(mo/3)+1); _qRev[qk]=(_qRev[qk]||0)+(+r.rental_revenue||0);
+      _yRev[y]=(_yRev[y]||0)+(+r.rental_revenue||0);});
+    var _nMonths=Object.keys(_mRev).length||1, _peakQtr=0; for(var _qk in _qRev)_peakQtr=Math.max(_peakQtr,_qRev[_qk]);
+    var _r25=_yRev[2025]||0,_r26=_yRev[2026]||0, _yoy=_r25?Math.round((_r26-_r25)/_r25*100):null;
+    var _adr=nights?rev/nights:0, _avgLead=n?Math.round(sum(booked,'lead_time')/n):0, _avgStay=n?nights/n:0;
+    var _chRev={}; booked.forEach(function(r){var s=r.booking_source;_chRev[s]=(_chRev[s]||0)+(+r.rental_revenue||0);});
+    var _ota=0; for(var _s in _chRev){ if(!DIRECT_SOURCES.has(_s)) _ota+=_chRev[_s]; }
+    var _otaPct=rev?Math.round(_ota/rev*100):0, _costPct=rev?Math.round((commTotal+cleanTotal)/rev*100):0;
+    var _marginPct=rev?Math.round(contribution/rev*100):0, _surplus=rev-_opcost;
+    window.__cv={
+      chMonthly:nz(rev), chAnnual:nz(rev), chQMatrix:nz(_peakQtr),
+      chTrend:nz(_nMonths?rev/_nMonths:0), chYoY:(_yoy==null?'\u2014':(_yoy>0?'+':'')+_yoy+'%'),
+      chCmpPerf:nz(_r26), chOcc:(occPct==null?'\u2014':occPct+'%'), chSeason:(occPct==null?'\u2014':occPct+'%'),
+      chCreated:n.toLocaleString(), chPace:nz(rev), chLead:_avgLead+' days', chLen:_avgStay.toFixed(2)+' nts',
+      chMarket:nz2(_adr), chRevChannel:_otaPct+'% OTA', chNightsChannel:nights.toLocaleString(),
+      chDirect:directPct+'%', chCmpDir:directN+' direct', chCost:_costPct+'%', chMargin:_marginPct+'%',
+      chQCost:nz(_surplus), chIvE:nz(_surplus), chCostMix:(_opcost?nz(_opcost):'\u2014'),
+      chYr:nz(_r26), chVal:'$4.0M'
+    };
+    if(window.__chartTiles)window.__chartTiles();
+  }catch(e){}
   const kpi=[
     ['Revenue',nz(rev),'','cash','#0f766e','hero'],
     ['Operating costs',_opcost?nz(_opcost):'—','','receipt','#0f766e','hero'],
@@ -651,7 +677,7 @@ function render(){
     ['Operating margin',rev?Math.round(contribution/rev*100)+'%':'—','after commission & cleaning','percent','#0f766e'],
     ['Net contribution',nz(contribution),'rev − commission − cleaning','cash','#0f766e'],
   ];
-  const KPI_TARGET={'Operating costs':'chCostMix','Revenue':'chMonthly','Nights booked':'chMonthly','Occupancy rate':'chOcc','RevPAR':'chMonthly','ADR (price / night)':'chMarket','Avg booking value':'tblChannel','Avg stay length':'chLen','Avg lead time':'chLead','Reservations':'chCreated','Commission saved (direct)':'chDirect','Direct bookings':'chDirect','Operating margin':'chMargin','Net contribution':'chMargin'};
+  const KPI_TARGET={'Operating costs':'chCostMix','Revenue':'chMonthly','Nights booked':'chMonthly','Occupancy rate':'chOcc','RevPAR':'chMonthly','ADR (price / night)':'chMarket','Avg booking value':'chRevChannel','Avg stay length':'chLen','Avg lead time':'chLead','Reservations':'chCreated','Commission saved (direct)':'chDirect','Direct bookings':'chDirect','Operating margin':'chMargin','Net contribution':'chMargin'};
   document.getElementById('kpis').innerHTML=kpi.map(k=>{
     const hero=true;
     const icBg=hero?'':`background:${k[4]}18`;
@@ -775,9 +801,7 @@ function render(){
 
 
   // channel table
-  fillTable('tblChannel',['Channel','Revenue','Nights','Res','ADR','Avg booking'],
-    chKeys.map(k=>[chName(k),nz(byCh[k].rev),byCh[k].nights,byCh[k].n,nz2(byCh[k].rev/byCh[k].nights),nz(byCh[k].rev/byCh[k].n)]),
-    ['Total',nz(rev),nights,n,n?nz2(rev/nights):'—',n?nz(rev/n):'—']);
+  
 
   // property summary (summary data only)
   const byP={};
@@ -1286,22 +1310,41 @@ const CBRK=[{"k":"Mar-25","s":1740787200000,"e":1743465599000,"b":"Actual","rev"
 (function(){
   var CHARTS=[["chMonthly", "Revenue & nights"], ["chAnnual", "Annual revenue"], ["chQMatrix", "Quarterly revenue"], ["chTrend", "Revenue trend"], ["chYoY", "Revenue YoY"], ["chCmpPerf", "2025 vs 2026"], ["chOcc", "Occupancy"], ["chSeason", "Occupancy by season"], ["chCreated", "Reservations created"], ["chPace", "Booking pace"], ["chLead", "Lead time"], ["chLen", "Stay length"], ["chMarket", "Rate vs market"], ["chRevChannel", "Revenue by channel"], ["chNightsChannel", "Nights by channel"], ["chDirect", "Direct share"], ["chCmpDir", "Direct 2025 vs 2026"], ["chCost", "Cost ratios"], ["chMargin", "Operating margin"], ["chQCost", "Cost vs income"], ["chIvE", "Income vs expenses"], ["chCostMix", "Cost breakdown"], ["chYr", "Year comparison"], ["chVal", "Value bands"]];
   var ICO='<svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>';
+  var refs={};
   function build(){
     var wrap=document.getElementById('chartnav'); if(!wrap) return;
-    wrap.innerHTML='';
+    wrap.innerHTML=''; refs={};
     CHARTS.forEach(function(c){
       var el=document.getElementById(c[0]); if(!el) return;
       var b=document.createElement('button'); b.className='navtile'; b.type='button';
-      b.innerHTML='<span class="nic">'+ICO+'</span><span class="nlab">'+c[1]+'</span>';
-      b.addEventListener('click',function(){
-        var card=el.closest('.card')||el;
-        card.scrollIntoView({behavior:'smooth',block:'center'});
-      });
-      wrap.appendChild(b);
+      b.innerHTML='<div class="ntop"><span class="nic">'+ICO+'</span><span class="nlab">'+c[1]+'</span></div><div class="nval" data-cv="'+c[0]+'">\u2014</div>';
+      b.addEventListener('click',function(){ (el.closest('.card')||el).scrollIntoView({behavior:'smooth',block:'center'}); });
+      wrap.appendChild(b); refs[c[0]]=b.querySelector('.nval');
     });
+    update();
   }
+  function update(){
+    var cv=window.__cv||{};
+    for(var id in refs){ if(refs[id]) refs[id].textContent=(cv[id]!=null?cv[id]:'\u2014'); }
+  }
+  window.__chartTiles=function(){ if(Object.keys(refs).length) update(); };
   if(document.readyState!=='loading')setTimeout(build,300);
   else document.addEventListener('DOMContentLoaded',function(){setTimeout(build,300);});
+})();
+</script>
+<script>
+(function(){
+  var FULL=['chCmpPerf','chCmpDir','chYoY','chPace','chSeason','chYr'];
+  var MKT=['chMarket'];
+  function badge(id,txt){
+    var el=document.getElementById(id); if(!el) return;
+    var c=el.closest('.card'); if(!c) return;
+    var h=c.querySelector('h3'); if(!h||h.querySelector('.ftag')) return;
+    var s=document.createElement('span'); s.className='ftag'; s.textContent=txt; h.appendChild(s);
+  }
+  function tag(){ FULL.forEach(function(id){badge(id,'Full timeline');}); MKT.forEach(function(id){badge(id,'Market benchmark');}); }
+  if(document.readyState!=='loading')setTimeout(tag,450);
+  else document.addEventListener('DOMContentLoaded',function(){setTimeout(tag,450);});
 })();
 </script>
 </body>
