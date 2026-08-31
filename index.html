@@ -617,8 +617,16 @@ function render(){
   const occToDate=(tEff<t); // true when denominator was capped at today
   var _firstBk=booked.length?Math.min.apply(null,booked.map(function(r){return r.start_date;})):null;
   var _sinceTxt=_firstBk?' since '+new Date(_firstBk).toLocaleDateString('en-NZ',{month:'short',year:'numeric'}):'';
+  // Operating cost total (matches the Operating cost breakdown chart, same date+property filter)
+  var _cf=Date.parse(document.getElementById('from').value+'T00:00:00Z'), _cto=Date.parse(document.getElementById('to').value+'T23:59:59Z');
+  var _cms=[]; for(var _i=0;_i<CBRK.length;_i++){ if(!(CBRK[_i].e<_cf||CBRK[_i].s>_cto)) _cms.push(_i); } if(!_cms.length){ for(var _j=0;_j<CBRK.length;_j++) _cms.push(_j); }
+  var _hs=false,_ha=false; try{ if(selProps.size){ _hs=selProps.has('Stone Cottage'); _ha=selProps.has('Arrow Junction Cottage'); } }catch(e){} if(!_hs&&!_ha){_hs=true;_ha=true;}
+  var _opcost=0;
+  _cms.forEach(function(i){ var m=CBRK[i], rt=m.rev[0]+m.rev[1]; var w=(_hs?(rt>0?m.rev[0]/rt:0.5):0)+(_ha?(rt>0?m.rev[1]/rt:0.5):0);
+    _opcost += (_hs?m.comm[0]:0)+(_ha?m.comm[1]:0)+(_hs?m.clean[0]:0)+(_ha?m.clean[1]:0)+(m.elec+m.gas+m.supplies+m.maint+m.ins+m.rates+m.bband+m.pms+m.dyn+m.solar)*w; });
   const kpi=[
     ['Total revenue',nz(rev),n+' bookings'+_sinceTxt,'cash','#0f766e','hero'],
+    ['Operating costs',nz(_opcost),'commission, cleaning & site costs','receipt','#e11d48','hero'],
     ['Nights booked',nights.toLocaleString(),'','moon','#2563eb'],
     ['Occupancy rate',occPct!=null?occPct+'%':'—',occToDate?'room-nights, to date':'room-nights in period','gauge','#7c3aed'],
     ['RevPAR',avail?nz2(rev/avail):'—','rev / avail night','chart','#0f766e'],
@@ -632,7 +640,7 @@ function render(){
     ['Operating margin',rev?Math.round(contribution/rev*100)+'%':'—','after commission & cleaning','percent','#0d9488'],
     ['Net contribution',nz(contribution),'rev − commission − cleaning','cash','#0f766e'],
   ];
-  const KPI_TARGET={'Total revenue':'chMonthly','Nights booked':'chMonthly','Occupancy rate':'chOcc','RevPAR':'chMonthly','ADR (price / night)':'chMarket','Avg booking value':'tblChannel','Avg stay length':'chLen','Avg lead time':'chLead','Guests hosted':'chCreated','Commission saved (direct)':'chDirect','Direct bookings':'chDirect','Operating margin':'chMargin','Net contribution':'chMargin'};
+  const KPI_TARGET={'Operating costs':'chCostMix','Total revenue':'chMonthly','Nights booked':'chMonthly','Occupancy rate':'chOcc','RevPAR':'chMonthly','ADR (price / night)':'chMarket','Avg booking value':'tblChannel','Avg stay length':'chLen','Avg lead time':'chLead','Guests hosted':'chCreated','Commission saved (direct)':'chDirect','Direct bookings':'chDirect','Operating margin':'chMargin','Net contribution':'chMargin'};
   document.getElementById('kpis').innerHTML=kpi.map(k=>{
     const hero=k[5]==='hero';
     const icBg=hero?'':`background:${k[4]}18`;
