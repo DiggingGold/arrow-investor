@@ -627,7 +627,7 @@ function render(){
       _opcost += (_hs?m.comm[0]:0)+(_ha?m.comm[1]:0)+(_hs?m.clean[0]:0)+(_ha?m.clean[1]:0)+(m.elec+m.gas+m.supplies+m.maint+m.ins+m.rates+m.bband+m.pms+m.dyn+m.solar)*w; });
   } }catch(e){}
   const kpi=[
-    ['Total revenue',nz(rev),n+' bookings'+_sinceTxt,'cash','#0f766e','hero'],
+    ['Total revenue',nz(rev),'','cash','#0f766e','hero'],
     ['Operating costs',_opcost?nz(_opcost):'—','','receipt','#e11d48','hero'],
     ['Nights booked',nights.toLocaleString(),'','moon','#2563eb'],
     ['Occupancy rate',occPct!=null?occPct+'%':'—',occToDate?'room-nights, to date':'room-nights in period','gauge','#7c3aed'],
