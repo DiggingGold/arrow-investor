@@ -113,6 +113,9 @@ h1{font-size:20px;margin:0;font-weight:750;letter-spacing:-.01em}
 .kpi.hero .ic svg{stroke:#fff!important}
 .chartnav{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:9px;margin:0 0 4px}
 .navtile{display:block;padding:9px 11px;border-radius:11px;cursor:pointer;color:#fff;background:linear-gradient(135deg,#0f766e,#0d9488);border:none;box-shadow:var(--sh);transition:transform .15s,box-shadow .15s;font:inherit;text-align:left;width:100%}
+.navtile{cursor:grab}
+.navtile:active{cursor:grabbing}
+.navtile.dragging{opacity:.45;outline:2px dashed #5eead4;outline-offset:-2px}
 .navtile:hover{transform:translateY(-2px);box-shadow:var(--sh2)}
 .navtile .ntop{display:flex;align-items:center;gap:7px;margin-bottom:5px}
 .navtile .nic{width:22px;height:22px;border-radius:6px;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0}
@@ -182,7 +185,7 @@ tbody tr:hover{background:#0f766e08}
       </div>
     </div>
 
-    <div class="sec"><span>Jump to a chart</span></div>
+    <div class="sec"><span>Jump to a chart</span><span style="font-size:11px;color:var(--muted2);font-weight:500;text-transform:none;letter-spacing:0;margin-left:10px">click to jump · drag to reorder</span></div>
     <div class="chartnav" id="chartnav"></div>
 
     <div class="sec"><span>Property summary</span></div>
@@ -1304,25 +1307,45 @@ const CBRK=[{"k":"Mar-25","s":1740787200000,"e":1743465599000,"b":"Actual","rev"
 
 <script>
 (function(){
-  var CHARTS=[["chMonthly", "Revenue"], ["chAnnual", "Annual revenue"], ["chQMatrix", "Quarterly revenue"], ["chTrend", "Revenue trend"], ["chYoY", "Revenue YoY"], ["chCmpPerf", "2025 vs 2026"], ["chOcc", "Occupancy"], ["chSeason", "Occupancy by season"], ["chCreated", "Reservations created"], ["chPace", "Booking pace"], ["chLead", "Lead time"], ["chLen", "Stay length"], ["chMarket", "Rate vs market"], ["chRevChannel", "Revenue by channel"], ["chNightsChannel", "Nights by channel"], ["chDirect", "Direct share"], ["chCmpDir", "Direct 2025 vs 2026"], ["chCost", "Cost ratios"], ["chMargin", "Operating margin"], ["chQCost", "Cost vs income"], ["chIvE", "Income vs expenses"], ["chCostMix", "Cost breakdown"], ["chYr", "Year comparison"]];
+  var CHARTS=[["chMonthly", "Revenue"], ["chQMatrix", "Quarterly revenue"], ["chTrend", "Revenue trend"], ["chYoY", "Revenue YoY"], ["chCmpPerf", "2025 vs 2026"], ["chOcc", "Occupancy"], ["chSeason", "Occupancy by season"], ["chCreated", "Reservations created"], ["chPace", "Booking pace"], ["chLead", "Lead time"], ["chLen", "Stay length"], ["chMarket", "Rate vs market"], ["chRevChannel", "Revenue by channel"], ["chNightsChannel", "Nights by channel"], ["chDirect", "Direct share"], ["chCmpDir", "Direct 2025 vs 2026"], ["chCost", "Cost ratios"], ["chMargin", "Operating margin"], ["chQCost", "Cost vs income"], ["chIvE", "Income vs expenses"], ["chCostMix", "Cost breakdown"], ["chYr", "Year comparison"]];
   var ICO='<svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>';
-  var refs={};
+  var STORE='arrowChartOrder_v1';
+  var refs={}, dragEl=null;
+  function savedOrder(){ try{return JSON.parse(localStorage.getItem(STORE)||'null');}catch(e){return null;} }
+  function saveOrder(){ try{var ids=[].slice.call(wrap().querySelectorAll('.navtile')).map(function(b){return b.dataset.chart;}); localStorage.setItem(STORE,JSON.stringify(ids));}catch(e){} }
+  function wrap(){ return document.getElementById('chartnav'); }
+  function ordered(){
+    var so=savedOrder(); if(!so||!so.length) return CHARTS.slice();
+    var byId={}; CHARTS.forEach(function(c){byId[c[0]]=c;});
+    var out=[]; so.forEach(function(id){ if(byId[id]){out.push(byId[id]); byId[id]=null;} });
+    CHARTS.forEach(function(c){ if(byId[c[0]]) out.push(c); }); // any new charts appended
+    return out;
+  }
+  function afterEl(x,y){
+    var els=[].slice.call(wrap().querySelectorAll('.navtile:not(.dragging)'));
+    var best=null,bestD=Infinity,ref=null;
+    els.forEach(function(el){var bx=el.getBoundingClientRect();var cx=bx.left+bx.width/2,cy=bx.top+bx.height/2;var d=Math.abs(y-cy)*3+Math.abs(x-cx);if(d<bestD){bestD=d;best=el;ref=(x<cx)?el:el.nextElementSibling;}});
+    return ref;
+  }
   function build(){
-    var wrap=document.getElementById('chartnav'); if(!wrap) return;
-    wrap.innerHTML=''; refs={};
-    CHARTS.forEach(function(c){
+    var w=wrap(); if(!w) return; w.innerHTML=''; refs={};
+    ordered().forEach(function(c){
       var el=document.getElementById(c[0]); if(!el) return;
-      var b=document.createElement('button'); b.className='navtile'; b.type='button';
+      var b=document.createElement('button'); b.className='navtile'; b.type='button'; b.setAttribute('draggable','true'); b.dataset.chart=c[0];
       b.innerHTML='<div class="ntop"><span class="nic">'+ICO+'</span><span class="nlab">'+c[1]+'</span></div><div class="nval" data-cv="'+c[0]+'">\u2014</div>';
-      b.addEventListener('click',function(){ (el.closest('.card')||el).scrollIntoView({behavior:'smooth',block:'center'}); });
-      wrap.appendChild(b); refs[c[0]]=b.querySelector('.nval');
+      var moved=false;
+      b.addEventListener('click',function(){ if(moved){moved=false;return;} (el.closest('.card')||el).scrollIntoView({behavior:'smooth',block:'center'}); });
+      b.addEventListener('dragstart',function(e){ dragEl=b; moved=true; b.classList.add('dragging'); try{e.dataTransfer.effectAllowed='move'; e.dataTransfer.setData('text/plain',c[0]);}catch(_){} });
+      b.addEventListener('dragend',function(){ b.classList.remove('dragging'); dragEl=null; saveOrder(); });
+      w.appendChild(b); refs[c[0]]=b.querySelector('.nval');
     });
+    if(!w.__dnd){ w.__dnd=true;
+      w.addEventListener('dragover',function(e){ if(!dragEl)return; e.preventDefault(); try{e.dataTransfer.dropEffect='move';}catch(_){} var ref=afterEl(e.clientX,e.clientY); if(ref===dragEl)return; if(ref==null)w.appendChild(dragEl); else w.insertBefore(dragEl,ref); });
+      w.addEventListener('drop',function(e){ e.preventDefault(); });
+    }
     update();
   }
-  function update(){
-    var cv=window.__cv||{};
-    for(var id in refs){ if(refs[id]) refs[id].textContent=(cv[id]!=null?cv[id]:'\u2014'); }
-  }
+  function update(){ var cv=window.__cv||{}; for(var id in refs){ if(refs[id]) refs[id].textContent=(cv[id]!=null?cv[id]:'\u2014'); } }
   window.__chartTiles=function(){ if(Object.keys(refs).length) update(); };
   if(document.readyState!=='loading')setTimeout(build,300);
   else document.addEventListener('DOMContentLoaded',function(){setTimeout(build,300);});
