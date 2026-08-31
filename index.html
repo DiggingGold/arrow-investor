@@ -644,7 +644,7 @@ function render(){
   ];
   const KPI_TARGET={'Operating costs':'chCostMix','Revenue':'chMonthly','Nights booked':'chMonthly','Occupancy rate':'chOcc','RevPAR':'chMonthly','ADR (price / night)':'chMarket','Avg booking value':'tblChannel','Avg stay length':'chLen','Avg lead time':'chLead','Reservations':'chCreated','Commission saved (direct)':'chDirect','Direct bookings':'chDirect','Operating margin':'chMargin','Net contribution':'chMargin'};
   document.getElementById('kpis').innerHTML=kpi.map(k=>{
-    const hero=k[5]==='hero';
+    const hero=true;
     const icBg=hero?'':`background:${k[4]}18`;
     const icStroke=hero?'#fff':k[4];
     return `<div class="kpi${hero?' hero':''}" data-t="${KPI_TARGET[k[0]]||''}" title="Click to jump to the chart"><div class="top">`+
