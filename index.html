@@ -628,7 +628,7 @@ function render(){
   } }catch(e){}
   const kpi=[
     ['Total revenue',nz(rev),n+' bookings'+_sinceTxt,'cash','#0f766e','hero'],
-    ['Operating costs',_opcost?nz(_opcost):'—','commission, cleaning & site costs','receipt','#e11d48','hero'],
+    ['Operating costs',_opcost?nz(_opcost):'—','','receipt','#e11d48','hero'],
     ['Nights booked',nights.toLocaleString(),'','moon','#2563eb'],
     ['Occupancy rate',occPct!=null?occPct+'%':'—',occToDate?'room-nights, to date':'room-nights in period','gauge','#7c3aed'],
     ['RevPAR',avail?nz2(rev/avail):'—','rev / avail night','chart','#0f766e'],
