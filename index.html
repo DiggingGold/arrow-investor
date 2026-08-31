@@ -636,13 +636,13 @@ function render(){
     ['Avg booking value',n?nz(rev/n):'—','','receipt','#2563eb'],
     ['Avg stay length',n?(nights/n).toFixed(2)+' nts':'—','','bed','#0d9488'],
     ['Avg lead time',n?Math.round(sum(booked,'lead_time')/n)+' days':'—','booking→check-in','clock','#d97706'],
-    ['Guests hosted',n.toLocaleString(),'reservations*','users','#db2777'],
+    ['Reservations',n.toLocaleString(),'','users','#db2777'],
     ['Commission saved (direct)',nz(commSaved),nz(directRev)+' direct rev','gift','#16a34a','hero'],
     ['Direct bookings',directN.toLocaleString(),directPct+'% of revenue · commission-free','users','#16a34a'],
     ['Operating margin',rev?Math.round(contribution/rev*100)+'%':'—','after commission & cleaning','percent','#0d9488'],
     ['Net contribution',nz(contribution),'rev − commission − cleaning','cash','#0f766e'],
   ];
-  const KPI_TARGET={'Operating costs':'chCostMix','Revenue':'chMonthly','Nights booked':'chMonthly','Occupancy rate':'chOcc','RevPAR':'chMonthly','ADR (price / night)':'chMarket','Avg booking value':'tblChannel','Avg stay length':'chLen','Avg lead time':'chLead','Guests hosted':'chCreated','Commission saved (direct)':'chDirect','Direct bookings':'chDirect','Operating margin':'chMargin','Net contribution':'chMargin'};
+  const KPI_TARGET={'Operating costs':'chCostMix','Revenue':'chMonthly','Nights booked':'chMonthly','Occupancy rate':'chOcc','RevPAR':'chMonthly','ADR (price / night)':'chMarket','Avg booking value':'tblChannel','Avg stay length':'chLen','Avg lead time':'chLead','Reservations':'chCreated','Commission saved (direct)':'chDirect','Direct bookings':'chDirect','Operating margin':'chMargin','Net contribution':'chMargin'};
   document.getElementById('kpis').innerHTML=kpi.map(k=>{
     const hero=k[5]==='hero';
     const icBg=hero?'':`background:${k[4]}18`;
