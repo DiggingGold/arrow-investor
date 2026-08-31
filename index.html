@@ -615,8 +615,10 @@ function render(){
   const occAvail=activeListings()*daysBetween(f,tEff);
   const occPct=occAvail?Math.round(occWin/occAvail*100):null;
   const occToDate=(tEff<t); // true when denominator was capped at today
+  var _firstBk=booked.length?Math.min.apply(null,booked.map(function(r){return r.start_date;})):null;
+  var _sinceTxt=_firstBk?' since '+new Date(_firstBk).toLocaleDateString('en-NZ',{month:'short',year:'numeric'}):'';
   const kpi=[
-    ['Total revenue',nz(rev),n+' bookings','cash','#0f766e','hero'],
+    ['Total revenue',nz(rev),n+' bookings'+_sinceTxt,'cash','#0f766e','hero'],
     ['Nights booked',nights.toLocaleString(),'','moon','#2563eb'],
     ['Occupancy rate',occPct!=null?occPct+'%':'—',occToDate?'room-nights, to date':'room-nights in period','gauge','#7c3aed'],
     ['RevPAR',avail?nz2(rev/avail):'—','rev / avail night','chart','#0f766e'],
