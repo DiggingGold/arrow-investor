@@ -111,6 +111,12 @@ h1{font-size:20px;margin:0;font-weight:750;letter-spacing:-.01em}
 .kpi.hero .lab,.kpi.hero .note{color:#e6fffb}
 .kpi.hero .ic{background:rgba(255,255,255,.2)!important}
 .kpi.hero .ic svg{stroke:#fff!important}
+.chartnav{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:0 0 4px}
+.navtile{display:flex;align-items:center;gap:8px;padding:10px 12px;border-radius:11px;cursor:pointer;color:#fff;background:linear-gradient(135deg,#0f766e,#0d9488);border:none;box-shadow:var(--sh);transition:transform .15s,box-shadow .15s;font:inherit;text-align:left;width:100%}
+.navtile:hover{transform:translateY(-2px);box-shadow:var(--sh2)}
+.navtile .nic{width:24px;height:24px;border-radius:7px;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.navtile .nic svg{width:14px;height:14px;stroke:#fff;fill:none;stroke-width:2}
+.navtile .nlab{font-size:10.5px;font-weight:600;line-height:1.15;letter-spacing:.02em;text-transform:uppercase;color:#eafff9}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 @media(max-width:820px){.grid{grid-template-columns:1fr}}
 .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;box-shadow:var(--sh);transition:box-shadow .15s}
@@ -174,6 +180,9 @@ tbody tr:hover{background:#0f766e08}
 
     <div class="sec"><span>Overview</span></div>
     <div class="kpis" id="kpis"></div>
+
+    <div class="sec"><span>Jump to a chart</span></div>
+    <div class="chartnav" id="chartnav"></div>
 
     <div class="sec"><span>Property summary</span></div>
     <div class="grid">
@@ -1270,6 +1279,29 @@ const CBRK=[{"k":"Mar-25","s":1740787200000,"e":1743465599000,"b":"Actual","rev"
   }
   btn.addEventListener('click',function(){var h=panel.hidden;panel.hidden=!h;btn.textContent=h?'Hide Valuation & Returns ▴':'Show Valuation & Returns ▾';if(h)compute();});
   var pi=document.getElementById('valPrice'); if(pi)pi.addEventListener('input',calc);
+})();
+</script>
+
+<script>
+(function(){
+  var CHARTS=[["chMonthly", "Revenue & nights"], ["chAnnual", "Annual revenue"], ["chQMatrix", "Quarterly revenue"], ["chTrend", "Revenue trend"], ["chYoY", "Revenue YoY"], ["chCmpPerf", "2025 vs 2026"], ["chOcc", "Occupancy"], ["chSeason", "Occupancy by season"], ["chCreated", "Reservations created"], ["chPace", "Booking pace"], ["chLead", "Lead time"], ["chLen", "Stay length"], ["chMarket", "Rate vs market"], ["chRevChannel", "Revenue by channel"], ["chNightsChannel", "Nights by channel"], ["chDirect", "Direct share"], ["chCmpDir", "Direct 2025 vs 2026"], ["chCost", "Cost ratios"], ["chMargin", "Operating margin"], ["chQCost", "Cost vs income"], ["chIvE", "Income vs expenses"], ["chCostMix", "Cost breakdown"], ["chYr", "Year comparison"], ["chVal", "Value bands"]];
+  var ICO='<svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>';
+  function build(){
+    var wrap=document.getElementById('chartnav'); if(!wrap) return;
+    wrap.innerHTML='';
+    CHARTS.forEach(function(c){
+      var el=document.getElementById(c[0]); if(!el) return;
+      var b=document.createElement('button'); b.className='navtile'; b.type='button';
+      b.innerHTML='<span class="nic">'+ICO+'</span><span class="nlab">'+c[1]+'</span>';
+      b.addEventListener('click',function(){
+        var card=el.closest('.card')||el;
+        card.scrollIntoView({behavior:'smooth',block:'center'});
+      });
+      wrap.appendChild(b);
+    });
+  }
+  if(document.readyState!=='loading')setTimeout(build,300);
+  else document.addEventListener('DOMContentLoaded',function(){setTimeout(build,300);});
 })();
 </script>
 </body>
