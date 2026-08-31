@@ -809,6 +809,7 @@ function render(){
 
   try{if(window.drawCmp)window.drawCmp();}catch(e){}
   try{if(window.__drawCostMix)window.__drawCostMix();}catch(e){}
+  try{if(window.__drawIvE)window.__drawIvE();}catch(e){}
 }
 
 function fillTable(id,head,rows,total){
@@ -1037,7 +1038,9 @@ function drawMonthly(labels,rev,nights,fut){
     if(getComputedStyle(card).position==='static')card.style.position='relative';
     var a=document.createElement('a');a.href='#';a.className='gfxtop';a.textContent='↑ Top';
     a.addEventListener('click',function(e){e.preventDefault();
-      (document.getElementById('kpis')||document.querySelector('.kpis')||document.body).scrollIntoView({behavior:'smooth',block:'start'});});
+      var top=document.querySelector('header')||document.querySelector('.wrap')||document.body.firstElementChild;
+      if(top)top.scrollIntoView({behavior:'smooth',block:'start'});
+      window.scrollTo({top:0,left:0,behavior:'smooth'});});
     card.appendChild(a);
   });}
   if(document.readyState!=='loading')setTimeout(add,250);else document.addEventListener('DOMContentLoaded',function(){setTimeout(add,250);});
@@ -1099,21 +1102,7 @@ const CBRK=[{"k":"Mar-25","s":1740787200000,"e":1743465599000,"b":"Actual","rev"
     var light=document.documentElement.dataset.theme==='light';
     var ink=light?'#0f1826':'#e6edf3', grid='#8892a611';
     ['chIvE','chCostMix','chYr'].forEach(function(id){var c=document.getElementById(id);var ex=c&&Chart.getChart(c);if(ex)ex.destroy();});
-    var fc=INVEXD.basis.map(function(b){return b==='Forecast';});
-    var incC=fc.map(function(f){return f?hatch('#2dd4bf'):'#2dd4bf';});
-    var expC=fc.map(function(f){return f?hatch('#f97316'):'#f97316';});
-    new Chart(document.getElementById('chIvE'),{
-      type:'bar',
-      data:{labels:INVEXD.months,datasets:[
-        {label:'Income',data:INVEXD.income,backgroundColor:incC,borderRadius:3},
-        {label:'Expenses',data:INVEXD.expenses,backgroundColor:expC,borderRadius:3}
-      ]},
-      options:{responsive:true,maintainAspectRatio:false,
-        plugins:{legend:{position:'top',labels:{boxWidth:12,color:ink}},
-          tooltip:{callbacks:{label:function(c){var m=(c.parsed.y&&INVEXD.income[c.dataIndex])?('  ·  '+Math.round((INVEXD.income[c.dataIndex]-INVEXD.expenses[c.dataIndex])/INVEXD.income[c.dataIndex]*100)+'% surplus'):'';return c.dataset.label+': '+fmt(c.parsed.y)+(c.datasetIndex===0?m:'');}}}},
-        scales:{x:{grid:{display:false},ticks:{color:ink,font:{size:9},maxRotation:60,minRotation:60,autoSkip:false}},
-          y:{grid:{color:grid},ticks:{color:ink,callback:function(v){return '$'+(v/1000)+'k';}}}}}
-    });
+    drawIvE();
     drawCostMix();
     var Y=INVEXD.ann;
     new Chart(document.getElementById('chYr'),{
@@ -1172,6 +1161,31 @@ const CBRK=[{"k":"Mar-25","s":1740787200000,"e":1743465599000,"b":"Actual","rev"
           y:{grid:{display:false},ticks:{color:ink,font:{size:10}}}}}
     });
   }
+  function drawIvE(){
+    if(typeof Chart==='undefined')return;
+    var el=document.getElementById('chIvE'); if(!el||el.clientWidth===0)return;
+    var light=document.documentElement.dataset.theme==='light';
+    var ink=light?'#0f1826':'#e6edf3', grid='#8892a611';
+    var idx=cmRange();
+    var months=idx.map(function(i){return INVEXD.months[i];});
+    var inc=idx.map(function(i){return INVEXD.income[i];});
+    var exp=idx.map(function(i){return INVEXD.expenses[i];});
+    var fc=idx.map(function(i){return INVEXD.basis[i]==='Forecast';});
+    var incC=fc.map(function(f){return f?hatch('#2dd4bf'):'#2dd4bf';});
+    var expC=fc.map(function(f){return f?hatch('#f97316'):'#f97316';});
+    var ex=Chart.getChart(el); if(ex)ex.destroy();
+    new Chart(el,{type:'bar',
+      data:{labels:months,datasets:[
+        {label:'Income',data:inc,backgroundColor:incC,borderRadius:3},
+        {label:'Expenses',data:exp,backgroundColor:expC,borderRadius:3}]},
+      options:{responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{position:'top',labels:{boxWidth:12,color:ink}},
+          tooltip:{callbacks:{label:function(c){var m=(c.parsed.y&&inc[c.dataIndex])?('  \u00b7  '+Math.round((inc[c.dataIndex]-exp[c.dataIndex])/inc[c.dataIndex]*100)+'% surplus'):'';return c.dataset.label+': '+fmt(c.parsed.y)+(c.datasetIndex===0?m:'');}}}},
+        scales:{x:{grid:{display:false},ticks:{color:ink,font:{size:9},maxRotation:60,minRotation:60,autoSkip:false}},
+          y:{grid:{color:grid},ticks:{color:ink,callback:function(v){return '$'+(v/1000)+'k';}}}}}
+    });
+  }
+  window.__drawIvE=drawIvE;
   window.__drawCostMix=drawCostMix;
   function visible(){var c=document.getElementById('chIvE');if(!c||c.clientWidth===0)return false;var app=document.getElementById('app');if(app&&getComputedStyle(app).display==='none')return false;return true;}
   function boot(){
