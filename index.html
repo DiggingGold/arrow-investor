@@ -166,8 +166,8 @@ tbody tr:hover{background:#0f766e08}
       </label>
       <div class="presets" style="margin-left:auto">
         <span class="chip" data-preset="ytd">YTD</span>
-        <span class="chip" data-preset="l12">Last 12 mo</span>
-        <span class="chip active" data-preset="next">Upcoming</span>
+        <span class="chip active" data-preset="l12">Last 12 mo</span>
+        <span class="chip" data-preset="next">Upcoming</span>
         <span class="chip" data-preset="all">All time</span>
       </div>
     </div>
@@ -1013,8 +1013,8 @@ function drawMonthly(labels,rev,nights,fut){
     document.documentElement.dataset.theme='dark';
     const _tb=document.getElementById('themeToggle'); if(_tb){_tb.textContent='Light';_tb.addEventListener('click',toggleTheme);}
     const _fb=document.getElementById('filterToggle'); if(_fb)_fb.addEventListener('click',toggleFilters);
-    const _up=document.querySelector('.chip[data-preset=\"next\"]');
-    if(_up){applyPreset('next',_up);}else{render();}
+    const _up=document.querySelector('.chip[data-preset=\"l12\"]');
+    if(_up){applyPreset('l12',_up);}else{render();}
   }catch(e){
     document.getElementById('loading').style.display='none';
     console.error('dashboard error:',e&&e.stack||e);const b=document.getElementById('errbox');b.style.display='block';
