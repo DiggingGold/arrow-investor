@@ -350,7 +350,7 @@ tbody tr:hover{background:#0f766e08}
       </div>
       <div class="card">
         <h3>Operating cost breakdown</h3>
-        <div class="hint">Operating costs over the selected period. Commission &amp; cleaning are actual per cottage; shared site costs (electricity, gas, rates, insurance, broadband, PMS, pricing, Solar) are allocated by revenue share when one cottage is selected.</div>
+        <div class="hint">Operating costs over the selected period. Commission &amp; cleaning are actual per cottage; shared site costs (electricity, gas, rates, insurance, broadband, PMS, pricing, Solar) are allocated by revenue share when one cottage is selected. Percentages are each cost as a share of revenue (e.g. commission runs ~15% of revenue).</div>
         <div class="chartbox"><canvas id="chCostMix"></canvas></div>
       </div>
       <div class="card">
@@ -1171,9 +1171,10 @@ const CBRK=[{"k":"Mar-25","s":1740787200000,"e":1743465599000,"b":"Actual","rev"
     var light=document.documentElement.dataset.theme==='light';
     var ink=light?'#0f1826':'#e6edf3', grid='#8892a611';
     var ms=cmRange(), sel=cmSel();
-    var A={comm:0,clean:0,elec:0,gas:0,supplies:0,maint:0,ins:0,rates:0,bband:0,pms:0,dyn:0,solar:0};
+    var A={comm:0,clean:0,elec:0,gas:0,supplies:0,maint:0,ins:0,rates:0,bband:0,pms:0,dyn:0,solar:0}, totRev=0;
     ms.forEach(function(i){
       var m=CBRK[i], rs=m.rev[0], ra=m.rev[1], rt=rs+ra;
+      totRev+=(sel.s?rs:0)+(sel.a?ra:0);
       var shS=rt>0?rs/rt:0.5, shA=rt>0?ra/rt:0.5;
       var w=(sel.s?shS:0)+(sel.a?shA:0);
       A.comm+=(sel.s?m.comm[0]:0)+(sel.a?m.comm[1]:0);
@@ -1183,13 +1184,14 @@ const CBRK=[{"k":"Mar-25","s":1740787200000,"e":1743465599000,"b":"Actual","rev"
     var items=[['Channel commission',A.comm,'#2563eb'],['Cleaning',A.clean,'#0f766e'],['Electricity',A.elec,'#d97706'],['Gas',A.gas,'#eab308'],['Supplies',A.supplies,'#e11d48'],['Maintenance',A.maint,'#ec4899'],['Insurance',A.ins,'#8b5cf6'],['Rates',A.rates,'#16a34a'],['Broadband',A.bband,'#06b6d4'],['PMS',A.pms,'#c026d3'],['Dynamic pricing',A.dyn,'#4f46e5'],['SolarZero lease',A.solar,'#64748b']];
     items.sort(function(a,b){return b[1]-a[1];});
     var tot=items.reduce(function(s,x){return s+x[1];},0)||1;
-    var labels=items.map(function(x){return x[0]+'  ('+Math.round(x[1]/tot*100)+'%)';});
+    var rden=totRev||1;
+    var labels=items.map(function(x){return x[0]+'  ('+Math.round(x[1]/rden*100)+'% of rev)';});
     var ex=Chart.getChart(el); if(ex)ex.destroy();
     new Chart(el,{type:'bar',
       data:{labels:labels,datasets:[{data:items.map(function(x){return Math.round(x[1]);}),backgroundColor:items.map(function(x){return x[2];}),borderRadius:3}]},
       options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
         plugins:{legend:{display:false},
-          tooltip:{callbacks:{label:function(c){return fmt(c.parsed.x)+'  ·  '+Math.round(c.parsed.x/tot*100)+'% of opex';}}}},
+          tooltip:{callbacks:{label:function(c){return fmt(c.parsed.x)+'  ·  '+Math.round(c.parsed.x/rden*100)+'% of revenue';}}}},
         scales:{x:{grid:{color:grid},ticks:{color:ink,callback:function(v){return '$'+(v/1000)+'k';}}},
           y:{grid:{display:false},ticks:{color:ink,font:{size:10}}}}}
     });
