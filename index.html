@@ -1484,7 +1484,7 @@ const CBRK=[{"k":"Mar-25","s":1740787200000,"e":1743465599000,"b":"Actual","rev"
       monthly:Object.keys(mon).sort().map(function(k){var m=mon[k];return {month:k,stone:m.stone,ajc:m.ajc,total:m.stone+m.ajc,sN:m.sN,aN:m.aN,nights:m.nights,adr:(m.nights?(m.stone+m.ajc)/m.nights:0)};}),
       costs:Object.keys(catt).sort(function(a,b){return catt[b]-catt[a];}).map(function(k){return {cat:k,amount:catt[k],pct:(rev?catt[k]/rev*100:0)};}),
       channel:Object.keys(ch).sort(function(a,b){return ch[b].rev-ch[a].rev;}).map(function(k){var c=ch[k];return {name:CN[k]||k,res:c.res,nights:c.nights,rev:c.rev,pct:(rev?c.rev/rev*100:0)};}),
-      reservations:rows.slice().sort(function(a,b){return a.start_date-b.start_date;}).map(function(r){return {checkin:new Date(r.start_date).toISOString().slice(0,10),cottage:(r.listing_name==='Stone Cottage'?'Stone':'AJC/Cream'),channel:(CN[r.booking_source]||r.booking_source),nights:r.no_of_days,revenue:+r.rental_revenue||0,nightly:+r.nightly_amount||0,lead:r.lead_time,booked:new Date(r.booked_time).toISOString().slice(0,10)};}),
+      tiles:[].slice.call(document.querySelectorAll('#chartnav .navtile')).map(function(t){var l=t.querySelector('.nlab'),v=t.querySelector('.nval');return {label:l?l.textContent:'',value:v?v.textContent:''};}),
       market:(typeof MARKET!=='undefined')?MARKET:null,
       totalRev:rev
     };
@@ -1498,12 +1498,12 @@ const CBRK=[{"k":"Mar-25","s":1740787200000,"e":1743465599000,"b":"Actual","rev"
     L.push(['SUMMARY']);L.push(['Revenue',Math.round(D.kpi.revenue)]);L.push(['Nights',D.kpi.nights]);L.push(['Reservations',D.kpi.reservations]);
     if(D.kpi.occPct!=null)L.push(['Occupancy %',D.kpi.occPct]);L.push(['ADR',Math.round(D.kpi.adr)]);L.push(['Direct share %',Math.round(D.kpi.directPct)]);
     L.push(['Operating costs',Math.round(D.kpi.opcost)]);L.push(['Operating margin %',Math.round(D.kpi.marginPct)]);L.push([]);
+    L.push(['DASHBOARD TILES']);L.push(['Metric','Value']);D.tiles.forEach(function(t){L.push([t.label,t.value]);});L.push([]);
     L.push(['BY COTTAGE']);L.push(['Cottage','Turnover','Nights','ADR','% of revenue']);D.perProp.forEach(function(p){L.push([p.name,Math.round(p.rev),p.nights,Math.round(p.adr),Math.round(p.pct)]);});L.push([]);
     L.push(['MONTHLY']);L.push(['Month','Stone rev','AJC/Cream rev','Total rev','Stone nights','AJC nights','Total nights','ADR']);D.monthly.forEach(function(m){L.push([m.month,Math.round(m.stone),Math.round(m.ajc),Math.round(m.total),m.sN,m.aN,m.nights,Math.round(m.adr)]);});L.push([]);
     L.push(['OPERATING COST BREAKDOWN']);L.push(['Category','Amount','% of revenue']);D.costs.forEach(function(c){L.push([c.cat,Math.round(c.amount),Math.round(c.pct)]);});L.push([]);
     L.push(['CHANNEL MIX']);L.push(['Channel','Reservations','Nights','Revenue','% of revenue']);D.channel.forEach(function(c){L.push([c.name,c.res,c.nights,Math.round(c.rev),Math.round(c.pct)]);});
     if(D.market){L.push([]);L.push(['MARKET BENCHMARKS (nightly, PriceLabs comp set)']);L.push(['Cottage','Type','25th','Median','75th','90th']);['Stone Cottage','Arrow Junction Cottage'].forEach(function(nm){var x=D.market[nm];if(x)L.push([(nm==='Arrow Junction Cottage'?'AJC/Cream':'Stone'),x.cat,x.p25,x.p50,x.p75,x.p90]);});}
-    L.push([]);L.push(['RESERVATIONS ('+D.reservations.length+')']);L.push(['Check-in','Cottage','Channel','Nights','Revenue','Nightly','Lead days','Booked']);D.reservations.forEach(function(r){L.push([r.checkin,r.cottage,r.channel,r.nights,Math.round(r.revenue),Math.round(r.nightly),r.lead,r.booked]);});
     return L.map(function(r){return r.map(q).join(',');}).join('\n');
   }
   function tbl(head,rows){var h='<tr>'+head.map(function(x,i){return '<th'+(i?' class="num"':'')+'>'+x+'</th>';}).join('')+'</tr>';
@@ -1513,12 +1513,12 @@ const CBRK=[{"k":"Mar-25","s":1740787200000,"e":1743465599000,"b":"Actual","rev"
     var H='';
     H+='<div class="sumsub">45 Arrow Junction Road, Arrowtown · '+D.meta.propLabel+' · '+D.meta.from+' to '+D.meta.to+' · data as of '+D.meta.asof+'</div>';
     H+='<h4>Summary</h4>'+tbl(['Metric','Value'],[['Revenue',M(D.kpi.revenue)],['Nights',D.kpi.nights],['Reservations',D.kpi.reservations]].concat(D.kpi.occPct!=null?[['Occupancy',D.kpi.occPct+'%']]:[]).concat([['ADR',M(D.kpi.adr)],['Direct share',Math.round(D.kpi.directPct)+'%'],['Operating costs',M(D.kpi.opcost)],['Operating margin',Math.round(D.kpi.marginPct)+'%']]));
+    H+='<h4>Dashboard tiles</h4>'+tbl(['Metric','Value'],D.tiles.map(function(t){return [t.label,t.value];}));
     H+='<h4>By cottage</h4>'+tbl(['Cottage','Turnover','Nights','ADR','% rev'],D.perProp.map(function(p){return [p.name,M(p.rev),p.nights,M(p.adr),Math.round(p.pct)+'%'];}));
     H+='<h4>Monthly</h4>'+tbl(['Month','Stone rev','AJC/Cream rev','Total','Nights','ADR'],D.monthly.map(function(m){return [m.month,M(m.stone),M(m.ajc),M(m.total),m.nights,M(m.adr)];}));
     H+='<h4>Operating cost breakdown</h4>'+tbl(['Category','Amount','% rev'],D.costs.map(function(c){return [c.cat,M(c.amount),Math.round(c.pct)+'%'];}));
     H+='<h4>Channel mix</h4>'+tbl(['Channel','Res','Nights','Revenue','% rev'],D.channel.map(function(c){return [c.name,c.res,c.nights,M(c.rev),Math.round(c.pct)+'%'];}));
     if(D.market){H+='<h4>Market benchmarks (nightly)</h4>'+tbl(['Cottage','Type','25th','Median','75th','90th'],['Stone Cottage','Arrow Junction Cottage'].filter(function(nm){return D.market[nm];}).map(function(nm){var x=D.market[nm];return [(nm==='Arrow Junction Cottage'?'AJC/Cream':'Stone'),x.cat,M(x.p25),M(x.p50),M(x.p75),M(x.p90)];}));}
-    H+='<h4>Reservations ('+D.reservations.length+')</h4>'+tbl(['Check-in','Cottage','Channel','Nights','Revenue','Nightly','Lead','Booked'],D.reservations.map(function(r){return [r.checkin,r.cottage,r.channel,r.nights,M(r.revenue),M(r.nightly),r.lead,r.booked];}));
     return H;
   }
   function download(name,text){try{var b=new Blob([text],{type:'text/csv;charset=utf-8'}),u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(u);a.remove();},400);}catch(e){alert('Download failed: '+e.message);}}
