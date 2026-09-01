@@ -122,6 +122,28 @@ h1{font-size:20px;margin:0;font-weight:750;letter-spacing:-.01em}
 .navtile .nic svg{width:13px;height:13px;stroke:#fff;fill:none;stroke-width:2}
 .navtile .nlab{font-size:9px;font-weight:600;line-height:1.15;letter-spacing:.03em;text-transform:uppercase;color:#eafff9}
 .navtile .nval{font-size:17px;font-weight:750;letter-spacing:-.01em;line-height:1;color:#fff}
+.commentary{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 22px;box-shadow:var(--sh);margin:0 0 14px}
+.commentary h3{margin:0 0 4px;font-size:16px;color:var(--ink)}
+.commentary .csub{font-size:12px;color:var(--muted2);margin:0 0 14px}
+.commentary p{margin:0 0 12px;font-size:13.5px;line-height:1.62;color:var(--ink)}
+.commentary p .lead{font-weight:700;color:var(--accent)}
+.commentary .cfoot{font-size:11px;color:var(--muted2);font-style:italic;margin:4px 0 0}
+.commentary b{color:var(--ink)}
+.expbtns{display:flex;gap:8px;flex-wrap:wrap;margin-left:8px}
+@media print{
+  @page{size:A4;margin:14mm}
+  .controls,.tools,.presets,#filterToggle,#themeToggle,.expbtns,.gfxtop,#chartnav,.sec:has(#chartnav){display:none!important}
+  body{background:#fff!important}
+  .wrap{max-width:none}
+  header{border-bottom:1px solid #ccc;margin-bottom:8px}
+  h1{color:#111!important}
+  .card,.commentary{break-inside:avoid;box-shadow:none;border:1px solid #ddd;background:#fff!important}
+  .grid{grid-template-columns:1fr 1fr!important}
+  .kpi .val,.card h3,.commentary p,.commentary h3,.hint{color:#111!important}
+  .printtitle{display:block!important}
+  canvas{max-width:100%!important}
+}
+.printtitle{display:none}
 .ftag{display:inline-block;margin-left:9px;padding:2px 8px;border-radius:999px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;background:#0f766e26;color:#5eead4;vertical-align:middle;border:1px solid #0f766e55}
 :root[data-theme="light"] .ftag{background:#0f766e14;color:#0f766e;border-color:#0f766e44}
 .grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px}
@@ -157,6 +179,7 @@ tbody tr:hover{background:#0f766e08}
       </div>
     </div>
     <div class="tools">
+      <div class="expbtns"><button class="tbtn" id="csvBtn" type="button">↓ CSV</button><button class="tbtn" id="pdfBtn" type="button">↓ PDF report</button></div>
       <button class="tbtn" id="filterToggle" type="button">Hide filters</button>
       <button class="tbtn" id="themeToggle" type="button">Dark</button>
       <div class="asof" id="asof"></div>
@@ -188,6 +211,17 @@ tbody tr:hover{background:#0f766e08}
 
     <div class="sec"><span>Jump to a chart</span><span style="font-size:11px;color:var(--muted2);font-weight:500;text-transform:none;letter-spacing:0;margin-left:10px">click to jump · drag to reorder</span></div>
     <div class="chartnav" id="chartnav"></div>
+
+    <div class="printtitle"><h2 style="margin:0 0 2px">Arrow Studios — Performance Report</h2><div style="font-size:12px;color:#555" id="ptSub"></div></div>
+    <div class="sec"><span>Market position &amp; growth</span></div>
+    <div class="commentary" id="commentary">
+      <h3>Market position and growth opportunity</h3>
+      <div class="csub">How the two cottages sit against the local market, and where the runway is.</div>
+      <p><span class="lead">Market conditions.</span> The Wakatipu Basin is one of the country’s tightest short-stay markets. Demand holds up through the year on the strength of Queenstown and Arrowtown tourism, while supply is held back by the district plan, which lets a property like this take paying guests for only 90 nights a year without a specific consent. That scarcity keeps nightly rates firm: across the local comparable set, one-bedroom homes clear a median of about <b>$213</b> a night and two-bedroom homes about <b>$360</b>, with the stronger listings well above that.</p>
+      <p><span class="lead">Where the cottages sit.</span> Stone Cottage is already trading at the top of its bracket — an average rate of about <b><span data-fill="stoneADR">$386</span></b> a night, close to the 90th percentile for one-bedroom homes locally, at around <b><span data-fill="stoneOcc">78%</span></b> occupancy since it opened. It is a proven premium performer. Arrow Junction (Cream) Cottage is the more interesting case: as a two-bedroom unit it should sit well above Stone, yet its average rate of about <b><span data-fill="ajcADR">$276</span></b> is currently below the bottom quartile of the two-bedroom market, at about <b><span data-fill="ajcOcc">60%</span></b> occupancy. That is not a fault in the cottage — it is a newer listing still building its review history, and it points straight to the upside.</p>
+      <p><span class="lead">Opportunity for growth.</span> The clearest lever is Cream Cottage’s rate. The two-bedroom market median sits near <b>$360</b> and the upper quartile near <b>$529</b>, both well above its current <b><span data-fill="ajcADR2">$276</span></b>; as it accumulates reviews and repeat guests there is room to lift the rate without moving beyond where the market already clears. Its occupancy has similar headroom toward the high-70s Stone already runs at. Both cottages also still take most bookings through the online travel agents, which charge around 15% commission — direct bookings, currently about <b><span data-fill="stoneDirect">5%</span></b> for Stone and <b><span data-fill="ajcDirect">11%</span></b> for Cream, carry none, so every booking moved to the website lands straight on the bottom line. Underpinning all of it is the year-round letting consent, which lets both cottages trade every night of the year rather than the 90 the plan allows by default. The room to grow nights and rate is already consented and in place.</p>
+      <div class="cfoot">Figures reflect the latest booking data and the local PriceLabs comparable set. Indicative only.</div>
+    </div>
 
     <div class="sec"><span>Property summary</span></div>
     <div class="grid">
@@ -1367,6 +1401,133 @@ const CBRK=[{"k":"Mar-25","s":1740787200000,"e":1743465599000,"b":"Actual","rev"
   function tag(){ FULL.forEach(function(id){badge(id,'Full timeline');}); MKT.forEach(function(id){badge(id,'Market benchmark');}); }
   if(document.readyState!=='loading')setTimeout(tag,450);
   else document.addEventListener('DOMContentLoaded',function(){setTimeout(tag,450);});
+})();
+</script>
+<script>
+(function(){
+  function $(id){return document.getElementById(id);}
+  function money(x){return '$'+Math.round(x).toLocaleString('en-NZ');}
+  var SNAP=(typeof SNAPSHOT_DATE!=='undefined')?Date.parse(SNAPSHOT_DATE+'T00:00:00Z'):Date.parse('2026-09-01T00:00:00Z');
+  var DAY=86400000;
+  var DIR=(typeof DIRECT_SOURCES!=='undefined')?DIRECT_SOURCES:new Set(['Manual','OH']);
+
+  // ---------- commentary live figures (all-time realised, per cottage) ----------
+  function fillCommentary(){
+    try{
+      if(typeof EMBEDDED_DATA==='undefined')return;
+      var agg={}; var launch={};
+      EMBEDDED_DATA.forEach(function(r){
+        if(r.status==='cancelled')return;
+        var name=r.listing_name, nd=r.no_of_days||0; if(nd<=0)return;
+        var per=r.rental_revenue/nd, isDir=DIR.has(r.booking_source);
+        if(launch[name]==null||r.start_date<launch[name])launch[name]=r.start_date;
+        var a=agg[name]||(agg[name]={rev:0,n:0,drev:0});
+        for(var i=0;i<nd;i++){var t=r.start_date+i*DAY; if(t<SNAP){a.rev+=per;a.n++; if(isDir)a.drev+=per;}}
+      });
+      function put(name,keyADR,keyOcc,keyDir){
+        var a=agg[name]; if(!a||!a.n)return;
+        var adr=a.rev/a.n; var days=Math.max(1,Math.round((SNAP-(launch[name]||SNAP))/DAY));
+        var occ=Math.round(a.n/days*100); var dir=Math.round(a.drev/a.rev*100);
+        document.querySelectorAll('[data-fill="'+keyADR+'"]').forEach(function(e){e.textContent=money(adr);});
+        document.querySelectorAll('[data-fill="'+keyOcc+'"]').forEach(function(e){e.textContent=occ+'%';});
+        document.querySelectorAll('[data-fill="'+keyDir+'"]').forEach(function(e){e.textContent=dir+'%';});
+      }
+      put('Stone Cottage','stoneADR','stoneOcc','stoneDirect');
+      var ajc=agg['Arrow Junction Cottage']?'Arrow Junction Cottage':null;
+      if(ajc){var a=agg[ajc],adr=a.rev/a.n; document.querySelectorAll('[data-fill="ajcADR"],[data-fill="ajcADR2"]').forEach(function(e){e.textContent=money(adr);});
+        var days=Math.max(1,Math.round((SNAP-(launch[ajc]||SNAP))/DAY)); document.querySelectorAll('[data-fill="ajcOcc"]').forEach(function(e){e.textContent=Math.round(a.n/days*100)+'%';});
+        document.querySelectorAll('[data-fill="ajcDirect"]').forEach(function(e){e.textContent=Math.round(a.drev/a.rev*100)+'%';});}
+    }catch(e){}
+  }
+
+  // ---------- CSV export (respects current filters) ----------
+  function winRange(){
+    var f=$('from')&&$('from').value?Date.parse($('from').value+'T00:00:00Z'):NaN;
+    var t=$('to')&&$('to').value?Date.parse($('to').value+'T23:59:59Z'):NaN;
+    return {f:f,t:t};
+  }
+  function props(){ var hs=true,ha=true; try{ if(typeof selProps!=='undefined'&&selProps.size){hs=selProps.has('Stone Cottage');ha=selProps.has('Arrow Junction Cottage');} }catch(e){} if(!hs&&!ha){hs=true;ha=true;} return {s:hs,a:ha}; }
+  function q(v){ v=(v==null?'':''+v); return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v; }
+  function buildCSV(){
+    var rows=(typeof filtered==='function')?filtered().filter(function(r){return r.status!=='cancelled';}):[];
+    var rev=0,nights=0,n=rows.length,drev=0,commT=0,cleanT=0;
+    var mon={}, ch={};
+    rows.forEach(function(r){
+      rev+=(+r.rental_revenue||0); nights+=(r.no_of_days||0);
+      if(DIR.has(r.booking_source))drev+=(+r.rental_revenue||0);
+      if(typeof rateFor==='function')commT+=(+r.rental_revenue||0)*rateFor(r.booking_source);
+      if(typeof cleanOf==='function')cleanT+=cleanOf(r);
+      var d=new Date(r.start_date), mk=d.getUTCFullYear()+'-'+String(d.getUTCMonth()+1).padStart(2,'0');
+      var pk=r.listing_name==='Stone Cottage'?'stone':'ajc';
+      var m=mon[mk]||(mon[mk]={stone:0,ajc:0,nights:0}); m[pk]+=(+r.rental_revenue||0); m.nights+=(r.no_of_days||0);
+      var c=ch[r.booking_source]||(ch[r.booking_source]={res:0,nights:0,rev:0}); c.res++; c.nights+=(r.no_of_days||0); c.rev+=(+r.rental_revenue||0);
+    });
+    var adr=nights?rev/nights:0, margin=rev?((rev-commT-cleanT)/rev*100):0, dpct=rev?drev/rev*100:0;
+    // operating costs from CBRK over window (allocated)
+    var wr=winRange(), sel=props(), op=0, catt={};
+    if(typeof CBRK!=='undefined'){
+      CBRK.forEach(function(m){
+        if(m.e<wr.f||m.s>wr.t)return;
+        var rs=m.rev[0],ra=m.rev[1],rt=rs+ra, w=(sel.s?(rt>0?rs/rt:0.5):0)+(sel.a?(rt>0?ra/rt:0.5):0);
+        var add={ 'Channel commission':(sel.s?m.comm[0]:0)+(sel.a?m.comm[1]:0),'Cleaning':(sel.s?m.clean[0]:0)+(sel.a?m.clean[1]:0),
+          'Electricity':m.elec*w,'Gas':m.gas*w,'Supplies':m.supplies*w,'Maintenance':m.maint*w,'Insurance':m.ins*w,'Rates':m.rates*w,
+          'Broadband':m.bband*w,'PMS':m.pms*w,'Dynamic pricing':m.dyn*w,'SolarZero lease':m.solar*w };
+        for(var k in add){catt[k]=(catt[k]||0)+add[k]; op+=add[k];}
+      });
+    }
+    var propLabel=(sel.s&&sel.a)?'All properties':(sel.s?'Stone Cottage':'Arrow Junction (Cream) Cottage');
+    var L=[];
+    L.push(['Arrow Studios — data export']);
+    L.push(['Property',propLabel]);
+    L.push(['Period (check-in)',($('from')?$('from').value:'')+' to '+($('to')?$('to').value:'')]);
+    L.push(['Data as of',(typeof SNAPSHOT_DATE!=='undefined')?SNAPSHOT_DATE:'']);
+    L.push(['Generated',new Date().toISOString().slice(0,10)]);
+    L.push([]);
+    L.push(['SUMMARY']);
+    L.push(['Revenue',Math.round(rev)]);L.push(['Nights',nights]);L.push(['Reservations',n]);
+    L.push(['ADR',Math.round(adr)]);L.push(['Direct share %',Math.round(dpct)]);
+    L.push(['Operating costs (allocated)',Math.round(op)]);
+    L.push(['Operating margin % (after commission & cleaning)',Math.round(margin)]);
+    L.push([]);
+    L.push(['MONTHLY REVENUE']);
+    L.push(['Month','Stone','AJC/Cream','Total','Nights']);
+    Object.keys(mon).sort().forEach(function(k){var m=mon[k];L.push([k,Math.round(m.stone),Math.round(m.ajc),Math.round(m.stone+m.ajc),m.nights]);});
+    L.push([]);
+    L.push(['OPERATING COST BREAKDOWN']);
+    L.push(['Category','Amount','% of revenue']);
+    Object.keys(catt).sort(function(a,b){return catt[b]-catt[a];}).forEach(function(k){L.push([k,Math.round(catt[k]),rev?Math.round(catt[k]/rev*100):0]);});
+    L.push([]);
+    L.push(['CHANNEL MIX']);
+    L.push(['Channel','Reservations','Nights','Revenue','% of revenue']);
+    var CN={'BookingCom':'Booking.com','AirbnbIntegration':'Airbnb','OH':'Direct (website)','Manual':'Direct (manual)'};
+    Object.keys(ch).sort(function(a,b){return ch[b].rev-ch[a].rev;}).forEach(function(k){var c=ch[k];L.push([CN[k]||k,c.res,c.nights,Math.round(c.rev),rev?Math.round(c.rev/rev*100):0]);});
+    return {csv:L.map(function(r){return r.map(q).join(',');}).join('\n'), propLabel:propLabel};
+  }
+  function downloadCSV(){
+    try{
+      var r=buildCSV();
+      var blob=new Blob([r.csv],{type:'text/csv;charset=utf-8'});
+      var url=URL.createObjectURL(blob), a=document.createElement('a');
+      a.href=url; a.download='Arrow Studios data '+((typeof SNAPSHOT_DATE!=='undefined')?SNAPSHOT_DATE:'')+'.csv';
+      document.body.appendChild(a); a.click(); setTimeout(function(){URL.revokeObjectURL(url);a.remove();},400);
+    }catch(e){ alert('Export failed: '+e.message); }
+  }
+  function doPDF(){
+    try{
+      var sel=props(); var pl=(sel.s&&sel.a)?'All properties':(sel.s?'Stone Cottage':'Arrow Junction (Cream) Cottage');
+      var sub=pl+'  ·  '+($('from')?$('from').value:'')+' to '+($('to')?$('to').value:'')+'  ·  data as of '+((typeof SNAPSHOT_DATE!=='undefined')?SNAPSHOT_DATE:'');
+      var pt=$('ptSub'); if(pt)pt.textContent=sub;
+    }catch(e){}
+    window.print();
+  }
+
+  function wire(){
+    var c=$('csvBtn'); if(c)c.addEventListener('click',downloadCSV);
+    var p=$('pdfBtn'); if(p)p.addEventListener('click',doPDF);
+    fillCommentary();
+  }
+  if(document.readyState!=='loading')setTimeout(wire,500);
+  else document.addEventListener('DOMContentLoaded',function(){setTimeout(wire,500);});
 })();
 </script>
 </body>
