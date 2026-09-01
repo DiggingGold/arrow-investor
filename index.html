@@ -1310,9 +1310,9 @@ const CBRK=[{"k":"Mar-25","s":1740787200000,"e":1743465599000,"b":"Actual","rev"
 
 <script>
 (function(){
-  var CHARTS=[["chMonthly", "Revenue"], ["chQMatrix", "Quarterly revenue"], ["chTrend", "Revenue trend"], ["chYoY", "Revenue YoY"], ["chCmpPerf", "2025 vs 2026"], ["chOcc", "Occupancy"], ["chSeason", "Occupancy by season"], ["chCreated", "Reservations created"], ["chPace", "Booking pace"], ["chLead", "Lead time"], ["chLen", "Stay length"], ["chMarket", "Rate vs market"], ["chRevChannel", "Revenue by channel"], ["chNightsChannel", "Nights by channel"], ["chDirect", "Direct share"], ["chCmpDir", "Direct 2025 vs 2026"], ["chCost", "Cost ratios"], ["chMargin", "Operating margin"], ["chQCost", "Cost vs income"], ["chIvE", "Income vs expenses"], ["chCostMix", "Cost breakdown"], ["chYr", "Year comparison"]];
+  var CHARTS=[["chMonthly", "Revenue"], ["chQMatrix", "Quarterly revenue"], ["chTrend", "Revenue trend"], ["chYoY", "Revenue YoY"], ["chRevChannel", "Revenue by channel"], ["chYr", "Year comparison"], ["chCostMix", "Cost breakdown"], ["chCost", "Cost ratios"], ["chIvE", "Income vs expenses"], ["chQCost", "Cost vs income"], ["chCmpPerf", "2025 vs 2026"], ["chMargin", "Operating margin"], ["chOcc", "Occupancy"], ["chSeason", "Occupancy by season"], ["chCreated", "Reservations created"], ["chPace", "Booking pace"], ["chLead", "Lead time"], ["chLen", "Stay length"], ["chMarket", "Rate vs market"], ["chNightsChannel", "Nights by channel"], ["chDirect", "Direct share"], ["chCmpDir", "Direct 2025 vs 2026"]];
   var ICO='<svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>';
-  var STORE='arrowChartOrder_v1';
+  var STORE='arrowChartOrder_v2';
   var refs={}, dragEl=null;
   function savedOrder(){ try{return JSON.parse(localStorage.getItem(STORE)||'null');}catch(e){return null;} }
   function saveOrder(){ try{var ids=[].slice.call(wrap().querySelectorAll('.navtile')).map(function(b){return b.dataset.chart;}); localStorage.setItem(STORE,JSON.stringify(ids));}catch(e){} }
