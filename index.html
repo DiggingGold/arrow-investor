@@ -130,20 +130,39 @@ h1{font-size:20px;margin:0;font-weight:750;letter-spacing:-.01em}
 .commentary .cfoot{font-size:11px;color:var(--muted2);font-style:italic;margin:4px 0 0}
 .commentary b{color:var(--ink)}
 .expbtns{display:flex;gap:8px;flex-wrap:wrap;margin-left:8px}
+.expmodal{position:fixed;inset:0;z-index:200;display:flex;align-items:flex-start;justify-content:center;background:rgba(4,10,18,.62);backdrop-filter:blur(3px);overflow:auto;padding:28px 16px}
+.expmodal[hidden]{display:none!important}
+.expbox{background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:0 20px 60px rgba(0,0,0,.45);width:min(860px,100%);margin:auto;overflow:hidden}
+.exphead{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 18px;border-bottom:1px solid var(--line)}
+.exphead h3{margin:0;font-size:15px;color:var(--ink)}
+.expx{background:none;border:none;color:var(--muted2);font-size:18px;cursor:pointer;line-height:1;padding:4px 8px;border-radius:8px}
+.expx:hover{background:var(--line);color:var(--ink)}
+.expbody{padding:18px 20px;max-height:66vh;overflow:auto}
+.expfoot{display:flex;justify-content:flex-end;gap:8px;padding:12px 18px;border-top:1px solid var(--line)}
+.expbody table.dt{width:100%;border-collapse:collapse;font-size:12px;margin:0 0 16px}
+.expbody table.dt th{text-align:left;color:var(--muted2);font-weight:600;text-transform:uppercase;letter-spacing:.03em;font-size:10px;border-bottom:1px solid var(--line);padding:5px 8px}
+.expbody table.dt td{padding:5px 8px;border-bottom:1px solid var(--line);color:var(--ink)}
+.expbody table.dt td.num,.expbody table.dt th.num{text-align:right;font-variant-numeric:tabular-nums}
+.expbody h4{margin:16px 0 6px;font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:var(--accent)}
+.expbody h4:first-child{margin-top:0}
+.sumhdr{margin:0 0 4px}.sumhdr h2{margin:0;font-size:19px;color:var(--ink)}
+.sumsub{font-size:12px;color:var(--muted2);margin:0 0 14px}
+.sumkpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin:0 0 16px}
+.sumk{border:1px solid var(--line);border-radius:10px;padding:9px 11px}
+.sumk .kl{font-size:9.5px;text-transform:uppercase;letter-spacing:.03em;color:var(--muted2);font-weight:600}
+.sumk .kv{font-size:18px;font-weight:750;color:var(--ink);line-height:1.1;margin-top:3px}
 @media print{
-  @page{size:A4;margin:14mm}
-  .controls,.tools,.presets,#filterToggle,#themeToggle,.expbtns,.gfxtop,#chartnav,.sec:has(#chartnav){display:none!important}
-  body{background:#fff!important}
-  .wrap{max-width:none}
-  header{border-bottom:1px solid #ccc;margin-bottom:8px}
-  h1{color:#111!important}
-  .card,.commentary{break-inside:avoid;box-shadow:none;border:1px solid #ddd;background:#fff!important}
-  .grid{grid-template-columns:1fr 1fr!important}
-  .kpi .val,.card h3,.commentary p,.commentary h3,.hint{color:#111!important}
-  .printtitle{display:block!important}
-  canvas{max-width:100%!important}
+  @page{size:A4;margin:16mm}
+  body *{visibility:hidden!important}
+  #expModal,#expModal *{visibility:visible!important}
+  #expModal{position:absolute;inset:0;background:#fff!important;padding:0;display:block;overflow:visible}
+  .expbox{width:auto;max-width:none;border:none;box-shadow:none;background:#fff!important}
+  .exphead,.expfoot,.expx{display:none!important}
+  .expbody{max-height:none;overflow:visible;padding:0}
+  .expbody *,.sumhdr h2,.sumk .kv,.commentary p,.commentary h3{color:#111!important}
+  .sumk,.expbody table.dt td,.expbody table.dt th{border-color:#ccc!important}
+  .commentary{border:none;box-shadow:none;background:#fff!important;padding:0}
 }
-.printtitle{display:none}
 .ftag{display:inline-block;margin-left:9px;padding:2px 8px;border-radius:999px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;background:#0f766e26;color:#5eead4;vertical-align:middle;border:1px solid #0f766e55}
 :root[data-theme="light"] .ftag{background:#0f766e14;color:#0f766e;border-color:#0f766e44}
 .grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px}
@@ -179,7 +198,7 @@ tbody tr:hover{background:#0f766e08}
       </div>
     </div>
     <div class="tools">
-      <div class="expbtns"><button class="tbtn" id="csvBtn" type="button">↓ CSV</button><button class="tbtn" id="pdfBtn" type="button">↓ PDF report</button></div>
+      <div class="expbtns"><button class="tbtn" id="csvBtn" type="button">↓ CSV</button><button class="tbtn" id="pdfBtn" type="button">Summary</button></div>
       <button class="tbtn" id="filterToggle" type="button">Hide filters</button>
       <button class="tbtn" id="themeToggle" type="button">Dark</button>
       <div class="asof" id="asof"></div>
@@ -212,7 +231,6 @@ tbody tr:hover{background:#0f766e08}
     <div class="sec"><span>Jump to a chart</span><span style="font-size:11px;color:var(--muted2);font-weight:500;text-transform:none;letter-spacing:0;margin-left:10px">click to jump · drag to reorder</span></div>
     <div class="chartnav" id="chartnav"></div>
 
-    <div class="printtitle"><h2 style="margin:0 0 2px">Arrow Studios — Performance Report</h2><div style="font-size:12px;color:#555" id="ptSub"></div></div>
     <div class="sec"><span>Market position &amp; growth</span></div>
     <div class="commentary" id="commentary">
       <h3>Market position and growth opportunity</h3>
@@ -694,6 +712,9 @@ function render(){
       chQCost:nz(_surplus), chIvE:nz(_surplus), chCostMix:(_opcost?nz(_opcost):'\u2014'),
       chYr:nz(_r26), chVal:'$4.0M'
     };
+    window.__kpi={revenue:rev,nights:nights,reservations:n,occPct:occPct,adr:(nights?rev/nights:0),
+      revpar:(avail?rev/avail:0),opcost:_opcost,marginPct:(rev?Math.round(contribution/rev*100):0),
+      directPct:directPct,commSaved:commSaved,directRev:directRev,contribution:contribution};
     if(window.__chartTiles)window.__chartTiles();
   }catch(e){}
   const kpi=[
@@ -1406,128 +1427,122 @@ const CBRK=[{"k":"Mar-25","s":1740787200000,"e":1743465599000,"b":"Actual","rev"
 <script>
 (function(){
   function $(id){return document.getElementById(id);}
-  function money(x){return '$'+Math.round(x).toLocaleString('en-NZ');}
+  function M(x){return '$'+Math.round(x||0).toLocaleString('en-NZ');}
   var SNAP=(typeof SNAPSHOT_DATE!=='undefined')?Date.parse(SNAPSHOT_DATE+'T00:00:00Z'):Date.parse('2026-09-01T00:00:00Z');
-  var DAY=86400000;
-  var DIR=(typeof DIRECT_SOURCES!=='undefined')?DIRECT_SOURCES:new Set(['Manual','OH']);
+  var DAY=86400000, DIR=(typeof DIRECT_SOURCES!=='undefined')?DIRECT_SOURCES:new Set(['Manual','OH']);
+  var CN={'BookingCom':'Booking.com','AirbnbIntegration':'Airbnb','OH':'Direct (website)','Manual':'Direct (manual)'};
 
-  // ---------- commentary live figures (all-time realised, per cottage) ----------
   function fillCommentary(){
     try{
       if(typeof EMBEDDED_DATA==='undefined')return;
-      var agg={}; var launch={};
-      EMBEDDED_DATA.forEach(function(r){
-        if(r.status==='cancelled')return;
-        var name=r.listing_name, nd=r.no_of_days||0; if(nd<=0)return;
-        var per=r.rental_revenue/nd, isDir=DIR.has(r.booking_source);
+      var agg={},launch={};
+      EMBEDDED_DATA.forEach(function(r){ if(r.status==='cancelled')return; var nd=r.no_of_days||0; if(nd<=0)return;
+        var per=r.rental_revenue/nd,isDir=DIR.has(r.booking_source),name=r.listing_name;
         if(launch[name]==null||r.start_date<launch[name])launch[name]=r.start_date;
         var a=agg[name]||(agg[name]={rev:0,n:0,drev:0});
-        for(var i=0;i<nd;i++){var t=r.start_date+i*DAY; if(t<SNAP){a.rev+=per;a.n++; if(isDir)a.drev+=per;}}
-      });
-      function put(name,keyADR,keyOcc,keyDir){
-        var a=agg[name]; if(!a||!a.n)return;
-        var adr=a.rev/a.n; var days=Math.max(1,Math.round((SNAP-(launch[name]||SNAP))/DAY));
-        var occ=Math.round(a.n/days*100); var dir=Math.round(a.drev/a.rev*100);
-        document.querySelectorAll('[data-fill="'+keyADR+'"]').forEach(function(e){e.textContent=money(adr);});
-        document.querySelectorAll('[data-fill="'+keyOcc+'"]').forEach(function(e){e.textContent=occ+'%';});
-        document.querySelectorAll('[data-fill="'+keyDir+'"]').forEach(function(e){e.textContent=dir+'%';});
-      }
-      put('Stone Cottage','stoneADR','stoneOcc','stoneDirect');
-      var ajc=agg['Arrow Junction Cottage']?'Arrow Junction Cottage':null;
-      if(ajc){var a=agg[ajc],adr=a.rev/a.n; document.querySelectorAll('[data-fill="ajcADR"],[data-fill="ajcADR2"]').forEach(function(e){e.textContent=money(adr);});
-        var days=Math.max(1,Math.round((SNAP-(launch[ajc]||SNAP))/DAY)); document.querySelectorAll('[data-fill="ajcOcc"]').forEach(function(e){e.textContent=Math.round(a.n/days*100)+'%';});
-        document.querySelectorAll('[data-fill="ajcDirect"]').forEach(function(e){e.textContent=Math.round(a.drev/a.rev*100)+'%';});}
+        for(var i=0;i<nd;i++){var t=r.start_date+i*DAY; if(t<SNAP){a.rev+=per;a.n++;if(isDir)a.drev+=per;}} });
+      function setf(k,v){document.querySelectorAll('[data-fill="'+k+'"]').forEach(function(e){e.textContent=v;});}
+      var s=agg['Stone Cottage']; if(s&&s.n){var d=Math.max(1,Math.round((SNAP-(launch['Stone Cottage']||SNAP))/DAY));
+        setf('stoneADR',M(s.rev/s.n));setf('stoneOcc',Math.round(s.n/d*100)+'%');setf('stoneDirect',Math.round(s.drev/s.rev*100)+'%');}
+      var a=agg['Arrow Junction Cottage']; if(a&&a.n){var d2=Math.max(1,Math.round((SNAP-(launch['Arrow Junction Cottage']||SNAP))/DAY));
+        setf('ajcADR',M(a.rev/a.n));setf('ajcADR2',M(a.rev/a.n));setf('ajcOcc',Math.round(a.n/d2*100)+'%');setf('ajcDirect',Math.round(a.drev/a.rev*100)+'%');}
     }catch(e){}
   }
 
-  // ---------- CSV export (respects current filters) ----------
-  function winRange(){
-    var f=$('from')&&$('from').value?Date.parse($('from').value+'T00:00:00Z'):NaN;
-    var t=$('to')&&$('to').value?Date.parse($('to').value+'T23:59:59Z'):NaN;
-    return {f:f,t:t};
-  }
-  function props(){ var hs=true,ha=true; try{ if(typeof selProps!=='undefined'&&selProps.size){hs=selProps.has('Stone Cottage');ha=selProps.has('Arrow Junction Cottage');} }catch(e){} if(!hs&&!ha){hs=true;ha=true;} return {s:hs,a:ha}; }
-  function q(v){ v=(v==null?'':''+v); return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v; }
-  function buildCSV(){
+  function props(){var hs=true,ha=true;try{if(typeof selProps!=='undefined'&&selProps.size){hs=selProps.has('Stone Cottage');ha=selProps.has('Arrow Junction Cottage');}}catch(e){}if(!hs&&!ha){hs=true;ha=true;}return {s:hs,a:ha};}
+  function winRange(){var f=$('from')&&$('from').value?Date.parse($('from').value+'T00:00:00Z'):NaN;var t=$('to')&&$('to').value?Date.parse($('to').value+'T23:59:59Z'):NaN;return {f:f,t:t};}
+
+  function buildData(){
     var rows=(typeof filtered==='function')?filtered().filter(function(r){return r.status!=='cancelled';}):[];
-    var rev=0,nights=0,n=rows.length,drev=0,commT=0,cleanT=0;
-    var mon={}, ch={};
-    rows.forEach(function(r){
-      rev+=(+r.rental_revenue||0); nights+=(r.no_of_days||0);
-      if(DIR.has(r.booking_source))drev+=(+r.rental_revenue||0);
-      if(typeof rateFor==='function')commT+=(+r.rental_revenue||0)*rateFor(r.booking_source);
-      if(typeof cleanOf==='function')cleanT+=cleanOf(r);
-      var d=new Date(r.start_date), mk=d.getUTCFullYear()+'-'+String(d.getUTCMonth()+1).padStart(2,'0');
+    var rev=0,nights=0,n=rows.length, mon={},ch={},pp={'Stone Cottage':{rev:0,n:0},'Arrow Junction Cottage':{rev:0,n:0}};
+    rows.forEach(function(r){var rr=+r.rental_revenue||0,nd=r.no_of_days||0; rev+=rr; nights+=nd;
+      var d=new Date(r.start_date),mk=d.getUTCFullYear()+'-'+String(d.getUTCMonth()+1).padStart(2,'0');
       var pk=r.listing_name==='Stone Cottage'?'stone':'ajc';
-      var m=mon[mk]||(mon[mk]={stone:0,ajc:0,nights:0}); m[pk]+=(+r.rental_revenue||0); m.nights+=(r.no_of_days||0);
-      var c=ch[r.booking_source]||(ch[r.booking_source]={res:0,nights:0,rev:0}); c.res++; c.nights+=(r.no_of_days||0); c.rev+=(+r.rental_revenue||0);
-    });
-    var adr=nights?rev/nights:0, margin=rev?((rev-commT-cleanT)/rev*100):0, dpct=rev?drev/rev*100:0;
-    // operating costs from CBRK over window (allocated)
-    var wr=winRange(), sel=props(), op=0, catt={};
-    if(typeof CBRK!=='undefined'){
-      CBRK.forEach(function(m){
-        if(m.e<wr.f||m.s>wr.t)return;
-        var rs=m.rev[0],ra=m.rev[1],rt=rs+ra, w=(sel.s?(rt>0?rs/rt:0.5):0)+(sel.a?(rt>0?ra/rt:0.5):0);
-        var add={ 'Channel commission':(sel.s?m.comm[0]:0)+(sel.a?m.comm[1]:0),'Cleaning':(sel.s?m.clean[0]:0)+(sel.a?m.clean[1]:0),
-          'Electricity':m.elec*w,'Gas':m.gas*w,'Supplies':m.supplies*w,'Maintenance':m.maint*w,'Insurance':m.ins*w,'Rates':m.rates*w,
-          'Broadband':m.bband*w,'PMS':m.pms*w,'Dynamic pricing':m.dyn*w,'SolarZero lease':m.solar*w };
-        for(var k in add){catt[k]=(catt[k]||0)+add[k]; op+=add[k];}
-      });
-    }
-    var propLabel=(sel.s&&sel.a)?'All properties':(sel.s?'Stone Cottage':'Arrow Junction (Cream) Cottage');
-    var L=[];
-    L.push(['Arrow Studios — data export']);
-    L.push(['Property',propLabel]);
-    L.push(['Period (check-in)',($('from')?$('from').value:'')+' to '+($('to')?$('to').value:'')]);
-    L.push(['Data as of',(typeof SNAPSHOT_DATE!=='undefined')?SNAPSHOT_DATE:'']);
-    L.push(['Generated',new Date().toISOString().slice(0,10)]);
-    L.push([]);
-    L.push(['SUMMARY']);
-    L.push(['Revenue',Math.round(rev)]);L.push(['Nights',nights]);L.push(['Reservations',n]);
-    L.push(['ADR',Math.round(adr)]);L.push(['Direct share %',Math.round(dpct)]);
-    L.push(['Operating costs (allocated)',Math.round(op)]);
-    L.push(['Operating margin % (after commission & cleaning)',Math.round(margin)]);
-    L.push([]);
-    L.push(['MONTHLY REVENUE']);
-    L.push(['Month','Stone','AJC/Cream','Total','Nights']);
-    Object.keys(mon).sort().forEach(function(k){var m=mon[k];L.push([k,Math.round(m.stone),Math.round(m.ajc),Math.round(m.stone+m.ajc),m.nights]);});
-    L.push([]);
-    L.push(['OPERATING COST BREAKDOWN']);
-    L.push(['Category','Amount','% of revenue']);
-    Object.keys(catt).sort(function(a,b){return catt[b]-catt[a];}).forEach(function(k){L.push([k,Math.round(catt[k]),rev?Math.round(catt[k]/rev*100):0]);});
-    L.push([]);
-    L.push(['CHANNEL MIX']);
-    L.push(['Channel','Reservations','Nights','Revenue','% of revenue']);
-    var CN={'BookingCom':'Booking.com','AirbnbIntegration':'Airbnb','OH':'Direct (website)','Manual':'Direct (manual)'};
-    Object.keys(ch).sort(function(a,b){return ch[b].rev-ch[a].rev;}).forEach(function(k){var c=ch[k];L.push([CN[k]||k,c.res,c.nights,Math.round(c.rev),rev?Math.round(c.rev/rev*100):0]);});
-    return {csv:L.map(function(r){return r.map(q).join(',');}).join('\n'), propLabel:propLabel};
-  }
-  function downloadCSV(){
-    try{
-      var r=buildCSV();
-      var blob=new Blob([r.csv],{type:'text/csv;charset=utf-8'});
-      var url=URL.createObjectURL(blob), a=document.createElement('a');
-      a.href=url; a.download='Arrow Studios data '+((typeof SNAPSHOT_DATE!=='undefined')?SNAPSHOT_DATE:'')+'.csv';
-      document.body.appendChild(a); a.click(); setTimeout(function(){URL.revokeObjectURL(url);a.remove();},400);
-    }catch(e){ alert('Export failed: '+e.message); }
-  }
-  function doPDF(){
-    try{
-      var sel=props(); var pl=(sel.s&&sel.a)?'All properties':(sel.s?'Stone Cottage':'Arrow Junction (Cream) Cottage');
-      var sub=pl+'  ·  '+($('from')?$('from').value:'')+' to '+($('to')?$('to').value:'')+'  ·  data as of '+((typeof SNAPSHOT_DATE!=='undefined')?SNAPSHOT_DATE:'');
-      var pt=$('ptSub'); if(pt)pt.textContent=sub;
-    }catch(e){}
-    window.print();
+      var m=mon[mk]||(mon[mk]={stone:0,ajc:0,nights:0}); m[pk]+=rr; m.nights+=nd;
+      if(pp[r.listing_name]){pp[r.listing_name].rev+=rr;pp[r.listing_name].n+=nd;}
+      var c=ch[r.booking_source]||(ch[r.booking_source]={res:0,nights:0,rev:0}); c.res++;c.nights+=nd;c.rev+=rr; });
+    // costs allocated from CBRK over window
+    var wr=winRange(),sel=props(),catt={},op=0;
+    if(typeof CBRK!=='undefined'){CBRK.forEach(function(m){ if(m.e<wr.f||m.s>wr.t)return;
+      var rs=m.rev[0],ra=m.rev[1],rt=rs+ra,w=(sel.s?(rt>0?rs/rt:0.5):0)+(sel.a?(rt>0?ra/rt:0.5):0);
+      var add={'Channel commission':(sel.s?m.comm[0]:0)+(sel.a?m.comm[1]:0),'Cleaning':(sel.s?m.clean[0]:0)+(sel.a?m.clean[1]:0),
+        'Electricity':m.elec*w,'Gas':m.gas*w,'Supplies':m.supplies*w,'Maintenance':m.maint*w,'Insurance':m.ins*w,'Rates':m.rates*w,
+        'Broadband':m.bband*w,'PMS':m.pms*w,'Dynamic pricing':m.dyn*w,'SolarZero lease':m.solar*w};
+      for(var k in add){catt[k]=(catt[k]||0)+add[k];op+=add[k];} });}
+    var K=window.__kpi||{revenue:rev,nights:nights,reservations:n,occPct:null,adr:(nights?rev/nights:0),opcost:op,marginPct:0,directPct:0};
+    var sel2=props(); var propLabel=(sel2.s&&sel2.a)?'All properties':(sel2.s?'Stone Cottage':'Arrow Junction (Cream) Cottage');
+    return {
+      meta:{propLabel:propLabel, from:($('from')?$('from').value:''), to:($('to')?$('to').value:''), asof:(typeof SNAPSHOT_DATE!=='undefined'?SNAPSHOT_DATE:''), gen:new Date().toISOString().slice(0,10)},
+      kpi:{revenue:K.revenue,nights:K.nights,reservations:K.reservations,occPct:K.occPct,adr:K.adr,opcost:(K.opcost||op),marginPct:K.marginPct,directPct:K.directPct},
+      perProp:['Stone Cottage','Arrow Junction Cottage'].filter(function(nm){return pp[nm].rev>0||pp[nm].n>0;}).map(function(nm){var x=pp[nm];return {name:(nm==='Arrow Junction Cottage'?'AJC / Cream Cottage':nm),rev:x.rev,nights:x.n,adr:(x.n?x.rev/x.n:0),pct:(rev?x.rev/rev*100:0)};}),
+      monthly:Object.keys(mon).sort().map(function(k){var m=mon[k];return {month:k,stone:m.stone,ajc:m.ajc,total:m.stone+m.ajc,nights:m.nights};}),
+      costs:Object.keys(catt).sort(function(a,b){return catt[b]-catt[a];}).map(function(k){return {cat:k,amount:catt[k],pct:(rev?catt[k]/rev*100:0)};}),
+      channel:Object.keys(ch).sort(function(a,b){return ch[b].rev-ch[a].rev;}).map(function(k){var c=ch[k];return {name:CN[k]||k,res:c.res,nights:c.nights,rev:c.rev,pct:(rev?c.rev/rev*100:0)};}),
+      totalRev:rev
+    };
   }
 
-  function wire(){
-    var c=$('csvBtn'); if(c)c.addEventListener('click',downloadCSV);
-    var p=$('pdfBtn'); if(p)p.addEventListener('click',doPDF);
-    fillCommentary();
+  // ---------- CSV (data only) ----------
+  function q(v){v=(v==null?'':''+v);return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v;}
+  function csvText(D){
+    var L=[];L.push(['Arrow Studios — data export']);L.push(['Property',D.meta.propLabel]);L.push(['Period (check-in)',D.meta.from+' to '+D.meta.to]);
+    L.push(['Data as of',D.meta.asof]);L.push(['Generated',D.meta.gen]);L.push([]);
+    L.push(['SUMMARY']);L.push(['Revenue',Math.round(D.kpi.revenue)]);L.push(['Nights',D.kpi.nights]);L.push(['Reservations',D.kpi.reservations]);
+    if(D.kpi.occPct!=null)L.push(['Occupancy %',D.kpi.occPct]);L.push(['ADR',Math.round(D.kpi.adr)]);L.push(['Direct share %',Math.round(D.kpi.directPct)]);
+    L.push(['Operating costs',Math.round(D.kpi.opcost)]);L.push(['Operating margin %',Math.round(D.kpi.marginPct)]);L.push([]);
+    L.push(['BY COTTAGE']);L.push(['Cottage','Turnover','Nights','ADR','% of revenue']);D.perProp.forEach(function(p){L.push([p.name,Math.round(p.rev),p.nights,Math.round(p.adr),Math.round(p.pct)]);});L.push([]);
+    L.push(['MONTHLY REVENUE']);L.push(['Month','Stone','AJC/Cream','Total','Nights']);D.monthly.forEach(function(m){L.push([m.month,Math.round(m.stone),Math.round(m.ajc),Math.round(m.total),m.nights]);});L.push([]);
+    L.push(['OPERATING COST BREAKDOWN']);L.push(['Category','Amount','% of revenue']);D.costs.forEach(function(c){L.push([c.cat,Math.round(c.amount),Math.round(c.pct)]);});L.push([]);
+    L.push(['CHANNEL MIX']);L.push(['Channel','Reservations','Nights','Revenue','% of revenue']);D.channel.forEach(function(c){L.push([c.name,c.res,c.nights,Math.round(c.rev),Math.round(c.pct)]);});
+    return L.map(function(r){return r.map(q).join(',');}).join('\n');
   }
-  if(document.readyState!=='loading')setTimeout(wire,500);
-  else document.addEventListener('DOMContentLoaded',function(){setTimeout(wire,500);});
+  function tbl(head,rows){var h='<tr>'+head.map(function(x,i){return '<th'+(i?' class="num"':'')+'>'+x+'</th>';}).join('')+'</tr>';
+    var b=rows.map(function(r){return '<tr>'+r.map(function(x,i){return '<td'+(i?' class="num"':'')+'>'+x+'</td>';}).join('')+'</tr>';}).join('');
+    return '<table class="dt"><thead>'+h+'</thead><tbody>'+b+'</tbody></table>';}
+  function csvPreviewHTML(D){
+    var H='';
+    H+='<div class="sumsub">'+D.meta.propLabel+' · '+D.meta.from+' to '+D.meta.to+' · data as of '+D.meta.asof+'</div>';
+    H+='<h4>Summary</h4>'+tbl(['Metric','Value'],[['Revenue',M(D.kpi.revenue)],['Nights',D.kpi.nights],['Reservations',D.kpi.reservations]].concat(D.kpi.occPct!=null?[['Occupancy',D.kpi.occPct+'%']]:[]).concat([['ADR',M(D.kpi.adr)],['Direct share',Math.round(D.kpi.directPct)+'%'],['Operating costs',M(D.kpi.opcost)],['Operating margin',Math.round(D.kpi.marginPct)+'%']]));
+    H+='<h4>By cottage</h4>'+tbl(['Cottage','Turnover','Nights','ADR','% rev'],D.perProp.map(function(p){return [p.name,M(p.rev),p.nights,M(p.adr),Math.round(p.pct)+'%'];}));
+    H+='<h4>Monthly revenue</h4>'+tbl(['Month','Stone','AJC/Cream','Total','Nights'],D.monthly.map(function(m){return [m.month,M(m.stone),M(m.ajc),M(m.total),m.nights];}));
+    H+='<h4>Operating cost breakdown</h4>'+tbl(['Category','Amount','% rev'],D.costs.map(function(c){return [c.cat,M(c.amount),Math.round(c.pct)+'%'];}));
+    H+='<h4>Channel mix</h4>'+tbl(['Channel','Res','Nights','Revenue','% rev'],D.channel.map(function(c){return [c.name,c.res,c.nights,M(c.rev),Math.round(c.pct)+'%'];}));
+    return H;
+  }
+  function download(name,text){try{var b=new Blob([text],{type:'text/csv;charset=utf-8'}),u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(u);a.remove();},400);}catch(e){alert('Download failed: '+e.message);}}
+
+  // ---------- Summary (report only, NO valuation) ----------
+  function summaryHTML(D){
+    var k=D.kpi, cells=[['Revenue',M(k.revenue)]];
+    if(k.occPct!=null)cells.push(['Occupancy',k.occPct+'%']);
+    cells.push(['ADR',M(k.adr)],['Nights',(''+k.nights)],['Reservations',(''+k.reservations)],['Operating costs',M(k.opcost)],['Operating margin',Math.round(k.marginPct)+'%'],['Direct share',Math.round(k.directPct)+'%']);
+    var H='<div class="sumhdr"><h2>Arrow Studios — Summary</h2></div>';
+    H+='<div class="sumsub">'+D.meta.propLabel+' · '+D.meta.from+' to '+D.meta.to+' · data as of '+D.meta.asof+'</div>';
+    H+='<div class="sumkpis">'+cells.map(function(c){return '<div class="sumk"><div class="kl">'+c[0]+'</div><div class="kv">'+c[1]+'</div></div>';}).join('')+'</div>';
+    H+='<h4>By cottage</h4>'+tbl(['Cottage','Turnover','Nights','ADR','% of revenue'],D.perProp.map(function(p){return [p.name,M(p.rev),p.nights,M(p.adr),Math.round(p.pct)+'%'];}));
+    H+='<h4>Operating costs (% of revenue)</h4>'+tbl(['Category','Amount','% of revenue'],D.costs.slice(0,8).map(function(c){return [c.cat,M(c.amount),Math.round(c.pct)+'%'];}));
+    var com=$('commentary'); if(com){var clone=com.cloneNode(true); clone.removeAttribute('id'); H+='<div style="margin-top:16px">'+clone.outerHTML+'</div>';}
+    return H;
+  }
+
+  // ---------- modal ----------
+  var modal;
+  function ensureModal(){
+    if(modal)return; modal=document.createElement('div'); modal.className='expmodal'; modal.id='expModal'; modal.hidden=true;
+    modal.innerHTML='<div class="expbox"><div class="exphead"><h3 id="expTitle"></h3><button class="expx" id="expClose" type="button">✕</button></div><div class="expbody" id="expBody"></div><div class="expfoot"><button class="tbtn" id="expCancel" type="button">Close</button><button class="tbtn" id="expAction" type="button"></button></div></div>';
+    document.body.appendChild(modal);
+    modal.addEventListener('click',function(e){if(e.target===modal)close();});
+    $('expClose').addEventListener('click',close); $('expCancel').addEventListener('click',close);
+  }
+  function open(title,bodyHTML,actionLabel,actionFn){ ensureModal(); $('expTitle').textContent=title; $('expBody').innerHTML=bodyHTML;
+    var a=$('expAction'); a.textContent=actionLabel; var na=a.cloneNode(true); a.parentNode.replaceChild(na,a); na.addEventListener('click',actionFn); modal.hidden=false; }
+  function close(){ if(modal)modal.hidden=true; }
+
+  function openCSV(){ var D=buildData(); open('Data export — preview', csvPreviewHTML(D), '↓ Download CSV', function(){ download('Arrow Studios data '+D.meta.asof+'.csv', csvText(D)); }); }
+  function openSummary(){ var D=buildData(); open('Summary report — preview', summaryHTML(D), '↓ Save as PDF', function(){ setTimeout(function(){window.print();},50); }); }
+
+  function wire(){ var c=$('csvBtn'); if(c)c.addEventListener('click',openCSV); var p=$('pdfBtn'); if(p)p.addEventListener('click',openSummary); fillCommentary(); }
+  if(document.readyState!=='loading')setTimeout(wire,500); else document.addEventListener('DOMContentLoaded',function(){setTimeout(wire,500);});
 })();
 </script>
 </body>
