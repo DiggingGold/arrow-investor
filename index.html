@@ -127,6 +127,8 @@ h1{font-size:20px;margin:0;font-weight:750;letter-spacing:-.01em}
 .commentary .csub{font-size:12px;color:var(--muted2);margin:0 0 14px}
 .commentary p{margin:0 0 12px;font-size:13.5px;line-height:1.62;color:var(--ink)}
 .commentary p .lead{font-weight:700;color:var(--accent)}
+.commentary .clead{margin:14px 0 4px;font-size:13px;font-weight:700;color:#2dd4bf;letter-spacing:.01em}
+:root[data-theme="light"] .commentary .clead{color:#0b6b63}
 .commentary .cfoot{font-size:11px;color:var(--muted2);font-style:italic;margin:4px 0 0}
 .commentary b{color:var(--ink)}
 .expbtns{display:flex;gap:8px;flex-wrap:wrap;margin-left:8px}
@@ -143,7 +145,8 @@ h1{font-size:20px;margin:0;font-weight:750;letter-spacing:-.01em}
 .expbody table.dt th{text-align:left;color:var(--muted2);font-weight:600;text-transform:uppercase;letter-spacing:.03em;font-size:10px;border-bottom:1px solid var(--line);padding:5px 8px}
 .expbody table.dt td{padding:5px 8px;border-bottom:1px solid var(--line);color:var(--ink)}
 .expbody table.dt td.num,.expbody table.dt th.num{text-align:right;font-variant-numeric:tabular-nums}
-.expbody h4{margin:16px 0 6px;font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:var(--accent)}
+.expbody h4{margin:16px 0 6px;font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:#2dd4bf}
+:root[data-theme="light"] .expbody h4{color:#0b6b63}
 .expbody h4:first-child{margin-top:0}
 .sumhdr{margin:0 0 4px}.sumhdr h2{margin:0;font-size:19px;color:var(--ink)}
 .sumsub{font-size:12px;color:var(--muted2);margin:0 0 14px}
@@ -198,7 +201,7 @@ tbody tr:hover{background:#0f766e08}
       </div>
     </div>
     <div class="tools">
-      <div class="expbtns"><button class="tbtn" id="csvBtn" type="button">↓ CSV</button><button class="tbtn" id="pdfBtn" type="button">Summary</button></div>
+      <div class="expbtns"><button class="tbtn" id="csvBtn" type="button">↓ Data</button><button class="tbtn" id="pdfBtn" type="button">↓ Summary</button></div>
       <button class="tbtn" id="filterToggle" type="button">Hide filters</button>
       <button class="tbtn" id="themeToggle" type="button">Dark</button>
       <div class="asof" id="asof"></div>
@@ -235,9 +238,12 @@ tbody tr:hover{background:#0f766e08}
     <div class="commentary" id="commentary">
       <h3>Market position and growth opportunity</h3>
       <div class="csub">How the two cottages sit against the local market, and where the runway is.</div>
-      <p><span class="lead">Market conditions.</span> The Wakatipu Basin is one of the country’s tightest short-stay markets. Demand holds up through the year on the strength of Queenstown and Arrowtown tourism, while supply is held back by the district plan, which lets a property like this take paying guests for only 90 nights a year without a specific consent. That scarcity keeps nightly rates firm: across the local comparable set, one-bedroom homes clear a median of about <b>$213</b> a night and two-bedroom homes about <b>$360</b>, with the stronger listings well above that.</p>
-      <p><span class="lead">Where the cottages sit.</span> Stone Cottage is already trading at the top of its bracket — an average rate of about <b><span data-fill="stoneADR">$386</span></b> a night, close to the 90th percentile for one-bedroom homes locally, at around <b><span data-fill="stoneOcc">78%</span></b> occupancy since it opened. It is a proven premium performer. Arrow Junction (Cream) Cottage is the more interesting case: as a two-bedroom unit it should sit well above Stone, yet its average rate of about <b><span data-fill="ajcADR">$276</span></b> is currently below the bottom quartile of the two-bedroom market, at about <b><span data-fill="ajcOcc">60%</span></b> occupancy. That is not a fault in the cottage — it is a newer listing still building its review history, and it points straight to the upside.</p>
-      <p><span class="lead">Opportunity for growth.</span> The clearest lever is Cream Cottage’s rate. The two-bedroom market median sits near <b>$360</b> and the upper quartile near <b>$529</b>, both well above its current <b><span data-fill="ajcADR2">$276</span></b>; as it accumulates reviews and repeat guests there is room to lift the rate without moving beyond where the market already clears. Its occupancy has similar headroom toward the high-70s Stone already runs at. Both cottages also still take most bookings through the online travel agents, which charge around 15% commission — direct bookings, currently about <b><span data-fill="stoneDirect">5%</span></b> for Stone and <b><span data-fill="ajcDirect">11%</span></b> for Cream, carry none, so every booking moved to the website lands straight on the bottom line. Underpinning all of it is the year-round letting consent, which lets both cottages trade every night of the year rather than the 90 the plan allows by default. The room to grow nights and rate is already consented and in place.</p>
+      <h4 class="clead">Market conditions</h4>
+      <p>The Wakatipu Basin is one of the country’s tightest short-stay markets. Demand holds up through the year on the strength of Queenstown and Arrowtown tourism, while supply is held back by the district plan, which lets a property like this take paying guests for only 90 nights a year without a specific consent. That scarcity keeps nightly rates firm: across the local comparable set, one-bedroom homes clear a median of about <b>$213</b> a night and two-bedroom homes about <b>$360</b>, with the stronger listings well above that.</p>
+      <h4 class="clead">Where the cottages sit</h4>
+      <p>Stone Cottage is already trading at the top of its bracket — an average rate of about <b><span data-fill="stoneADR">$386</span></b> a night, close to the 90th percentile for one-bedroom homes locally, at around <b><span data-fill="stoneOcc">78%</span></b> occupancy since it opened. It is a proven premium performer. Arrow Junction (Cream) Cottage is the more interesting case: as a two-bedroom unit it should sit well above Stone, yet its average rate of about <b><span data-fill="ajcADR">$276</span></b> is currently below the bottom quartile of the two-bedroom market, at about <b><span data-fill="ajcOcc">60%</span></b> occupancy. That is not a fault in the cottage — it is a newer listing still building its review history, and it points straight to the upside.</p>
+      <h4 class="clead">Opportunity for growth</h4>
+      <p>The clearest lever is Cream Cottage’s rate. The two-bedroom market median sits near <b>$360</b> and the upper quartile near <b>$529</b>, both well above its current <b><span data-fill="ajcADR2">$276</span></b>; as it accumulates reviews and repeat guests there is room to lift the rate without moving beyond where the market already clears. Its occupancy has similar headroom toward the high-70s Stone already runs at. Both cottages also still take most bookings through the online travel agents, which charge around 15% commission — direct bookings, currently about <b><span data-fill="stoneDirect">5%</span></b> for Stone and <b><span data-fill="ajcDirect">11%</span></b> for Cream, carry none, so every booking moved to the website lands straight on the bottom line. Underpinning all of it is the year-round letting consent, which lets both cottages trade every night of the year rather than the 90 the plan allows by default. The room to grow nights and rate is already consented and in place.</p>
       <div class="cfoot">Figures reflect the latest booking data and the local PriceLabs comparable set. Indicative only.</div>
     </div>
 
@@ -1458,7 +1464,7 @@ const CBRK=[{"k":"Mar-25","s":1740787200000,"e":1743465599000,"b":"Actual","rev"
     rows.forEach(function(r){var rr=+r.rental_revenue||0,nd=r.no_of_days||0; rev+=rr; nights+=nd;
       var d=new Date(r.start_date),mk=d.getUTCFullYear()+'-'+String(d.getUTCMonth()+1).padStart(2,'0');
       var pk=r.listing_name==='Stone Cottage'?'stone':'ajc';
-      var m=mon[mk]||(mon[mk]={stone:0,ajc:0,nights:0}); m[pk]+=rr; m.nights+=nd;
+      var m=mon[mk]||(mon[mk]={stone:0,ajc:0,sN:0,aN:0,nights:0}); m[pk]+=rr; m[pk==='stone'?'sN':'aN']+=nd; m.nights+=nd;
       if(pp[r.listing_name]){pp[r.listing_name].rev+=rr;pp[r.listing_name].n+=nd;}
       var c=ch[r.booking_source]||(ch[r.booking_source]={res:0,nights:0,rev:0}); c.res++;c.nights+=nd;c.rev+=rr; });
     // costs allocated from CBRK over window
@@ -1475,9 +1481,11 @@ const CBRK=[{"k":"Mar-25","s":1740787200000,"e":1743465599000,"b":"Actual","rev"
       meta:{propLabel:propLabel, from:($('from')?$('from').value:''), to:($('to')?$('to').value:''), asof:(typeof SNAPSHOT_DATE!=='undefined'?SNAPSHOT_DATE:''), gen:new Date().toISOString().slice(0,10)},
       kpi:{revenue:K.revenue,nights:K.nights,reservations:K.reservations,occPct:K.occPct,adr:K.adr,opcost:(K.opcost||op),marginPct:K.marginPct,directPct:K.directPct},
       perProp:['Stone Cottage','Arrow Junction Cottage'].filter(function(nm){return pp[nm].rev>0||pp[nm].n>0;}).map(function(nm){var x=pp[nm];return {name:(nm==='Arrow Junction Cottage'?'AJC / Cream Cottage':nm),rev:x.rev,nights:x.n,adr:(x.n?x.rev/x.n:0),pct:(rev?x.rev/rev*100:0)};}),
-      monthly:Object.keys(mon).sort().map(function(k){var m=mon[k];return {month:k,stone:m.stone,ajc:m.ajc,total:m.stone+m.ajc,nights:m.nights};}),
+      monthly:Object.keys(mon).sort().map(function(k){var m=mon[k];return {month:k,stone:m.stone,ajc:m.ajc,total:m.stone+m.ajc,sN:m.sN,aN:m.aN,nights:m.nights,adr:(m.nights?(m.stone+m.ajc)/m.nights:0)};}),
       costs:Object.keys(catt).sort(function(a,b){return catt[b]-catt[a];}).map(function(k){return {cat:k,amount:catt[k],pct:(rev?catt[k]/rev*100:0)};}),
       channel:Object.keys(ch).sort(function(a,b){return ch[b].rev-ch[a].rev;}).map(function(k){var c=ch[k];return {name:CN[k]||k,res:c.res,nights:c.nights,rev:c.rev,pct:(rev?c.rev/rev*100:0)};}),
+      reservations:rows.slice().sort(function(a,b){return a.start_date-b.start_date;}).map(function(r){return {checkin:new Date(r.start_date).toISOString().slice(0,10),cottage:(r.listing_name==='Stone Cottage'?'Stone':'AJC/Cream'),channel:(CN[r.booking_source]||r.booking_source),nights:r.no_of_days,revenue:+r.rental_revenue||0,nightly:+r.nightly_amount||0,lead:r.lead_time,booked:new Date(r.booked_time).toISOString().slice(0,10)};}),
+      market:(typeof MARKET!=='undefined')?MARKET:null,
       totalRev:rev
     };
   }
@@ -1485,15 +1493,17 @@ const CBRK=[{"k":"Mar-25","s":1740787200000,"e":1743465599000,"b":"Actual","rev"
   // ---------- CSV (data only) ----------
   function q(v){v=(v==null?'':''+v);return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v;}
   function csvText(D){
-    var L=[];L.push(['Arrow Studios — data export']);L.push(['Property',D.meta.propLabel]);L.push(['Period (check-in)',D.meta.from+' to '+D.meta.to]);
+    var L=[];L.push(['45 Arrow Junction Road, Arrowtown — data export']);L.push(['Property',D.meta.propLabel]);L.push(['Period (check-in)',D.meta.from+' to '+D.meta.to]);
     L.push(['Data as of',D.meta.asof]);L.push(['Generated',D.meta.gen]);L.push([]);
     L.push(['SUMMARY']);L.push(['Revenue',Math.round(D.kpi.revenue)]);L.push(['Nights',D.kpi.nights]);L.push(['Reservations',D.kpi.reservations]);
     if(D.kpi.occPct!=null)L.push(['Occupancy %',D.kpi.occPct]);L.push(['ADR',Math.round(D.kpi.adr)]);L.push(['Direct share %',Math.round(D.kpi.directPct)]);
     L.push(['Operating costs',Math.round(D.kpi.opcost)]);L.push(['Operating margin %',Math.round(D.kpi.marginPct)]);L.push([]);
     L.push(['BY COTTAGE']);L.push(['Cottage','Turnover','Nights','ADR','% of revenue']);D.perProp.forEach(function(p){L.push([p.name,Math.round(p.rev),p.nights,Math.round(p.adr),Math.round(p.pct)]);});L.push([]);
-    L.push(['MONTHLY REVENUE']);L.push(['Month','Stone','AJC/Cream','Total','Nights']);D.monthly.forEach(function(m){L.push([m.month,Math.round(m.stone),Math.round(m.ajc),Math.round(m.total),m.nights]);});L.push([]);
+    L.push(['MONTHLY']);L.push(['Month','Stone rev','AJC/Cream rev','Total rev','Stone nights','AJC nights','Total nights','ADR']);D.monthly.forEach(function(m){L.push([m.month,Math.round(m.stone),Math.round(m.ajc),Math.round(m.total),m.sN,m.aN,m.nights,Math.round(m.adr)]);});L.push([]);
     L.push(['OPERATING COST BREAKDOWN']);L.push(['Category','Amount','% of revenue']);D.costs.forEach(function(c){L.push([c.cat,Math.round(c.amount),Math.round(c.pct)]);});L.push([]);
     L.push(['CHANNEL MIX']);L.push(['Channel','Reservations','Nights','Revenue','% of revenue']);D.channel.forEach(function(c){L.push([c.name,c.res,c.nights,Math.round(c.rev),Math.round(c.pct)]);});
+    if(D.market){L.push([]);L.push(['MARKET BENCHMARKS (nightly, PriceLabs comp set)']);L.push(['Cottage','Type','25th','Median','75th','90th']);['Stone Cottage','Arrow Junction Cottage'].forEach(function(nm){var x=D.market[nm];if(x)L.push([(nm==='Arrow Junction Cottage'?'AJC/Cream':'Stone'),x.cat,x.p25,x.p50,x.p75,x.p90]);});}
+    L.push([]);L.push(['RESERVATIONS ('+D.reservations.length+')']);L.push(['Check-in','Cottage','Channel','Nights','Revenue','Nightly','Lead days','Booked']);D.reservations.forEach(function(r){L.push([r.checkin,r.cottage,r.channel,r.nights,Math.round(r.revenue),Math.round(r.nightly),r.lead,r.booked]);});
     return L.map(function(r){return r.map(q).join(',');}).join('\n');
   }
   function tbl(head,rows){var h='<tr>'+head.map(function(x,i){return '<th'+(i?' class="num"':'')+'>'+x+'</th>';}).join('')+'</tr>';
@@ -1501,12 +1511,14 @@ const CBRK=[{"k":"Mar-25","s":1740787200000,"e":1743465599000,"b":"Actual","rev"
     return '<table class="dt"><thead>'+h+'</thead><tbody>'+b+'</tbody></table>';}
   function csvPreviewHTML(D){
     var H='';
-    H+='<div class="sumsub">'+D.meta.propLabel+' · '+D.meta.from+' to '+D.meta.to+' · data as of '+D.meta.asof+'</div>';
+    H+='<div class="sumsub">45 Arrow Junction Road, Arrowtown · '+D.meta.propLabel+' · '+D.meta.from+' to '+D.meta.to+' · data as of '+D.meta.asof+'</div>';
     H+='<h4>Summary</h4>'+tbl(['Metric','Value'],[['Revenue',M(D.kpi.revenue)],['Nights',D.kpi.nights],['Reservations',D.kpi.reservations]].concat(D.kpi.occPct!=null?[['Occupancy',D.kpi.occPct+'%']]:[]).concat([['ADR',M(D.kpi.adr)],['Direct share',Math.round(D.kpi.directPct)+'%'],['Operating costs',M(D.kpi.opcost)],['Operating margin',Math.round(D.kpi.marginPct)+'%']]));
     H+='<h4>By cottage</h4>'+tbl(['Cottage','Turnover','Nights','ADR','% rev'],D.perProp.map(function(p){return [p.name,M(p.rev),p.nights,M(p.adr),Math.round(p.pct)+'%'];}));
-    H+='<h4>Monthly revenue</h4>'+tbl(['Month','Stone','AJC/Cream','Total','Nights'],D.monthly.map(function(m){return [m.month,M(m.stone),M(m.ajc),M(m.total),m.nights];}));
+    H+='<h4>Monthly</h4>'+tbl(['Month','Stone rev','AJC/Cream rev','Total','Nights','ADR'],D.monthly.map(function(m){return [m.month,M(m.stone),M(m.ajc),M(m.total),m.nights,M(m.adr)];}));
     H+='<h4>Operating cost breakdown</h4>'+tbl(['Category','Amount','% rev'],D.costs.map(function(c){return [c.cat,M(c.amount),Math.round(c.pct)+'%'];}));
     H+='<h4>Channel mix</h4>'+tbl(['Channel','Res','Nights','Revenue','% rev'],D.channel.map(function(c){return [c.name,c.res,c.nights,M(c.rev),Math.round(c.pct)+'%'];}));
+    if(D.market){H+='<h4>Market benchmarks (nightly)</h4>'+tbl(['Cottage','Type','25th','Median','75th','90th'],['Stone Cottage','Arrow Junction Cottage'].filter(function(nm){return D.market[nm];}).map(function(nm){var x=D.market[nm];return [(nm==='Arrow Junction Cottage'?'AJC/Cream':'Stone'),x.cat,M(x.p25),M(x.p50),M(x.p75),M(x.p90)];}));}
+    H+='<h4>Reservations ('+D.reservations.length+')</h4>'+tbl(['Check-in','Cottage','Channel','Nights','Revenue','Nightly','Lead','Booked'],D.reservations.map(function(r){return [r.checkin,r.cottage,r.channel,r.nights,M(r.revenue),M(r.nightly),r.lead,r.booked];}));
     return H;
   }
   function download(name,text){try{var b=new Blob([text],{type:'text/csv;charset=utf-8'}),u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(u);a.remove();},400);}catch(e){alert('Download failed: '+e.message);}}
@@ -1516,8 +1528,8 @@ const CBRK=[{"k":"Mar-25","s":1740787200000,"e":1743465599000,"b":"Actual","rev"
     var k=D.kpi, cells=[['Revenue',M(k.revenue)]];
     if(k.occPct!=null)cells.push(['Occupancy',k.occPct+'%']);
     cells.push(['ADR',M(k.adr)],['Nights',(''+k.nights)],['Reservations',(''+k.reservations)],['Operating costs',M(k.opcost)],['Operating margin',Math.round(k.marginPct)+'%'],['Direct share',Math.round(k.directPct)+'%']);
-    var H='<div class="sumhdr"><h2>Arrow Studios — Summary</h2></div>';
-    H+='<div class="sumsub">'+D.meta.propLabel+' · '+D.meta.from+' to '+D.meta.to+' · data as of '+D.meta.asof+'</div>';
+    var H='<div class="sumhdr"><h2>Performance summary</h2></div>';
+    H+='<div class="sumsub">45 Arrow Junction Road, Arrowtown · '+D.meta.propLabel+' · '+D.meta.from+' to '+D.meta.to+' · data as of '+D.meta.asof+'</div>';
     H+='<div class="sumkpis">'+cells.map(function(c){return '<div class="sumk"><div class="kl">'+c[0]+'</div><div class="kv">'+c[1]+'</div></div>';}).join('')+'</div>';
     H+='<h4>By cottage</h4>'+tbl(['Cottage','Turnover','Nights','ADR','% of revenue'],D.perProp.map(function(p){return [p.name,M(p.rev),p.nights,M(p.adr),Math.round(p.pct)+'%'];}));
     H+='<h4>Operating costs (% of revenue)</h4>'+tbl(['Category','Amount','% of revenue'],D.costs.slice(0,8).map(function(c){return [c.cat,M(c.amount),Math.round(c.pct)+'%'];}));
@@ -1538,8 +1550,8 @@ const CBRK=[{"k":"Mar-25","s":1740787200000,"e":1743465599000,"b":"Actual","rev"
     var a=$('expAction'); a.textContent=actionLabel; var na=a.cloneNode(true); a.parentNode.replaceChild(na,a); na.addEventListener('click',actionFn); modal.hidden=false; }
   function close(){ if(modal)modal.hidden=true; }
 
-  function openCSV(){ var D=buildData(); open('Data export — preview', csvPreviewHTML(D), '↓ Download CSV', function(){ download('Arrow Studios data '+D.meta.asof+'.csv', csvText(D)); }); }
-  function openSummary(){ var D=buildData(); open('Summary report — preview', summaryHTML(D), '↓ Save as PDF', function(){ setTimeout(function(){window.print();},50); }); }
+  function openCSV(){ var D=buildData(); open('Data export', csvPreviewHTML(D), '↓ Download CSV', function(){ download('Performance data '+D.meta.asof+'.csv', csvText(D)); }); }
+  function openSummary(){ var D=buildData(); open('Summary report', summaryHTML(D), '↓ Save as PDF', function(){ setTimeout(function(){window.print();},50); }); }
 
   function wire(){ var c=$('csvBtn'); if(c)c.addEventListener('click',openCSV); var p=$('pdfBtn'); if(p)p.addEventListener('click',openSummary); fillCommentary(); }
   if(document.readyState!=='loading')setTimeout(wire,500); else document.addEventListener('DOMContentLoaded',function(){setTimeout(wire,500);});
