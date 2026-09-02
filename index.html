@@ -129,7 +129,7 @@ h1{font-size:20px;margin:0;font-weight:750;letter-spacing:-.01em}
 .commentary p .lead{font-weight:700;color:var(--accent)}
 .commentary .clead{margin:14px 0 4px;font-size:13px;font-weight:700;color:#2dd4bf;letter-spacing:.01em}
 :root[data-theme="light"] .commentary .clead{color:#0b6b63}
-.commentary .cfoot{font-size:11px;color:var(--muted2);font-style:italic;margin:4px 0 0}
+.commentary .cfoot{font-size:11px;color:var(--muted2);font-style:italic;margin:4px 0 0}.cacc{border-top:1px solid var(--line)}.commentary>.cacc:first-of-type{border-top:none}.cacc>.clead{margin:0;padding:11px 0;cursor:pointer;user-select:none;display:flex;align-items:center;justify-content:space-between;gap:12px}.cacc>.clead:hover{opacity:.82}.cacc>.clead::after{content:'';flex:0 0 auto;width:8px;height:8px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(-45deg);transition:transform .22s;opacity:.6;margin-right:2px}.cacc.open>.clead::after{transform:rotate(45deg)}.cbody{max-height:0;overflow:hidden;transition:max-height .32s ease}.cacc.open>.cbody{max-height:900px}.cacc>.cbody>p:first-child{margin-top:2px}.cacc>.cbody>p:last-child{margin-bottom:12px}#expModal .cbody{max-height:none!important;overflow:visible!important}#expModal .cacc{border-top:none}#expModal .cacc>.clead{cursor:default}#expModal .cacc>.clead::after{display:none}
 .commentary b{color:var(--ink)}
 .expbtns{display:flex;gap:8px;flex-wrap:wrap;margin-left:8px}
 .expmodal{position:fixed;inset:0;z-index:200;display:flex;align-items:flex-start;justify-content:center;background:rgba(4,10,18,.62);backdrop-filter:blur(3px);overflow:auto;padding:28px 16px}
@@ -1562,6 +1562,6 @@ const CBRK=[{"k":"Mar-25","s":1740787200000,"e":1743465599000,"b":"Actual","rev"
   if(document.readyState!=='loading')setTimeout(wire,500); else document.addEventListener('DOMContentLoaded',function(){setTimeout(wire,500);});
 })();
 </script>
-</body>
+<script>(function(){function acc(card){if(!card||card.__acc)return;card.__acc=1;var kids=[].slice.call(card.children),groups=[],cur=null;kids.forEach(function(el){var c=el.classList;if(c&&c.contains('clead')){cur={head:el,body:[]};groups.push(cur);}else if(cur&&!(c&&c.contains('cfoot'))){cur.body.push(el);}else{cur=null;}});groups.forEach(function(g){var w=document.createElement('div');w.className='cacc';var b=document.createElement('div');b.className='cbody';card.insertBefore(w,g.head);w.appendChild(g.head);g.body.forEach(function(x){b.appendChild(x);});w.appendChild(b);g.head.addEventListener('click',function(){w.classList.toggle('open');});});}function run(){acc(document.getElementById('commentary'));acc(document.getElementById('cottagereview'));}if(document.readyState!=='loading')run();else document.addEventListener('DOMContentLoaded',run);})();</script></body>
 
 </html>
