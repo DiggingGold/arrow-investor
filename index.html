@@ -129,7 +129,7 @@ h1{font-size:20px;margin:0;font-weight:750;letter-spacing:-.01em}
 .commentary p .lead{font-weight:700;color:var(--accent)}
 .commentary .clead{margin:14px 0 4px;font-size:13px;font-weight:700;color:#2dd4bf;letter-spacing:.01em}
 :root[data-theme="light"] .commentary .clead{color:#0b6b63}
-.commentary .cfoot{font-size:11px;color:var(--muted2);font-style:italic;margin:4px 0 0}.cacc{border-top:1px solid var(--line)}.commentary>.cacc:first-of-type{border-top:none}.cacc>.clead{margin:0;padding:11px 0;cursor:pointer;user-select:none;display:flex;align-items:center;justify-content:space-between;gap:12px}.cacc>.clead:hover{opacity:.82}.cacc>.clead::after{content:'';flex:0 0 auto;width:8px;height:8px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(-45deg);transition:transform .22s;opacity:.6;margin-right:2px}.cacc.open>.clead::after{transform:rotate(45deg)}.cbody{max-height:0;overflow:hidden;transition:max-height .32s ease}.cacc.open>.cbody{max-height:900px}.cacc>.cbody>p:first-child{margin-top:2px}.cacc>.cbody>p:last-child{margin-bottom:12px}#expModal .cbody{max-height:none!important;overflow:visible!important}#expModal .cacc{border-top:none}#expModal .cacc>.clead{cursor:default}#expModal .cacc>.clead::after{display:none}
+.commentary .cfoot{font-size:11px;color:var(--muted2);font-style:italic;margin:4px 0 0}.cacc{border-top:1px solid var(--line)}.commentary>.cacc:first-of-type{border-top:none}.cacc>.clead{margin:0;padding:11px 0;cursor:pointer;user-select:none;display:flex;align-items:center;justify-content:space-between;gap:12px}.cacc>.clead:hover{opacity:.82}.cacc>.clead::after{content:'';flex:0 0 auto;width:8px;height:8px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(-45deg);transition:transform .22s;opacity:.6;margin-right:2px}.cacc.open>.clead::after{transform:rotate(45deg)}.cbody{max-height:0;overflow:hidden;transition:max-height .32s ease}.cacc.open>.cbody{max-height:900px}.cacc>.cbody>p:first-child{margin-top:2px}.cacc>.cbody>p:last-child{margin-bottom:12px}#expModal .cbody{max-height:none!important;overflow:visible!important}#expModal .cacc{border-top:none}#expModal .cacc>.clead{cursor:default}#expModal .cacc>.clead::after{display:none}.costtot{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-top:12px;padding-top:10px;border-top:1px solid var(--line)}.costtot .ctlab{font-size:11px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;color:var(--muted2)}.costtot .ctval{font-size:14px;font-weight:750;color:var(--ink)}
 .commentary b{color:var(--ink)}
 .expbtns{display:flex;gap:8px;flex-wrap:wrap;margin-left:8px}
 .expmodal{position:fixed;inset:0;z-index:200;display:flex;align-items:flex-start;justify-content:center;background:rgba(4,10,18,.62);backdrop-filter:blur(3px);overflow:auto;padding:28px 16px}
@@ -297,7 +297,7 @@ tbody tr:hover{background:#0f766e08}
     <div class="grid">
       <div class="card full">
         <h3>Revenue &amp; nights by month</h3>
-        <div class="hint">By check-in month. Bars = revenue, line = nights booked. Solid = realised; hatched = confirmed forward bookings.</div>
+        <div class="hint">By check-in month. Bars = revenue, line = nights booked. Solid = realised; hatched = confirmed forward bookings. All revenue figures are GST-inclusive (NZ GST 15%).</div>
         <div class="chartbox tall"><canvas id="chMonthly"></canvas></div>
       </div>
       <div class="card">
@@ -358,7 +358,7 @@ tbody tr:hover{background:#0f766e08}
         <div class="chartbox"><canvas id="chNightsChannel"></canvas></div>
       </div>
       <div class="card full">
-        <h3>Cost ratios &amp; direct share by property</h3>
+        <h3>Booking cost ratio &amp; direct share by property</h3>
         <div class="hint">As a % of each property's revenue: cleaning, platform commission, and the commission-free direct sales. Respects date &amp; property filters.</div>
         <div class="chartbox tall"><canvas id="chCost"></canvas></div>
       </div>
@@ -368,7 +368,7 @@ tbody tr:hover{background:#0f766e08}
         <div class="chartbox"><canvas id="chDirect"></canvas></div>
       </div>
       <div class="card full">
-        <h3>Operating margin by property</h3>
+        <h3>Contribution margin by property</h3>
         <div class="hint">Where each property's revenue goes: platform commission and cleaning (both modelled), leaving net contribution. Margin % shown per property. Excludes fixed overheads.</div>
         <div class="chartbox tall"><canvas id="chMargin"></canvas></div>
       </div>
@@ -422,6 +422,7 @@ tbody tr:hover{background:#0f766e08}
         <h3>Operating cost breakdown</h3>
         <div class="hint">Operating costs over the selected period. Commission &amp; cleaning are actual per cottage; shared site costs (electricity, gas, rates, insurance, broadband, PMS, pricing, Solar) are allocated by revenue share when one cottage is selected. Percentages are each cost as a share of revenue (e.g. commission runs ~15% of revenue).</div>
         <div class="chartbox"><canvas id="chCostMix"></canvas></div>
+        <div class="costtot" id="costTot"></div>
       </div>
       <div class="card">
         <h3>2025 vs 2026 — income, expenses &amp; surplus</h3>
@@ -457,7 +458,7 @@ tbody tr:hover{background:#0f766e08}
       </div>
     </div>
 </div>
-    <div class="foot"><span id="footnote" style="display:block;color:var(--accent);font-weight:600;margin-bottom:8px"></span>All figures NZD · indicative and unaudited · forward-year months are projections.</div>
+    <div class="foot"><span id="footnote" style="display:block;color:var(--accent);font-weight:600;margin-bottom:8px"></span>All figures NZD and GST-inclusive · indicative and unaudited · forward-year months are projections.</div>
   </div>
 
   <div id="errbox" class="state err" style="display:none"></div>
@@ -1257,7 +1258,7 @@ const CBRK=[{"k":"Mar-25","s":1740787200000,"e":1743465599000,"b":"Actual","rev"
     var items=[['Channel commission',A.comm,'#2563eb'],['Cleaning',A.clean,'#0f766e'],['Electricity',A.elec,'#d97706'],['Gas',A.gas,'#eab308'],['Supplies',A.supplies,'#e11d48'],['Maintenance',A.maint,'#ec4899'],['Insurance',A.ins,'#8b5cf6'],['Rates',A.rates,'#16a34a'],['Broadband',A.bband,'#06b6d4'],['PMS',A.pms,'#c026d3'],['Dynamic pricing',A.dyn,'#4f46e5'],['Solar lease',A.solar,'#64748b']];
     items.sort(function(a,b){return b[1]-a[1];});
     var tot=items.reduce(function(s,x){return s+x[1];},0)||1;
-    var rden=totRev||1;
+    var rden=totRev||1;var _ct=document.getElementById('costTot');if(_ct){_ct.innerHTML='<span class="ctlab">Total operating costs</span><span class="ctval">'+Math.round(tot/rden*100)+'% of revenue \u00b7 '+fmt(Math.round(tot))+'</span>';}
     var labels=items.map(function(x){return x[0]+'  ('+Math.round(x[1]/rden*100)+'% of rev)';});
     var ex=Chart.getChart(el); if(ex)ex.destroy();
     new Chart(el,{type:'bar',
@@ -1383,7 +1384,7 @@ const CBRK=[{"k":"Mar-25","s":1740787200000,"e":1743465599000,"b":"Actual","rev"
 
 <script>
 (function(){
-  var CHARTS=[["chMonthly", "Revenue"], ["chQMatrix", "Quarterly revenue"], ["chTrend", "Revenue trend"], ["chYoY", "Revenue YoY"], ["chRevChannel", "Revenue by channel"], ["chYr", "Year comparison"], ["chCostMix", "Cost breakdown"], ["chCost", "Cost ratios"], ["chIvE", "Income vs expenses"], ["chQCost", "Cost vs income"], ["chCmpPerf", "2025 vs 2026"], ["chMargin", "Operating margin"], ["chOcc", "Occupancy"], ["chSeason", "Occupancy by season"], ["chCreated", "Reservations created"], ["chPace", "Booking pace"], ["chLead", "Lead time"], ["chLen", "Stay length"], ["chMarket", "Rate vs market"], ["chNightsChannel", "Nights by channel"], ["chDirect", "Direct share"], ["chCmpDir", "Direct 2025 vs 2026"]];
+  var CHARTS=[["chMonthly", "Revenue"], ["chQMatrix", "Quarterly revenue"], ["chTrend", "Revenue trend"], ["chYoY", "Revenue YoY"], ["chRevChannel", "Revenue by channel"], ["chYr", "Year comparison"], ["chCostMix", "Cost breakdown"], ["chCost", "Booking cost ratio"], ["chIvE", "Income vs expenses"], ["chQCost", "Cost vs income"], ["chCmpPerf", "2025 vs 2026"], ["chMargin", "Contribution margin"], ["chOcc", "Occupancy"], ["chSeason", "Occupancy by season"], ["chCreated", "Reservations created"], ["chPace", "Booking pace"], ["chLead", "Lead time"], ["chLen", "Stay length"], ["chMarket", "Rate vs market"], ["chNightsChannel", "Nights by channel"], ["chDirect", "Direct share"], ["chCmpDir", "Direct 2025 vs 2026"]];
   var ICO='<svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>';
   var STORE='arrowChartOrder_v2';
   var refs={}, dragEl=null;
@@ -1509,7 +1510,7 @@ const CBRK=[{"k":"Mar-25","s":1740787200000,"e":1743465599000,"b":"Actual","rev"
     L.push(['Data as of',D.meta.asof]);L.push(['Generated',D.meta.gen]);L.push([]);
     L.push(['SUMMARY']);L.push(['Revenue',Math.round(D.kpi.revenue)]);L.push(['Nights',D.kpi.nights]);L.push(['Reservations',D.kpi.reservations]);
     if(D.kpi.occPct!=null)L.push(['Occupancy %',D.kpi.occPct]);L.push(['ADR',Math.round(D.kpi.adr)]);L.push(['Direct share %',Math.round(D.kpi.directPct)]);
-    L.push(['Operating costs',Math.round(D.kpi.opcost)]);L.push(['Operating margin %',Math.round(D.kpi.marginPct)]);L.push([]);
+    L.push(['Operating costs',Math.round(D.kpi.opcost)]);L.push(['Contribution margin %',Math.round(D.kpi.marginPct)]);L.push([]);
     L.push(['DASHBOARD TILES']);L.push(['Metric','Value']);D.tiles.forEach(function(t){L.push([t.label,t.value]);});L.push([]);
     L.push(['BY COTTAGE']);L.push(['Cottage','Turnover','Nights','ADR','% of revenue']);D.perProp.forEach(function(p){L.push([p.name,Math.round(p.rev),p.nights,Math.round(p.adr),Math.round(p.pct)]);});
     return L.map(function(r){return r.map(q).join(',');}).join('\n');
@@ -1520,7 +1521,7 @@ const CBRK=[{"k":"Mar-25","s":1740787200000,"e":1743465599000,"b":"Actual","rev"
   function csvPreviewHTML(D){
     var H='';
     H+='<div class="sumsub">45 Arrow Junction Road, Arrowtown · '+D.meta.propLabel+' · '+D.meta.from+' to '+D.meta.to+' · data as of '+D.meta.asof+'</div>';
-    H+='<h4>Summary</h4>'+tbl(['Metric','Value'],[['Revenue',M(D.kpi.revenue)],['Nights',D.kpi.nights],['Reservations',D.kpi.reservations]].concat(D.kpi.occPct!=null?[['Occupancy',D.kpi.occPct+'%']]:[]).concat([['ADR',M(D.kpi.adr)],['Direct share',Math.round(D.kpi.directPct)+'%'],['Operating costs',M(D.kpi.opcost)],['Operating margin',Math.round(D.kpi.marginPct)+'%']]));
+    H+='<h4>Summary</h4>'+tbl(['Metric','Value'],[['Revenue',M(D.kpi.revenue)],['Nights',D.kpi.nights],['Reservations',D.kpi.reservations]].concat(D.kpi.occPct!=null?[['Occupancy',D.kpi.occPct+'%']]:[]).concat([['ADR',M(D.kpi.adr)],['Direct share',Math.round(D.kpi.directPct)+'%'],['Operating costs',M(D.kpi.opcost)],['Contribution margin',Math.round(D.kpi.marginPct)+'%']]));
     H+='<h4>Dashboard tiles</h4>'+tbl(['Metric','Value'],D.tiles.map(function(t){return [t.label,t.value];}));
     H+='<h4>By cottage</h4>'+tbl(['Cottage','Turnover','Nights','ADR','% rev'],D.perProp.map(function(p){return [p.name,M(p.rev),p.nights,M(p.adr),Math.round(p.pct)+'%'];}));
     return H;
@@ -1531,7 +1532,7 @@ const CBRK=[{"k":"Mar-25","s":1740787200000,"e":1743465599000,"b":"Actual","rev"
   function summaryHTML(D){
     var k=D.kpi, cells=[['Revenue',M(k.revenue)]];
     if(k.occPct!=null)cells.push(['Occupancy',k.occPct+'%']);
-    cells.push(['ADR',M(k.adr)],['Nights',(''+k.nights)],['Reservations',(''+k.reservations)],['Operating costs',M(k.opcost)],['Operating margin',Math.round(k.marginPct)+'%'],['Direct share',Math.round(k.directPct)+'%']);
+    cells.push(['ADR',M(k.adr)],['Nights',(''+k.nights)],['Reservations',(''+k.reservations)],['Operating costs',M(k.opcost)],['Contribution margin',Math.round(k.marginPct)+'%'],['Direct share',Math.round(k.directPct)+'%']);
     var H='<div class="sumhdr"><h2>Performance summary</h2></div>';
     H+='<div class="sumsub">45 Arrow Junction Road, Arrowtown · '+D.meta.propLabel+' · '+D.meta.from+' to '+D.meta.to+' · data as of '+D.meta.asof+'</div>';
     H+='<div class="sumkpis">'+cells.map(function(c){return '<div class="sumk"><div class="kl">'+c[0]+'</div><div class="kv">'+c[1]+'</div></div>';}).join('')+'</div>';
