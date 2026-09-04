@@ -290,6 +290,16 @@ tbody tr:hover{background:#0f766e08}
         <div class="hint">Revenue, costs and cost-to-income % per year, plus nights, ADR and YoY revenue.</div>
         <table id="tblAnnual"><thead></thead><tbody></tbody></table>
       </div>
+      <div class="card">
+        <h3>Operating cost breakdown</h3>
+        <div class="hint">Operating Costs over the selected period. Commission &amp; Cleaning are actual per cottage; Shared Costs (electricity, gas, rates, insurance, broadband, PMS, pricing, solar) are allocated by revenue share when one cottage is selected. Percentages are each Cost as a % share of revenue</div>
+        <div class="chartbox"><canvas id="chCostMix"></canvas></div>
+        <div class="costtot" id="costTot"></div>
+      </div>
+      <div class="card">
+        <h3>2025 vs 2026 — income, expenses &amp; surplus</h3>
+        <div class="chartbox"><canvas id="chYr"></canvas></div>
+      </div>
       <div class="card full">
         <h3>Cost vs income by quarter</h3>
         <div class="hint">Each quarter's revenue split into costs (commission + cleaning) and net income; the line is cost-to-income %.</div>
@@ -422,16 +432,6 @@ tbody tr:hover{background:#0f766e08}
         <h3>Income vs expenses — monthly</h3>
         <div class="hint">Solid = actual; hatched = forecast (projected).</div>
         <div class="chartbox tall"><canvas id="chIvE"></canvas></div>
-      </div>
-      <div class="card">
-        <h3>Operating cost breakdown</h3>
-        <div class="hint">Operating Costs over the selected period. Commission &amp; Cleaning are actual per cottage; Shared Costs (electricity, gas, rates, insurance, broadband, PMS, pricing, solar) are allocated by revenue share when one cottage is selected. Percentages are each Cost as a % share of revenue</div>
-        <div class="chartbox"><canvas id="chCostMix"></canvas></div>
-        <div class="costtot" id="costTot"></div>
-      </div>
-      <div class="card">
-        <h3>2025 vs 2026 — income, expenses &amp; surplus</h3>
-        <div class="chartbox"><canvas id="chYr"></canvas></div>
       </div>
     </div>
 
