@@ -306,6 +306,11 @@ tbody tr:hover{background:#0f766e08}
         <div class="chartbox tall"><canvas id="chQCost"></canvas></div>
         <table id="tblQMatrix"><thead></thead><tbody></tbody></table>
       </div>
+      <div class="card full">
+        <h3>Income vs expenses — monthly</h3>
+        <div class="hint">Solid = actual; hatched = forecast (projected).</div>
+        <div class="chartbox tall"><canvas id="chIvE"></canvas></div>
+      </div>
     </div>
 
     <div class="sec"><span>Revenue &amp; occupancy</span></div>
@@ -427,14 +432,6 @@ tbody tr:hover{background:#0f766e08}
       <div class="kpi"><div class="top"><div class="ic" style="background:#16a34a18"><svg viewBox="0 0 24 24" stroke="#16a34a">{ICONS_chart}</svg></div><div class="lab">Surplus swing 2025→2026</div></div><div class="val">+$111.7k</div><div class="note">−$1,082 (ramp) → +$110,660</div></div>
     </div>
     <div class="hint" style="margin:6px 2px 2px;color:var(--muted2);font-size:11.5px">Business operating surplus — excludes owner drawings &amp; financing</div>
-    <div class="grid">
-      <div class="card full">
-        <h3>Income vs expenses — monthly</h3>
-        <div class="hint">Solid = actual; hatched = forecast (projected).</div>
-        <div class="chartbox tall"><canvas id="chIvE"></canvas></div>
-      </div>
-    </div>
-
 <style>
 .valbtn{background:var(--card,#1a2230);color:var(--accent,#2dd4bf);border:1px solid var(--accent,#2dd4bf);border-radius:999px;padding:8px 20px;font-size:13px;font-weight:600;cursor:pointer;transition:all .15s}
 .valbtn:hover{background:var(--accent,#2dd4bf);color:#0a0e14}
