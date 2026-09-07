@@ -638,6 +638,13 @@ function filteredNoDate(){
 }
 function daysBetween(a,b){return Math.max(1,Math.round((b-a)/86400000)+1);}
 function activeListings(){return Math.max(1,selProps.size);}
+const PROP_LAUNCH={'Arrow Junction Cottage':Date.UTC(2025,0,1),'Stone Cottage':Date.UTC(2025,11,1)};
+function occAvailNights(f,t){
+  var props=['Arrow Junction Cottage','Stone Cottage'];
+  if(typeof selProps!=='undefined'&&selProps.size){props=[];selProps.forEach(function(p){props.push(p);});}
+  var tot=0; props.forEach(function(p){var lv=PROP_LAUNCH[p]; if(lv==null)lv=f; var s=(f>lv?f:lv); if(t>s)tot+=Math.round((t-s)/86400000);});
+  return tot||1;
+}
 
 // Average occupancy by season (Southern Hemisphere), per property, fair active-window basis
 function seasonalOccupancy(rows){
@@ -698,7 +705,7 @@ function render(){
   const occM={}; let occWin=0;
   occSrc.forEach(r=>{let d=new Date(+r.start_date);const nn=+r.no_of_days||0;
     for(let i=0;i<nn;i++){const ms=d.getTime();const k=d.getUTCFullYear()+'-'+String(d.getUTCMonth()+1).padStart(2,'0');occM[k]=(occM[k]||0)+1;if(ms>=f&&ms<=tEff)occWin++;d=new Date(ms+86400000);}});
-  const occAvail=activeListings()*daysBetween(f,tEff);
+  const occAvail=occAvailNights(f,tEff);
   const occPct=occAvail?Math.round(occWin/occAvail*100):null;
   const occToDate=(tEff<t); // true when denominator was capped at today
   var _firstBk=booked.length?Math.min.apply(null,booked.map(function(r){return r.start_date;})):null;
@@ -726,10 +733,15 @@ function render(){
     var _ota=0; for(var _s in _chRev){ if(!DIRECT_SOURCES.has(_s)) _ota+=_chRev[_s]; }
     var _otaPct=rev?Math.round(_ota/rev*100):0, _costPct=rev?Math.round((commTotal+cleanTotal)/rev*100):0;
     var _marginPct=rev?Math.round(contribution/rev*100):0, _surplus=rev-_opcost;
+    var _seas=(typeof seasonalOccupancy==='function')?seasonalOccupancy(filteredNoDate()):{}; var _ss=[],_ws=[];
+    for(var _p in _seas){ if(_seas[_p].summer!=null)_ss.push(_seas[_p].summer); if(_seas[_p].winter!=null)_ws.push(_seas[_p].winter); }
+    var _suOcc=_ss.length?Math.round(_ss.reduce(function(a,b){return a+b;},0)/_ss.length):null;
+    var _wiOcc=_ws.length?Math.round(_ws.reduce(function(a,b){return a+b;},0)/_ws.length):null;
+    var _seasTxt=(_suOcc!=null&&_wiOcc!=null)?(_suOcc+'% / '+_wiOcc+'%'):(occPct==null?'\u2014':occPct+'%');
     window.__cv={
       chMonthly:nz(rev), chAnnual:nz(rev), chQMatrix:nz(_peakQtr),
       chTrend:nz(_nMonths?rev/_nMonths:0), chYoY:(_yoy==null?'\u2014':(_yoy>0?'+':'')+_yoy+'%'),
-      chCmpPerf:nz(_r26), chOcc:(occPct==null?'\u2014':occPct+'%'), chSeason:(occPct==null?'\u2014':occPct+'%'),
+      chCmpPerf:nz(_r26), chOcc:(occPct==null?'\u2014':occPct+'%'), chSeason:_seasTxt,
       chCreated:n.toLocaleString(), chPace:nz(rev), chLead:_avgLead+' days', chLen:_avgStay.toFixed(2)+' nts',
       chMarket:nz2(_adr), chRevChannel:_otaPct+'% OTA', chNightsChannel:nights.toLocaleString(),
       chDirect:directPct+'%', chCmpDir:directN+' direct', chCost:_costPct+'%', chMargin:_marginPct+'%',
