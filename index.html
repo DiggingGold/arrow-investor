@@ -227,7 +227,7 @@ tbody tr:hover{background:#0f766e08}
         <span class="chip" data-preset="ytd">YTD</span>
         <span class="chip active" data-preset="l12">Last 12 mo</span>
         <span class="chip" data-preset="next">Upcoming</span>
-        <span class="chip" data-preset="all">All time</span>
+        <span class="chip" data-preset="all" title="All bookings Mar 2025 – Jul 2027. Stone Cottage launched Dec 2025, so Mar–Nov 2025 is Arrow Junction Cottage only.">All time (from Mar '25)</span>
       </div>
     </div>
 
@@ -237,12 +237,12 @@ tbody tr:hover{background:#0f766e08}
 
     <div class="sec"><span>Operating economics (portfolio)</span></div>
     <div class="kpis">
-      <div class="kpi hero"><div class="top"><div class="ic" style="background:rgba(255,255,255,.2)"><svg viewBox="0 0 24 24" stroke="#fff">{ICONS_cash}</svg></div><div class="lab">Operating surplus · 15-mo</div></div><div class="val">$182,228</div><div class="note">Apr '26–Jun '27 · 60% margin</div></div>
-      <div class="kpi hero"><div class="top"><div class="ic" style="background:#0f766e18"><svg viewBox="0 0 24 24" stroke="#0f766e">{ICONS_pct}</svg></div><div class="lab">Operating surplus · 2026</div></div><div class="val">$122,033</div><div class="note">$214,173 income − $92,140 exp · 57%</div></div>
-      <div class="kpi hero"><div class="top"><div class="ic" style="background:#2563eb18"><svg viewBox="0 0 24 24" stroke="#2563eb">{ICONS_receipt}</svg></div><div class="lab">Operating expenses · 15-mo</div></div><div class="val">$119,391</div><div class="note">operating run-cost base</div></div>
-      <div class="kpi hero"><div class="top"><div class="ic" style="background:#16a34a18"><svg viewBox="0 0 24 24" stroke="#16a34a">{ICONS_chart}</svg></div><div class="lab">Surplus swing 2025→2026</div></div><div class="val">+$123.1k</div><div class="note">−$1,084 (ramp) → +$122,033</div></div>
+      <div class="kpi hero"><div class="top"><div class="ic" style="background:rgba(255,255,255,.2)"><svg viewBox="0 0 24 24" stroke="#fff">{ICONS_cash}</svg></div><div class="lab">Operating surplus</div></div><div class="val" id="oe1v">$182,228</div><div class="note" id="oe1n">60% margin</div></div>
+      <div class="kpi hero"><div class="top"><div class="ic" style="background:rgba(255,255,255,.2)"><svg viewBox="0 0 24 24" stroke="#fff">{ICONS_pct}</svg></div><div class="lab">Operating income</div></div><div class="val" id="oe2v">$301,619</div><div class="note" id="oe2n">15 months</div></div>
+      <div class="kpi hero"><div class="top"><div class="ic" style="background:rgba(255,255,255,.2)"><svg viewBox="0 0 24 24" stroke="#fff">{ICONS_receipt}</svg></div><div class="lab">Operating expenses</div></div><div class="val" id="oe3v">$119,391</div><div class="note" id="oe3n">40% of income</div></div>
+      <div class="kpi hero"><div class="top"><div class="ic" style="background:rgba(255,255,255,.2)"><svg viewBox="0 0 24 24" stroke="#fff">{ICONS_chart}</svg></div><div class="lab">Surplus / month</div></div><div class="val" id="oe4v">$12,149</div><div class="note" id="oe4n">avg / month over 15</div></div>
     </div>
-    <div class="hint" style="margin:6px 2px 2px;color:var(--muted2);font-size:11.5px">Business operating surplus — excludes owner drawings &amp; financing</div>
+    <div class="hint" id="oeCap" style="margin:6px 2px 2px;color:var(--muted2);font-size:11.5px">Business operating surplus — excludes owner drawings &amp; financing</div>
 
     <div class="sec"><span>Market position &amp; growth</span></div>
     <div class="commentary" id="commentary">
@@ -921,6 +921,7 @@ function render(){
   try{if(window.drawCmp)window.drawCmp();}catch(e){}
   try{if(window.__drawCostMix)window.__drawCostMix();}catch(e){}
   try{if(window.__drawIvE)window.__drawIvE();}catch(e){}
+  try{if(window.__updateOpEcon)window.__updateOpEcon();}catch(e){}
 }
 
 function fillTable(id,head,rows,total){
@@ -1298,6 +1299,21 @@ const CBRK=[{"k":"Mar-25","s":1740787200000,"e":1743465599000,"b":"Actual","rev"
           y:{grid:{color:grid},ticks:{color:ink,callback:function(v){return '$'+(v/1000)+'k';}}}}}
     });
   }
+  function oeFmt(n){var neg=n<0;n=Math.abs(Math.round(n));return (neg?'-$':'$')+n.toLocaleString('en-NZ');}
+  function updateOpEcon(){try{
+    if(typeof INVEXD==='undefined'||typeof cmRange!=='function')return;
+    var idx=cmRange(),inc=0,exp=0;
+    for(var k=0;k<idx.length;k++){var i=idx[k];inc+=(+INVEXD.income[i]||0);exp+=(+INVEXD.expenses[i]||0);}
+    var n=idx.length,sur=inc-exp,marg=inc?Math.round(sur/inc*100):0,ep=inc?Math.round(exp/inc*100):0,pm=n?sur/n:0;
+    function S(id,v){var e=document.getElementById(id);if(e)e.textContent=v;}
+    S('oe1v',oeFmt(sur));S('oe1n',marg+'% margin');
+    S('oe2v',oeFmt(inc));S('oe2n',n+' month'+(n===1?'':'s'));
+    S('oe3v',oeFmt(exp));S('oe3n',ep+'% of income');
+    S('oe4v',oeFmt(pm));S('oe4n','avg / month over '+n);
+    var per=n?(INVEXD.months[idx[0]]+' \u2013 '+INVEXD.months[idx[n-1]]):'';
+    var cap=document.getElementById('oeCap');if(cap)cap.textContent='Business operating surplus \u2014 excludes owner drawings & financing'+(per?('  \u00b7  '+per):'');
+  }catch(e){}}
+  window.__updateOpEcon=updateOpEcon;
   window.__drawIvE=drawIvE;
   window.__drawCostMix=drawCostMix;
   function visible(){var c=document.getElementById('chIvE');if(!c||c.clientWidth===0)return false;var app=document.getElementById('app');if(app&&getComputedStyle(app).display==='none')return false;return true;}
@@ -1305,6 +1321,7 @@ const CBRK=[{"k":"Mar-25","s":1740787200000,"e":1743465599000,"b":"Actual","rev"
     if(!visible()){setTimeout(boot,150);return;}
     draw();
     try{if(window.render)window.render();}catch(e){}
+    try{if(window.__updateOpEcon)window.__updateOpEcon();}catch(e){}
     var tb=document.getElementById('themeToggle'); if(tb) tb.addEventListener('click',function(){setTimeout(draw,90);});
     var ft=document.getElementById('filterToggle'); if(ft) ft.addEventListener('click',function(){setTimeout(draw,120);});
     window.addEventListener('resize',function(){clearTimeout(window.__exdT);window.__exdT=setTimeout(draw,200);});
