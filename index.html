@@ -122,6 +122,7 @@ h1{font-size:20px;margin:0;font-weight:750;letter-spacing:-.01em}
 .navtile .nic svg{width:13px;height:13px;stroke:#fff;fill:none;stroke-width:2}
 .navtile .nlab{font-size:10.35px;font-weight:600;line-height:1.15;letter-spacing:.03em;text-transform:uppercase;color:#eafff9}
 .navtile .nval{font-size:19.55px;font-weight:750;letter-spacing:-.01em;line-height:1;color:#fff}
+.nsub{font-size:9px;font-weight:600;color:#eafff9;opacity:.82;margin-top:4px;letter-spacing:.03em;text-transform:uppercase}
 .commentary{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 22px;box-shadow:var(--sh);margin:0 0 14px}
 .commentary h3{margin:0 0 4px;font-size:16px;color:var(--ink)}
 .commentary .csub{font-size:12px;color:var(--muted2);margin:0 0 14px}
@@ -1444,7 +1445,7 @@ const CBRK=[{"k":"Mar-25","s":1740787200000,"e":1743465599000,"b":"Actual","rev"
     ordered().forEach(function(c){
       var el=document.getElementById(c[0]); if(!el) return;
       var b=document.createElement('button'); b.className='navtile'; b.type='button'; b.setAttribute('draggable','true'); b.dataset.chart=c[0];
-      b.innerHTML='<div class="ntop"><span class="nic">'+ICO+'</span><span class="nlab">'+c[1]+'</span></div><div class="nval" data-cv="'+c[0]+'">\u2014</div>';
+      b.innerHTML='<div class="ntop"><span class="nic">'+ICO+'</span><span class="nlab">'+c[1]+'</span></div><div class="nval" data-cv="'+c[0]+'">\u2014</div>'+(c[0]==='chSeason'?'<div class="nsub">Summer&nbsp;/&nbsp;Winter</div>':'');
       var moved=false;
       b.addEventListener('click',function(){ if(moved){moved=false;return;} (el.closest('.card')||el).scrollIntoView({behavior:'smooth',block:'center'}); });
       b.addEventListener('dragstart',function(e){ dragEl=b; moved=true; b.classList.add('dragging'); try{e.dataTransfer.effectAllowed='move'; e.dataTransfer.setData('text/plain',c[0]);}catch(_){} });
