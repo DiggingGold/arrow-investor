@@ -228,7 +228,7 @@ tbody tr:hover{background:#0f766e08}
         <span class="chip" data-preset="ytd">YTD</span>
         <span class="chip active" data-preset="l12">Last 12 mo</span>
         <span class="chip" data-preset="next">Upcoming</span>
-        <span class="chip" data-preset="all" title="All bookings Mar 2025 – Jul 2027. Stone Cottage launched Dec 2025, so Mar–Nov 2025 is Arrow Junction Cottage only.">All time (from Mar '25)</span>
+        <span class="chip" data-preset="all" title="Achieved performance, first booking (Mar 2025) to today. Stone Cottage launched Dec 2025, so Mar–Nov 2025 is Arrow Junction Cottage only. Confirmed forward bookings run to Jul 2027 — see the Forward bookings view.">All time (Mar '25 – now)</span>
       </div>
     </div>
     <div id="ajcNote" hidden style="margin:-2px 2px 12px;color:#f0b429;font-size:11.5px;font-weight:600">Mar–Nov 2025 is Arrow Junction Cottage only — Stone Cottage launched Dec 2025.</div>
@@ -343,7 +343,7 @@ tbody tr:hover{background:#0f766e08}
       </div>
       <div class="card full">
         <h3>Average occupancy by season</h3>
-        <div class="hint">Summer = Dec/Jan/Feb, Winter = Jun/Jul/Aug. Booked nights ÷ available nights, counting only months each property was actually listed. Respects the property &amp; channel selection.</div>
+        <div class="hint">Summer = Dec/Jan/Feb, Winter = Jun/Jul/Aug. Booked nights ÷ available nights, counting only months each property was actually listed. Respects the property &amp; channel selection. The nav tile pools both cottages (night-weighted) to match the headline occupancy basis, so it won't equal the simple average of the bars.</div>
         <div class="chartbox"><canvas id="chSeason"></canvas></div>
       </div>
       <div class="card full">
@@ -364,6 +364,15 @@ tbody tr:hover{background:#0f766e08}
         <h3>Forward booking pace — on the books vs same time last year</h3>
         <div class="hint">Revenue already booked for upcoming months, vs bookings for the same period 12 months ago.</div>
         <div class="chartbox tall"><canvas id="chPace"></canvas></div>
+      </div>
+    </div>
+
+    <div class="sec"><span>Forward bookings</span></div>
+    <div class="grid">
+      <div class="card full">
+        <h3>Forward bookings — confirmed pipeline</h3>
+        <div class="hint" id="fwdSummary">Confirmed bookings with a check-in date after today, by month and property. Independent of the date filter above; respects the property &amp; channel selection. All revenue is GST-inclusive.</div>
+        <div class="chartbox tall"><canvas id="chForward"></canvas></div>
       </div>
     </div>
 
@@ -622,6 +631,7 @@ function applyPreset(p,chip){
   if(p==='ytd'){f=new Date(Date.UTC(today.getUTCFullYear(),0,1));t=today;}
   else if(p==='l12'){f=new Date(Date.UTC(today.getUTCFullYear()-1,today.getUTCMonth(),1));t=today;}
   else if(p==='next'){f=today;t=new Date(Date.UTC(today.getUTCFullYear(),today.getUTCMonth()+12,today.getUTCDate()));}
+  else if(p==='all'){f=dmin;t=today;} // achieved-to-date: cap at today; forward bookings shown in the Forward bookings view
   document.getElementById('from').value=iso(f);
   document.getElementById('to').value=iso(t);
   render();
@@ -676,6 +686,34 @@ function seasonalOccupancy(rows){
   return out;
 }
 
+// Pooled (night-weighted) occupancy by season, across the selected properties — same basis as the headline occupancy tile.
+// Sums booked nights and available nights across all properties before dividing, so it is directly comparable to the headline.
+function seasonalOccupancyPooled(rows){
+  const DAY=86400000, SUMMER=new Set([12,1,2]), WINTER=new Set([6,7,8]);
+  const occ={}, active={};
+  rows.filter(r=>r.status!=='cancelled').forEach(r=>{
+    const p=r.listing_name; occ[p]=occ[p]||{};
+    let d=new Date(r.start_date);
+    for(let i=0;i<(+r.no_of_days||0);i++){
+      const y=d.getUTCFullYear(), m=d.getUTCMonth()+1, k=y+'-'+m;
+      occ[p][k]=(occ[p][k]||0)+1;
+      const mi=y*12+(m-1); active[p]=active[p]||{min:mi,max:mi};
+      if(mi<active[p].min)active[p].min=mi; if(mi>active[p].max)active[p].max=mi;
+      d=new Date(d.getTime()+DAY);
+    }
+  });
+  const dim=(y,m)=>new Date(Date.UTC(y,m,0)).getUTCDate();
+  const now=new Date(), nowMi=now.getUTCFullYear()*12+now.getUTCMonth(); // exclude future months
+  let sb=0,sa=0,wb=0,wa=0;
+  Object.keys(occ).forEach(p=>{
+    for(let mi=active[p].min; mi<=Math.min(active[p].max,nowMi); mi++){
+      const y=Math.floor(mi/12), m=(mi%12)+1, nights=occ[p][y+'-'+m]||0, days=dim(y,m);
+      if(SUMMER.has(m)){sb+=nights;sa+=days;} else if(WINTER.has(m)){wb+=nights;wa+=days;}
+    }
+  });
+  return {summer:sa?Math.round(sb/sa*1000)/10:null, winter:wa?Math.round(wb/wa*1000)/10:null};
+}
+
 const sum=(a,k)=>a.reduce((s,r)=>s+(+r[k]||0),0);
 
 function inkLine(){ return document.documentElement.dataset.theme==='dark'?'#e2e8f0':'#1f2937'; }
@@ -690,7 +728,7 @@ function render(){
   const rev=sum(booked,'rental_revenue'), nights=sum(booked,'no_of_days'), n=booked.length;
   const f=new Date(document.getElementById('from').value+'T00:00:00Z').getTime();
   const t=new Date(document.getElementById('to').value+'T00:00:00Z').getTime();(function(){var gi=0,mk=0;booked.forEach(function(r){var v=+r.rental_revenue||0;if(r.booking_source==='BookingCom'||DIRECT_SOURCES.has(r.booking_source))gi+=v;else mk+=v;});var og=gi*3/23,ex=gi-og,ti=gi+mk,te=ex+mk;var _m=function(v){return (v<0?'-$':'$')+Math.round(Math.abs(v)).toLocaleString('en-NZ');};var g=document.getElementById('gstGrid');if(g){g.innerHTML='<table class="gsttbl"><thead><tr><th>Revenue source</th><th>Incl GST</th><th>GST to IRD</th><th>Ex-GST</th></tr></thead><tbody>'+'<tr><td>Booking.com &amp; direct<span class="gsttag">I remit</span></td><td>'+_m(gi)+'</td><td class="gstneg">\u2212'+_m(og)+'</td><td>'+_m(ex)+'</td></tr>'+'<tr><td>Airbnb / marketplace<span class="gsttag">platform remits</span></td><td>'+_m(mk)+'</td><td>\u2014</td><td>'+_m(mk)+'</td></tr>'+'<tr class="gsttot"><td>Total revenue</td><td>'+_m(ti)+'</td><td>'+_m(og)+'</td><td>'+_m(te)+'</td></tr></tbody></table>';}var gp=document.getElementById('gstPeriod');if(gp){gp.textContent='\u00b7 '+document.getElementById('from').value+' to '+document.getElementById('to').value;}})();
-  const avail=activeListings()*daysBetween(f,t);
+  const avail=occAvailNights(f,t); // launch-aware available nights (credits each property only from its launch, like occupancy)
   const directBk=booked.filter(r=>DIRECT_SOURCES.has(r.booking_source));
   const directRev=directBk.reduce((s,r)=>s+(+r.rental_revenue||0),0);
   const directN=directBk.length, directPct=rev?Math.round(directRev/rev*100):0;
@@ -734,11 +772,13 @@ function render(){
     var _ota=0; for(var _s in _chRev){ if(!DIRECT_SOURCES.has(_s)) _ota+=_chRev[_s]; }
     var _otaPct=rev?Math.round(_ota/rev*100):0, _costPct=rev?Math.round((commTotal+cleanTotal)/rev*100):0;
     var _marginPct=rev?Math.round(contribution/rev*100):0, _surplus=rev-_opcost;
-    var _seas=(typeof seasonalOccupancy==='function')?seasonalOccupancy(filteredNoDate()):{}; var _ss=[],_ws=[];
-    for(var _p in _seas){ if(_seas[_p].summer!=null)_ss.push(_seas[_p].summer); if(_seas[_p].winter!=null)_ws.push(_seas[_p].winter); }
-    var _suOcc=_ss.length?Math.round(_ss.reduce(function(a,b){return a+b;},0)/_ss.length):null;
-    var _wiOcc=_ws.length?Math.round(_ws.reduce(function(a,b){return a+b;},0)/_ws.length):null;
+    var _seasP=(typeof seasonalOccupancyPooled==='function')?seasonalOccupancyPooled(filteredNoDate()):{summer:null,winter:null};
+    var _suOcc=_seasP.summer!=null?Math.round(_seasP.summer):null;
+    var _wiOcc=_seasP.winter!=null?Math.round(_seasP.winter):null;
     var _seasTxt=(_suOcc!=null&&_wiOcc!=null)?(_suOcc+'% / '+_wiOcc+'%'):(occPct==null?'\u2014':occPct+'%');
+    // forward bookings pipeline (confirmed stays after today; respects property/channel, ignores the date filter)
+    var _fwdRows=filteredNoDate().filter(function(r){return r.status!=='cancelled'&&(+r.start_date)>today;});
+    var _fwdRev=_fwdRows.reduce(function(s,r){return s+(+r.rental_revenue||0);},0);
     window.__cv={
       chMonthly:nz(rev), chAnnual:nz(rev), chQMatrix:nz(_peakQtr),
       chTrend:nz(_nMonths?rev/_nMonths:0), chYoY:(_yoy==null?'\u2014':(_yoy>0?'+':'')+_yoy+'%'),
@@ -747,7 +787,7 @@ function render(){
       chMarket:nz2(_adr), chRevChannel:_otaPct+'% OTA', chNightsChannel:nights.toLocaleString(),
       chDirect:directPct+'%', chCmpDir:directN+' direct', chCost:_costPct+'%', chMargin:_marginPct+'%',
       chQCost:nz(_surplus), chIvE:nz(_surplus), chCostMix:(_opcost?nz(_opcost):'\u2014'),
-      chYr:nz(_r26), chVal:'$4.0M'
+      chYr:nz(_r26), chVal:'$4.0M', chForward:(_fwdRev?nz(_fwdRev):'\u2014')
     };
     window.__kpi={revenue:rev,nights:nights,reservations:n,occPct:occPct,adr:(nights?rev/nights:0),
       revpar:(avail?rev/avail:0),opcost:_opcost,marginPct:(rev?Math.round(contribution/rev*100):0),
@@ -871,6 +911,31 @@ function render(){
       else if(k===mi-12 && (+r.booked_time||0)<=lyMs) bp+=+r.rental_revenue||0;});
     pNow.push(Math.round(bn)); pPrev.push(Math.round(bp));}
   drawPace(pLab,pNow,pPrev);
+
+  // forward bookings — confirmed pipeline after today (ignores date filter; respects property/channel)
+  const fwd=filteredNoDate().filter(r=>r.status!=='cancelled'&&(+r.start_date)>today);
+  const fwM={};
+  fwd.forEach(r=>{const k=ym(r.start_date);(fwM[k]=fwM[k]||{ajc:0,stone:0,nights:0});
+    const rv=+r.rental_revenue||0;
+    if(r.listing_name==='Stone Cottage')fwM[k].stone+=rv; else fwM[k].ajc+=rv;
+    fwM[k].nights+=+r.no_of_days||0;});
+  const fwMonths=Object.keys(fwM).sort();
+  drawForward(fwMonths.map(ymLabel),
+    fwMonths.map(k=>Math.round(fwM[k].ajc)),
+    fwMonths.map(k=>Math.round(fwM[k].stone)),
+    fwMonths.map(k=>fwM[k].nights));
+  (function(){
+    const el=document.getElementById('fwdSummary'); if(!el)return;
+    const fRev=fwd.reduce((s,r)=>s+(+r.rental_revenue||0),0);
+    const fNights=fwd.reduce((s,r)=>s+(+r.no_of_days||0),0);
+    const fN=fwd.length;
+    if(!fN){el.textContent='No confirmed bookings with a check-in date after today for the current property/channel selection.';return;}
+    const furthest=Math.max.apply(null,fwd.map(r=>+r.start_date));
+    const fLbl=new Date(furthest).toLocaleDateString('en-NZ',{month:'short',year:'numeric',timeZone:'UTC'});
+    el.innerHTML='Confirmed bookings with a check-in date after today, by month and property. '+
+      '<b>'+nz(fRev)+'</b> already on the books across <b>'+fNights.toLocaleString()+'</b> nights ('+fN+' bookings), furthest check-in '+fLbl+'. '+
+      'Independent of the date filter; respects the property &amp; channel selection. GST-inclusive.';
+  })();
 
   // monthly & quarterly trend with MoM / QoQ (full history, ignores date filter)
   const tm={};
@@ -1128,6 +1193,22 @@ function drawMonthly(labels,rev,nights,fut){
       scales:{y:{position:'left',beginAtZero:true,ticks:{callback:v=>'$'+(v/1000)+'k',font:{size:10}}},
         y1:{position:'right',beginAtZero:true,grid:{drawOnChartArea:false},ticks:{font:{size:10}}},
         x:{ticks:{font:{size:10},autoSkip:true,maxRotation:0}}}}});
+}
+
+function drawForward(labels,ajc,stone,nights){
+  destroy('chForward');
+  charts['chForward']=safeChart(document.getElementById('chForward'),{
+    data:{labels,datasets:[
+      {type:'bar',label:'Arrow Junction Cottage',data:ajc,backgroundColor:'#0d9488',borderRadius:3,stack:'f',yAxisID:'y'},
+      {type:'bar',label:'Stone Cottage',data:stone,backgroundColor:'#f59e0b',borderRadius:3,stack:'f',yAxisID:'y'},
+      {type:'line',label:'Nights',data:nights,borderColor:'#2563eb',backgroundColor:'#2563eb',tension:.3,yAxisID:'y1',pointRadius:2}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
+      plugins:{legend:{position:'top',labels:{boxWidth:12,font:{size:11}}},
+        tooltip:{callbacks:{label:c=>c.dataset.label+': '+(c.dataset.yAxisID==='y1'?c.parsed.y+' nts':nz(c.parsed.y))}}},
+      scales:{y:{position:'left',stacked:true,beginAtZero:true,ticks:{callback:v=>'$'+(v/1000)+'k',font:{size:10}}},
+        y1:{position:'right',beginAtZero:true,grid:{drawOnChartArea:false},ticks:{font:{size:10}}},
+        x:{stacked:true,ticks:{font:{size:10},autoSkip:true,maxRotation:0}}}}});
 }
 
 (async function(){
@@ -1420,7 +1501,7 @@ const CBRK=[{"k":"Mar-25","s":1740787200000,"e":1743465599000,"b":"Actual","rev"
 
 <script>
 (function(){
-  var CHARTS=[["chMonthly", "Revenue"], ["chQMatrix", "Quarterly revenue"], ["chTrend", "Revenue trend"], ["chYoY", "Revenue YoY"], ["chRevChannel", "Revenue by channel"], ["chYr", "Year comparison"], ["chCostMix", "Cost breakdown"], ["chCost", "Booking cost ratio"], ["chIvE", "Income vs expenses"], ["chQCost", "Cost vs income"], ["chCmpPerf", "2025 vs 2026"], ["chMargin", "Contribution margin"], ["chOcc", "Occupancy"], ["chSeason", "Occupancy by season"], ["chCreated", "Reservations created"], ["chPace", "Booking pace"], ["chLead", "Lead time"], ["chLen", "Stay length"], ["chMarket", "Rate vs market"], ["chNightsChannel", "Nights by channel"], ["chDirect", "Direct share"], ["chCmpDir", "Direct 2025 vs 2026"]];
+  var CHARTS=[["chMonthly", "Revenue"], ["chQMatrix", "Quarterly revenue"], ["chTrend", "Revenue trend"], ["chYoY", "Revenue YoY"], ["chRevChannel", "Revenue by channel"], ["chYr", "Year comparison"], ["chCostMix", "Cost breakdown"], ["chCost", "Booking cost ratio"], ["chIvE", "Income vs expenses"], ["chQCost", "Cost vs income"], ["chCmpPerf", "2025 vs 2026"], ["chMargin", "Contribution margin"], ["chOcc", "Occupancy"], ["chSeason", "Occupancy by season"], ["chCreated", "Reservations created"], ["chPace", "Booking pace"], ["chForward", "Forward bookings"], ["chLead", "Lead time"], ["chLen", "Stay length"], ["chMarket", "Rate vs market"], ["chNightsChannel", "Nights by channel"], ["chDirect", "Direct share"], ["chCmpDir", "Direct 2025 vs 2026"]];
   var ICO='<svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>';
   var STORE='arrowChartOrder_v2';
   var refs={}, dragEl=null;
