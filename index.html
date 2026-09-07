@@ -230,6 +230,7 @@ tbody tr:hover{background:#0f766e08}
         <span class="chip" data-preset="all" title="All bookings Mar 2025 – Jul 2027. Stone Cottage launched Dec 2025, so Mar–Nov 2025 is Arrow Junction Cottage only.">All time (from Mar '25)</span>
       </div>
     </div>
+    <div id="ajcNote" hidden style="margin:-2px 2px 12px;color:#f0b429;font-size:11.5px;font-weight:600">Mar–Nov 2025 is Arrow Junction Cottage only — Stone Cottage launched Dec 2025.</div>
 
     <div class="gstpanel card" id="gstPanel" hidden><div class="gsthead"><h3>Revenue with &amp; without GST <span id="gstPeriod" class="gstper"></span></h3><button class="gstx" id="gstClose" type="button" aria-label="Close">×</button></div><div id="gstGrid"></div><div class="gstnote"><b>Booking.com &amp; direct</b> bookings are GST-inclusive — I remit output GST to IRD (15%, i.e. 3/23 of the payout). <b>Airbnb</b> collects the 15% GST from the guest itself and, under NZ marketplace rules, pass an 8.5% flat-rate credit back in my payout while remitting the balance to IRD, so I have no output GST to account for on that income. Cost figures elsewhere on the dashboard are shown GST-inclusive as invoiced. Indicative.</div></div>
     <div class="sec"><span>Jump to a chart</span><span style="font-size:11px;color:var(--muted2);font-weight:500;text-transform:none;letter-spacing:0;margin-left:10px">click to jump · drag to reorder</span></div>
@@ -1310,6 +1311,7 @@ const CBRK=[{"k":"Mar-25","s":1740787200000,"e":1743465599000,"b":"Actual","rev"
     S('oe2v',oeFmt(inc));S('oe2n',n+' month'+(n===1?'':'s'));
     S('oe3v',oeFmt(exp));S('oe3n',ep+'% of income');
     S('oe4v',oeFmt(pm));S('oe4n','avg / month over '+n);
+    var an=document.getElementById('ajcNote');if(an)an.hidden=!(idx.length&&idx[0]<9);
     var per=n?(INVEXD.months[idx[0]]+' \u2013 '+INVEXD.months[idx[n-1]]):'';
     var cap=document.getElementById('oeCap');if(cap)cap.textContent='Business operating surplus \u2014 excludes owner drawings & financing'+(per?('  \u00b7  '+per):'');
   }catch(e){}}
