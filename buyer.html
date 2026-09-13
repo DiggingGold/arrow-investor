@@ -262,7 +262,7 @@ html.bglocked .wrap{display:none!important}
     <div class="tools">
       <div class="expbtns"><button class="tbtn" id="csvBtn" type="button">↓ Data</button><button class="tbtn" id="pdfBtn" type="button">↓ Summary</button></div>
       <button class="tbtn" id="filterToggle" type="button">Hide filters</button>
-      <button class="tbtn" id="themeToggle" type="button">Dark</button>
+      <button class="tbtn" id="themeToggle" type="button">Dark</button><button class="tbtn" id="logoutTop" type="button" onclick="try{sessionStorage.removeItem('asBuyerUnlock')}catch(e){};location.reload()">Log out</button>
       <div class="asof" id="asof"></div>
     </div>
   </header>
@@ -501,6 +501,7 @@ html.bglocked .wrap{display:none!important}
 #valPanel .valpriceline{margin:10px 0 4px;font-size:13px;color:var(--muted2,#93a4b8)}
 .valout{margin-top:8px}
 </style>
+    <div style="text-align:center;margin:16px 0 2px"><button class="tbtn" id="logoutBottom" type="button" onclick="try{sessionStorage.removeItem('asBuyerUnlock')}catch(e){};location.reload()">Log out</button></div>
     <div class="foot"><span id="footnote" style="display:block;color:var(--accent);font-weight:600;margin-bottom:8px"></span>All figures NZD and GST-inclusive · indicative and unaudited · forward-year months are projections.</div>
   </div>
 
