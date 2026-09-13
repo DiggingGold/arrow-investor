@@ -611,9 +611,7 @@ function initControls(){
   ['from','to','channel'].forEach(id=>document.getElementById(id).addEventListener('change',()=>{clearPreset();render();}));
   document.querySelectorAll('.chip').forEach(c=>c.addEventListener('click',()=>applyPreset(c.dataset.preset,c)));
   document.getElementById('asof').textContent='Data as of '+(USING_SNAPSHOT?new Date(SNAPSHOT_DATE+'T00:00:00'):new Date()).toLocaleDateString('en-NZ',{day:'numeric',month:'short',year:'numeric'});
-  const _fn=document.getElementById('footnote');
-  if(_fn){const _snap=(typeof SNAPSHOT_DATE!=='undefined')?SNAPSHOT_DATE:new Date().toISOString().slice(0,10);
-    _fn.textContent='This dashboard is a point-in-time snapshot, rebuilt on demand. Figures shown are as of '+_snap+', in NZD.';}
+  /* buyer view: point-in-time snapshot footnote removed */
 }
 
 function buildPropMenu(){
