@@ -530,7 +530,7 @@ const costBreakdownColors = ['#2dd4bf','#f87171','#fbbf24','#818cf8','#34d399','
 new Chart(document.getElementById('chartCostBreakdown'), {
   type:'bar',
   data:{ labels:costBreakdownLabels, datasets:[{label:'Amount', data:costBreakdownValues, backgroundColor:costBreakdownColors}] },
-  options:{ indexAxis:'y', plugins:{legend:{display:false}}, scales:{x:{ticks:{callback:v=>'$'+(v/1000).toFixed(1)+'k'}}} }
+  options:{ indexAxis:'y', plugins:{legend:{display:false}}, scales:{x:{max:150733,ticks:{callback:v=>'$'+(v/1000).toFixed(0)+'k'}}} }
 });
 </script>
 </body>
