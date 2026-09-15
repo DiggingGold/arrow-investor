@@ -41,21 +41,20 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:var(--font);}
 @media(max-width:640px){.grid{grid-template-columns:repeat(2,1fr);}}
 .grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
 @media(max-width:800px){.grid4{grid-template-columns:repeat(2,1fr);}}
-.tile{background:#47867e;border:1px solid #3a6f68;border-radius:11px;padding:12px 14px;min-height:82px;cursor:pointer;transition:background .15s;}
-.tile:hover{background:#529289;}
+.tile{background:rgba(45,212,191,.12);border:1px solid rgba(45,212,191,.35);border-radius:9px;padding:9px 11px;min-height:66px;cursor:pointer;transition:background .15s;}
+.tile:hover{background:rgba(45,212,191,.2);}
 .tile.nolink{cursor:default;}
-.tile.nolink:hover{background:#47867e;}
-@media (prefers-color-scheme: light){ :root:not([data-theme="dark"]) .tile{background:#4f9088;border-color:#3a6f68;} :root:not([data-theme="dark"]) .tile:hover{background:#5a9c93;} }
-:root[data-theme="light"] .tile{background:#4f9088;border-color:#3a6f68;}
-:root[data-theme="light"] .tile:hover{background:#5a9c93;}
+.tile.nolink:hover{background:rgba(45,212,191,.12);}
+
+
 .jump-hint{color:var(--muted);font-size:11.5px;margin:-4px 0 12px 2px;}
 .top-link{float:right;font-size:11px;color:var(--muted);cursor:pointer;text-decoration:none;}
 .top-link:hover{color:var(--teal);}
 .card h3{overflow:auto;}
-.tile.hi{background:#47867e;border-color:#3a6f68;}
-.tile .lbl{display:flex;align-items:center;gap:5px;font-size:10.5px;letter-spacing:.02em;color:rgba(255,255,255,.85);text-transform:uppercase;margin-bottom:7px;}
-.tile .val{font-size:20px;font-weight:700;color:#fff;}
-.tile .sub{font-size:10.5px;color:rgba(255,255,255,.75);margin-top:2px;}
+.tile.hi{background:rgba(45,212,191,.12);border-color:rgba(45,212,191,.35);}
+.tile .lbl{display:flex;align-items:center;gap:4px;font-size:8.5px;letter-spacing:.02em;color:var(--teal);text-transform:uppercase;margin-bottom:5px;}
+.tile .val{font-size:16px;font-weight:700;color:var(--text);}
+.tile .sub{font-size:8.5px;color:var(--muted);margin-top:1px;}
 .cards2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
 @media(max-width:900px){.cards2{grid-template-columns:1fr;}}
 .card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px 20px;}
@@ -76,7 +75,7 @@ canvas{max-height:280px;}
 footer{margin-top:36px;padding-top:16px;border-top:1px solid var(--border);color:var(--muted);font-size:11.5px;line-height:1.7;}
 .pos{color:var(--green);} .neg{color:var(--red);}
 .unchanged{opacity:.92;}
-.tag{display:inline-block;background:rgba(251,191,36,.12);border:1px solid rgba(251,191,36,.35);color:var(--amber);font-size:10px;padding:2px 7px;border-radius:5px;margin-left:6px;vertical-align:middle;text-transform:none;letter-spacing:0;}
+.tag{display:inline-block;background:rgba(251,191,36,.12);border:1px solid rgba(251,191,36,.35);color:var(--amber);font-size:8px;padding:1px 5px;border-radius:4px;margin-left:5px;vertical-align:middle;text-transform:none;letter-spacing:0;}
 </style>
 </head>
 
@@ -147,13 +146,12 @@ footer{margin-top:36px;padding-top:16px;border-top:1px solid var(--border);color
     <div class="tile unchanged"><div class="lbl">Operating Expenses</div><div class="val">$88,669</div><div class="sub">54% of income</div></div>
     <div class="tile unchanged"><div class="lbl">Surplus / Month</div><div class="val">$5,812</div><div class="sub">avg / month over 13</div></div>
   </div>
-  <p class="desc" style="margin-top:8px;">Business operating surplus &mdash; excludes owner drawings &amp; financing &middot; Sep-25 &ndash; Sep-26</p>
 
   <div class="section-hdr"><div class="bar"></div><h2>Market Position &amp; Growth</h2></div>
-  <details class="card" open>
+  <details class="card">
     <summary><h3>Market position and growth opportunity</h3></summary>
     <p class="desc">How the two cottages sit against the local market, and where the runway is.</p>
-    <p>The Wakatipu Basin is one of the country&rsquo;s tightest short-stay markets. Demand holds up through the year on the strength of Queenstown and Arrowtown tourism, while supply is held back by the district plan, which lets a property like this take paying guests for only 90 nights a year without a specific consent. That scarcity keeps nightly rates firm: across the local comparable set, one-bedroom homes clear a median of about $220 a night and two-bedroom homes about $366, with the stronger listings well above that.</p>
+    <p>The Wakatipu Basin is one of the country&rsquo;s tightest Short Stay Accommodation markets. Demand is driven by the strength of tourism, while supply is constrained by the district plan, which allows STA operations to take paying guests for a maximum 90 nights a year. 45 Arrow Junction has a VA365 consent which allows year-round STA operation. That scarcity keeps nightly rates firm: across the local comparable set, one-bedroom homes clear a median of about $220 a night and two-bedroom homes about $366, with the stronger listings well above that.</p>
 <h4>Where the cottages sit</h4>
 <p>Stone Cottage is already trading at the top of its bracket, at an average rate of about $387 a night, close to the 90th percentile for one-bedroom homes locally, and around 78% occupancy since it opened in December 2025. For the newer of the two listings to launch straight into a premium position is a strong sign. Arrow Junction (Cream) Cottage is the more interesting case. As a two-bedroom unit it should sit well above Stone, yet its average rate of about $276 is currently below the bottom quartile of the two-bedroom market, at about 61% occupancy. That is not a fault in the cottage. It is the longer-established of the two, and its rate was set conservatively while occupancy built; it is now climbing back toward where the market clears, which points straight to the upside.</p>
 <h4>Opportunity for growth</h4>
@@ -164,7 +162,7 @@ footer{margin-top:36px;padding-top:16px;border-top:1px solid var(--border);color
 <p>The property draws water from a nearby spring with an allowed take of up to 24,000 litres a day, well beyond current property requirements.</p>
 <p class="desc">Figures reflect the latest booking data and the local market comparable set. Indicative only. <span class="tag">carried over &mdash; not refreshed this pass</span></p>
   </details>
-  <details class="card" style="margin-top:16px;" open>
+  <details class="card" style="margin-top:16px;">
     <summary><h3>Cottage review</h3></summary>
     <p class="desc">How each cottage is performing against its market, at the latest pricing review.</p>
     <h4>Stone Cottage &mdash; outperforming</h4>
@@ -177,8 +175,8 @@ footer{margin-top:36px;padding-top:16px;border-top:1px solid var(--border);color
   </details>
 
   <div class="section-hdr" id="sec-property"><div class="bar"></div><h2>Property Summary</h2></div>
-  <div class="card">
-    <h3>Per-property performance</h3>
+  <details class="card">
+    <summary><h3>Per-property performance</h3></summary>
     <p class="desc">Revenue, nights, reservations, ADR and average stay for the selected range.</p>
     <table id="propTable"><thead><tr><th>Property</th><th>Revenue</th><th>Nights</th><th>Res</th><th>ADR</th><th>Avg Stay</th></tr></thead><tbody>
 <tr><td>Stone Cottage</td><td>$83,689</td><td>216</td><td>52</td><td>$387.45</td><td>4.2 nts</td></tr>
@@ -186,24 +184,24 @@ footer{margin-top:36px;padding-top:16px;border-top:1px solid var(--border);color
 <tr><td>Total</td><td>$150,733</td><td>438</td><td>103</td><td>$344.14</td><td>4.3 nts</td></tr>
 
     </tbody></table>
-  </div>
+  </details>
 
   <div class="section-hdr" id="sec-annual"><div class="bar"></div><h2>Annual &amp; Quarterly Comparison</h2></div>
   <div class="cards2">
     <div class="card"><h3>Quarterly revenue by year <span class="top-link" data-jump="top-anchor">&uarr; Top</span></h3><p class="desc">Revenue by quarter, selected range.</p><canvas id="chartQuarterly"></canvas></div>
     <div class="card"><h3>Annual revenue <span class="top-link" data-jump="top-anchor">&uarr; Top</span></h3><p class="desc">Total revenue by calendar year (clipped to selected range).</p><canvas id="chartAnnual"></canvas></div>
   </div>
-  <div class="card" style="margin-top:16px;">
-    <h3>Annual summary</h3>
+  <details class="card" style="margin-top:16px;">
+    <summary><h3>Annual summary</h3></summary>
     <p class="desc">Revenue, nights, ADR and YoY revenue for the selected range. Costs column intentionally omitted here &mdash; see Operating Cost Breakdown below (unchanged from 2026-09-12).</p>
     <table><thead><tr><th>Year</th><th>Revenue</th><th>Nights</th><th>ADR</th><th>YoY Rev</th></tr></thead><tbody>
 <tr><td>2025</td><td>$25,467</td><td>88</td><td>$289.40</td><td>—</td></tr>
 <tr><td>2026</td><td>$125,266</td><td>350</td><td>$357.90</td><td><span class='pos'>+392%</span></td></tr>
 
     </tbody></table>
-  </div>
-  <div class="card" id="sec-costincome" style="margin-top:16px;">
-    <h3>Cost vs income by quarter <span class="tag">costs unchanged</span> <span class="top-link" data-jump="top-anchor">&uarr; Top</span></h3>
+  </details>
+  <details class="card" id="sec-costincome" style="margin-top:16px;">
+    <summary><h3>Cost vs income by quarter <span class="tag">costs unchanged</span> <span class="top-link" data-jump="top-anchor">&uarr; Top</span></h3></summary>
     <p class="desc">Revenue is refreshed; costs are carried over from the 2026-09-12 pull.</p>
     <table><thead><tr><th>Quarter</th><th>Revenue</th><th>Costs</th><th>Cost:Income</th></tr></thead><tbody>
 <tr><td>2025-Q3</td><td>$979</td><td>$339</td><td>35%</td></tr>
@@ -213,13 +211,16 @@ footer{margin-top:36px;padding-top:16px;border-top:1px solid var(--border);color
 <tr><td>2026-Q3</td><td>$40,123</td><td>$10,321</td><td>26%</td></tr>
 <tr><td>All quarters</td><td>$150,733</td><td>$37,300</td><td>25%</td></tr>
 </tbody></table>
-  </div>
+  </details>
 
   <div class="section-hdr" id="sec-costbreakdown"><div class="bar"></div><h2>Operating Cost Breakdown <span class="tag">unchanged</span></h2></div>
   <div class="card">
     <h3>Operating cost breakdown</h3>
     <p class="desc">Commission &amp; Cleaning are actual per cottage; Shared Costs are allocated by revenue share. Carried over unchanged from the 2026-09-12 pull &mdash; no updated cost source available for this window.</p>
-    <table><thead><tr><th>Cost</th><th>Amount</th><th>% of Revenue</th></tr></thead><tbody>
+    <canvas id="chartCostBreakdown"></canvas>
+    <details style="margin-top:14px;">
+      <summary style="font-size:13px;color:var(--muted);">Show breakdown table</summary>
+      <table style="margin-top:10px;"><thead><tr><th>Cost</th><th>Amount</th><th>% of Revenue</th></tr></thead><tbody>
 <tr><td>Channel commission</td><td>$22,679</td><td>15%</td></tr>
 <tr><td>Cleaning</td><td>$18,516</td><td>12%</td></tr>
 <tr><td>Insurance</td><td>$8,421</td><td>6%</td></tr>
@@ -234,6 +235,7 @@ footer{margin-top:36px;padding-top:16px;border-top:1px solid var(--border);color
 <tr><td>Dynamic pricing</td><td>$1,485</td><td>1%</td></tr>
 <tr><td>Total operating costs</td><td>$88,669</td><td>59%</td></tr>
 </tbody></table>
+    </details>
   </div>
 
   <div class="section-hdr" id="sec-revocc"><div class="bar"></div><h2>Revenue &amp; Occupancy</h2></div>
@@ -244,8 +246,8 @@ footer{margin-top:36px;padding-top:16px;border-top:1px solid var(--border);color
     <div class="card"><h3>Revenue by channel <span class="top-link" data-jump="top-anchor">&uarr; Top</span></h3><p class="desc">All-time booking revenue split by source.</p><canvas id="chartChannelRev"></canvas></div>
     <div class="card"><h3>Nights per channel <span class="top-link" data-jump="top-anchor">&uarr; Top</span></h3><p class="desc">All-time nights booked broken down by source.</p><canvas id="chartChannelNights"></canvas></div>
   </div>
-  <div class="card" style="margin-top:16px;">
-    <h3>Channel summary &middot; selected range</h3>
+  <details class="card" style="margin-top:16px;">
+    <summary><h3>Channel summary &middot; selected range</h3></summary>
     <table id="chanTable"><thead><tr><th>Channel</th><th>Revenue</th><th>Nights</th><th>Res</th><th>ADR</th><th>Avg Booking</th></tr></thead><tbody>
 <tr><td>Booking.com</td><td>$130,738</td><td>390</td><td>90</td><td>$335.23</td><td>$1,453</td></tr>
 <tr><td>Airbnb</td><td>$5,974</td><td>15</td><td>5</td><td>$398.27</td><td>$1,195</td></tr>
@@ -254,7 +256,7 @@ footer{margin-top:36px;padding-top:16px;border-top:1px solid var(--border);color
 <tr><td>Total</td><td>$150,733</td><td>438</td><td>103</td><td>$344.14</td><td>$1,463</td></tr>
 
     </tbody></table>
-  </div>
+  </details>
   <div class="card" style="margin-top:16px;"><h3>Direct booking share over time <span class="top-link" data-jump="top-anchor">&uarr; Top</span></h3><p class="desc">Commission-free (direct + OH) revenue as a % of total, by check-in month.</p><canvas id="chartDirectShare"></canvas></div>
 
   <div class="section-hdr" id="sec-guest"><div class="bar"></div><h2>Guest &amp; Booking Behaviour</h2></div>
@@ -267,10 +269,12 @@ footer{margin-top:36px;padding-top:16px;border-top:1px solid var(--border);color
   <div class="card">
     <h3>Forward bookings &mdash; confirmed pipeline</h3>
     <p class="desc" id="fwdText">Loading&hellip;</p>
+    <canvas id="chartForward"></canvas>
   </div>
 
   <div class="section-hdr"><div class="bar"></div><h2>Monthly Revenue &amp; Nights</h2></div>
-  <div class="card">
+  <details class="card">
+    <summary><h3>Monthly revenue &amp; nights</h3></summary>
     <table><thead><tr><th>Month</th><th>Stone</th><th>AJC</th><th>Total</th><th>Nights</th></tr></thead><tbody>
 <tr><td>2025-09</td><td>$0</td><td>$979</td><td>$979</td><td>4</td></tr>
 <tr><td>2025-10</td><td>$0</td><td>$4,260</td><td>$4,260</td><td>19</td></tr>
@@ -296,18 +300,13 @@ footer{margin-top:36px;padding-top:16px;border-top:1px solid var(--border);color
 <tr><td>2027-07</td><td>$0</td><td>$910</td><td>$910</td><td>2</td></tr>
 
     </tbody></table>
-  </div>
+  </details>
 
   <div class="section-hdr" id="sec-growth"><div class="bar"></div><h2>2025 vs 2026 &middot; Growth</h2></div>
   <div class="card">
     <h3>Direct (commission-free) bookings by month</h3>
     <canvas id="chartGrowthDirect"></canvas>
   </div>
-
-  <footer>
-    All figures NZD and GST-inclusive &middot; indicative and unaudited &middot; forward-year months are projections.<br>
-    Revenue, occupancy, channel and booking figures refreshed from live PriceLabs data as of 2026-09-15. Cost-side figures (Operating Economics, Operating Cost Breakdown, Cost vs Income columns, and the two narrative essays) are carried over unchanged from the 2026-09-12 pull, per instruction &mdash; the available cash flow model only covers Apr 2026 onward.
-  </footer>
 </div>
 
 <script>
@@ -517,6 +516,22 @@ new Chart(document.getElementById('chartGrowthDirect'), {
 });
 
 document.getElementById('fwdText').innerHTML = fmtMoney(PRECOMP.forward.revenue) + ' already on the books across ' + PRECOMP.forward.nights + ' nights (' + PRECOMP.forward.res + ' bookings), furthest check-in ' + PRECOMP.forward.furthest + '.';
+
+const fwdMonthLabels = Object.keys(PRECOMP.monthly).filter(m => m > '2026-09');
+new Chart(document.getElementById('chartForward'), {
+  type:'bar',
+  data:{ labels:fwdMonthLabels, datasets:[{label:'Booked revenue', data:fwdMonthLabels.map(m=>PRECOMP.monthly[m].stone+PRECOMP.monthly[m].ajc), backgroundColor:teal}] },
+  options:{ plugins:{legend:{display:false}}, scales:{y:{ticks:{callback:v=>'$'+(v/1000)+'k'}}} }
+});
+
+const costBreakdownLabels = ['Channel commission: 15%','Cleaning: 12%','Insurance: 6%','Electricity: 5%','Rates: 5%','Maintenance: 4%','Solar lease: 3%','Supplies: 3%','Gas: 2%','PMS: 2%','Broadband: 1%','Dynamic pricing: 1%'];
+const costBreakdownValues = [22679,18516,8421,7649,7641,6740,4849,3900,2625,2296,1869,1485];
+const costBreakdownColors = ['#2dd4bf','#f87171','#fbbf24','#818cf8','#34d399','#fb923c','#60a5fa','#e879f9','#a3e635','#f472b6','#38bdf8','#facc15'];
+new Chart(document.getElementById('chartCostBreakdown'), {
+  type:'bar',
+  data:{ labels:costBreakdownLabels, datasets:[{label:'Amount', data:costBreakdownValues, backgroundColor:costBreakdownColors}] },
+  options:{ indexAxis:'y', plugins:{legend:{display:false}}, scales:{x:{ticks:{callback:v=>'$'+(v/1000).toFixed(1)+'k'}}} }
+});
 </script>
 </body>
 </html>
