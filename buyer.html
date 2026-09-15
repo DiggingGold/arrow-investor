@@ -41,18 +41,18 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:var(--font);}
 @media(max-width:640px){.grid{grid-template-columns:repeat(2,1fr);}}
 .grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
 @media(max-width:800px){.grid4{grid-template-columns:repeat(2,1fr);}}
-.tile{background:#2f7d72;border:1px solid #285f56;border-radius:11px;padding:12px 14px;min-height:82px;cursor:pointer;transition:background .15s;}
-.tile:hover{background:#37907f;}
+.tile{background:#47867e;border:1px solid #3a6f68;border-radius:11px;padding:12px 14px;min-height:82px;cursor:pointer;transition:background .15s;}
+.tile:hover{background:#529289;}
 .tile.nolink{cursor:default;}
-.tile.nolink:hover{background:#2f7d72;}
-@media (prefers-color-scheme: light){ :root:not([data-theme="dark"]) .tile{background:#3f9088;border-color:#2a7268;} :root:not([data-theme="dark"]) .tile:hover{background:#49a396;} }
-:root[data-theme="light"] .tile{background:#3f9088;border-color:#2a7268;}
-:root[data-theme="light"] .tile:hover{background:#49a396;}
+.tile.nolink:hover{background:#47867e;}
+@media (prefers-color-scheme: light){ :root:not([data-theme="dark"]) .tile{background:#4f9088;border-color:#3a6f68;} :root:not([data-theme="dark"]) .tile:hover{background:#5a9c93;} }
+:root[data-theme="light"] .tile{background:#4f9088;border-color:#3a6f68;}
+:root[data-theme="light"] .tile:hover{background:#5a9c93;}
 .jump-hint{color:var(--muted);font-size:11.5px;margin:-4px 0 12px 2px;}
 .top-link{float:right;font-size:11px;color:var(--muted);cursor:pointer;text-decoration:none;}
 .top-link:hover{color:var(--teal);}
 .card h3{overflow:auto;}
-.tile.hi{background:#2f7d72;border-color:#285f56;}
+.tile.hi{background:#47867e;border-color:#3a6f68;}
 .tile .lbl{display:flex;align-items:center;gap:5px;font-size:10.5px;letter-spacing:.02em;color:rgba(255,255,255,.85);text-transform:uppercase;margin-bottom:7px;}
 .tile .val{font-size:20px;font-weight:700;color:#fff;}
 .tile .sub{font-size:10.5px;color:rgba(255,255,255,.75);margin-top:2px;}
@@ -83,7 +83,7 @@ footer{margin-top:36px;padding-top:16px;border-top:1px solid var(--border);color
       <p>STA Data</p>
     </div>
     <div class="top-actions">
-      <button class="btn" id="themeBtn" onclick="toggleTheme()">Light</button>
+      <button class="btn" id="themeBtn">Light</button>
       <span class="badge">Revenue data as of 2026-09-15 &middot; cost data as of 2026-09-12</span>
     </div>
   </div>
@@ -98,10 +98,10 @@ footer{margin-top:36px;padding-top:16px;border-top:1px solid var(--border);color
       <select id="fChan"><option value="all">All channels</option><option value="Booking.com">Booking.com</option><option value="Airbnb">Airbnb</option><option value="Other (OH)">Other (OH)</option><option value="Direct / Manual">Direct / Manual</option></select>
     </div>
     <div class="presets">
-      <button class="preset" onclick="setPreset('ytd')">YTD</button>
-      <button class="preset active" id="presetLast12" onclick="setPreset('last12')">Last 12 mo</button>
-      <button class="preset" onclick="setPreset('upcoming')">Upcoming</button>
-      <button class="preset" onclick="setPreset('all')">All time (Mar '25 &ndash; now)</button>
+      <button class="preset" data-preset="ytd">YTD</button>
+      <button class="preset active" id="presetLast12" data-preset="last12">Last 12 mo</button>
+      <button class="preset" data-preset="upcoming">Upcoming</button>
+      <button class="preset" data-preset="all">All time (Mar '25 &ndash; now)</button>
     </div>
   </div>
 
@@ -319,10 +319,147 @@ function toggleTheme(){
 }
 function fmtMoney(v){ return '$' + Math.round(v).toLocaleString(); }
 
+
+const TODAY_MS = new Date('2026-09-15T00:00:00Z').getTime();
+const COMMISSION = {'Booking.com':0.15,'Airbnb':0.16,'Other (OH)':0,'Direct / Manual':0};
+
+function fmtMoney2(v){ return '$' + v.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2}); }
+function fmtPct(v){ return Math.round(v*100) + '%'; }
+function toDMY(d){ const dd=String(d.getDate()).padStart(2,'0'), mm=String(d.getMonth()+1).padStart(2,'0'); return `${d.getFullYear()}-${mm}-${dd}`; }
+
+function computeAndRender(){
+  const fromV = document.getElementById('fFrom').value;
+  const toV = document.getElementById('fTo').value;
+  const prop = document.getElementById('fProp').value;
+  const chan = document.getElementById('fChan').value;
+  if(!fromV || !toV) return;
+  const from = new Date(fromV + 'T00:00:00Z').getTime();
+  const to = new Date(toV + 'T23:59:59Z').getTime();
+
+  const rows = RESERVATIONS.filter(r => r.d >= from && r.d <= to && (prop==='all'||r.p===prop) && (chan==='all'||r.c===chan));
+  const booked = rows.filter(r=>r.s==='booked');
+
+  const totalRevenue = booked.reduce((a,r)=>a+r.rev,0);
+  const totalNights = booked.reduce((a,r)=>a+r.n,0);
+  const totalBookings = booked.length;
+  const LAUNCH = {'Stone Cottage': new Date('2025-12-01T00:00:00Z').getTime(), 'Arrow Junction Cottage': new Date('2025-03-02T00:00:00Z').getTime()};
+  const activeProps = prop==='all' ? ['Stone Cottage','Arrow Junction Cottage'] : [prop];
+  let availNights = 0;
+  activeProps.forEach(function(p){
+    const s = Math.max(from, LAUNCH[p]);
+    const e = to;
+    if(e>s) availNights += Math.round((e-s)/86400000) + 1;
+  });
+  availNights = Math.max(1, availNights);
+  const occ = totalNights/availNights;
+  const adr = totalNights ? totalRevenue/totalNights : 0;
+  const directRows = booked.filter(r=>r.c==='Direct / Manual'||r.c==='Other (OH)');
+  const directRev = directRows.reduce((a,r)=>a+r.rev,0);
+  const otaRev = booked.filter(r=>r.c==='Booking.com'||r.c==='Airbnb').reduce((a,r)=>a+r.rev,0);
+  const otaPct = totalRevenue ? Math.round(otaRev/totalRevenue*100) : 0;
+
+  // quarterly revenue (within filtered window, all filtered rows) - latest quarter total
+  const qMap = {};
+  booked.forEach(r=>{ const d=new Date(r.d); const q=Math.floor(d.getUTCMonth()/3)+1; const key=d.getUTCFullYear()+'-Q'+q; qMap[key]=(qMap[key]||0)+r.rev; });
+  const qKeys = Object.keys(qMap).sort();
+  const latestQRev = qKeys.length ? qMap[qKeys[qKeys.length-1]] : 0;
+
+  // year comparison: latest full year in window
+  const yMap = {};
+  booked.forEach(r=>{ const y=new Date(r.d).getUTCFullYear(); yMap[y]=(yMap[y]||0)+r.rev; });
+  const yKeys = Object.keys(yMap).sort();
+  const latestYearRev = yKeys.length ? yMap[yKeys[yKeys.length-1]] : 0;
+  const prevYearRev = yKeys.length>1 ? yMap[yKeys[yKeys.length-2]] : null;
+  const yoy = prevYearRev ? ((latestYearRev/prevYearRev)-1) : null;
+
+  // current month revenue
+  const now = new Date(TODAY_MS);
+  const curMonthKey = now.getUTCFullYear()+'-'+String(now.getUTCMonth()+1).padStart(2,'0');
+  const curMonthRev = booked.filter(r=>{ const d=new Date(r.d); return (d.getUTCFullYear()+'-'+String(d.getUTCMonth()+1).padStart(2,'0'))===curMonthKey; }).reduce((a,r)=>a+r.rev,0);
+
+  // forward bookings: independent of date filter, but respects property/channel
+  const fwdRows = RESERVATIONS.filter(r=>r.s==='booked' && r.d>TODAY_MS && (prop==='all'||r.p===prop) && (chan==='all'||r.c===chan));
+  const fwdRev = fwdRows.reduce((a,r)=>a+r.rev,0);
+
+  // reservations created (booked count in window) = totalBookings
+  // direct 2025 vs 2026 (calendar year, all-time, respects property/channel only)
+  const allBooked = RESERVATIONS.filter(r=>r.s==='booked' && (prop==='all'||r.p===prop) && (chan==='all'||r.c===chan));
+  const direct2026 = allBooked.filter(r=>new Date(r.d).getUTCFullYear()===2026 && (r.c==='Direct / Manual'||r.c==='Other (OH)')).length;
+
+  document.getElementById('overviewTiles').innerHTML = `
+<div class="grid">
+  <div class="tile hi" data-jump="sec-annual"><div class="lbl">Revenue</div><div class="val">${fmtMoney(totalRevenue)}</div></div>
+  <div class="tile" data-jump="sec-annual"><div class="lbl">Quarterly Revenue</div><div class="val">${fmtMoney(latestQRev)}</div></div>
+  <div class="tile" data-jump="sec-revocc"><div class="lbl">Revenue Trend</div><div class="val">${fmtMoney(curMonthRev)}</div><div class="sub">current month (Sep-26)</div></div>
+  <div class="tile" data-jump="sec-annual"><div class="lbl">Revenue YoY</div><div class="val">${yoy===null?'\u2014':(yoy>=0?'+':'')+Math.round(yoy*100)+'%'}</div></div>
+  <div class="tile" data-jump="sec-channels"><div class="lbl">Revenue by Channel</div><div class="val">${otaPct}% OTA</div></div>
+  <div class="tile" data-jump="sec-channels"><div class="lbl">Direct Share</div><div class="val">${fmtPct(totalRevenue?directRev/totalRevenue:0)}</div></div>
+  <div class="tile" data-jump="sec-annual"><div class="lbl">Year Comparison</div><div class="val">${fmtMoney(latestYearRev)}</div></div>
+  <div class="tile unchanged" data-jump="sec-costbreakdown"><div class="lbl">Cost Breakdown<span class="tag">unchanged</span></div><div class="val">$88,669</div></div>
+  <div class="tile unchanged" data-jump="sec-costbreakdown"><div class="lbl">Income vs Expenses<span class="tag">unchanged</span></div><div class="val">$62,064</div></div>
+  <div class="tile unchanged" data-jump="sec-costincome"><div class="lbl">Cost vs Income<span class="tag">unchanged</span></div><div class="val">$62,064</div></div>
+  <div class="tile" data-jump="sec-growth"><div class="lbl">2025 vs 2026</div><div class="val">${fmtMoney(latestYearRev)}</div></div>
+  <div class="tile" data-jump="sec-revocc"><div class="lbl">Occupancy</div><div class="val">${fmtPct(occ)}</div></div>
+  <div class="tile" data-jump="sec-revocc"><div class="lbl">Occupancy by Season</div><div class="val">86% / 64%</div><div class="sub">summer / winter</div></div>
+  <div class="tile" data-jump="sec-property"><div class="lbl">Reservations Created</div><div class="val">${totalBookings}</div></div>
+  <div class="tile" data-jump="sec-annual"><div class="lbl">Booking Pace</div><div class="val">${fmtMoney(totalRevenue)}</div></div>
+  <div class="tile" data-jump="sec-forward"><div class="lbl">Forward Bookings</div><div class="val">${fmtMoney(fwdRev)}</div></div>
+  <div class="tile" data-jump="sec-guest"><div class="lbl">Lead Time</div><div class="val">${totalBookings?Math.round(booked.reduce((a,r)=>a+r.lt,0)/totalBookings):0} days</div></div>
+  <div class="tile" data-jump="sec-guest"><div class="lbl">Stay Length</div><div class="val">${(totalBookings?totalNights/totalBookings:0).toFixed(2)} nts</div></div>
+  <div class="tile unchanged nolink"><div class="lbl">Rate vs Market<span class="tag">unchanged</span></div><div class="val">$344.14</div></div>
+  <div class="tile" data-jump="sec-channels"><div class="lbl">Nights by Channel</div><div class="val">${totalNights}</div></div>
+  <div class="tile" data-jump="sec-growth"><div class="lbl">Direct 2025 vs 2026</div><div class="val">${direct2026} direct</div></div>
+</div>`;
+  document.querySelectorAll('#overviewTiles [data-jump]').forEach(function(el){ el.addEventListener('click', function(){ jumpTo(el.getAttribute('data-jump')); }); });
+
+  // property table
+  const props = prop==='all' ? ['Stone Cottage','Arrow Junction Cottage'] : [prop];
+  let pRows=''; let pTotRev=0,pTotNights=0,pTotRes=0;
+  props.forEach(p=>{
+    const pr = booked.filter(r=>r.p===p);
+    const rv = pr.reduce((a,r)=>a+r.rev,0), nt = pr.reduce((a,r)=>a+r.n,0);
+    pTotRev+=rv; pTotNights+=nt; pTotRes+=pr.length;
+    pRows += `<tr><td>${p}</td><td>${fmtMoney(rv)}</td><td>${nt}</td><td>${pr.length}</td><td>${fmtMoney2(nt?rv/nt:0)}</td><td>${(pr.length?nt/pr.length:0).toFixed(1)} nts</td></tr>`;
+  });
+  pRows += `<tr><td>Total</td><td>${fmtMoney(pTotRev)}</td><td>${pTotNights}</td><td>${pTotRes}</td><td>${fmtMoney2(pTotNights?pTotRev/pTotNights:0)}</td><td>${(pTotRes?pTotNights/pTotRes:0).toFixed(1)} nts</td></tr>`;
+  document.getElementById('propTable').querySelector('tbody').innerHTML = pRows;
+
+  // channel table
+  const chans = chan==='all' ? ['Booking.com','Airbnb','Other (OH)','Direct / Manual'] : [chan];
+  let cRows=''; let cTotRev=0,cTotNights=0,cTotRes=0;
+  chans.forEach(c=>{
+    const cr = booked.filter(r=>r.c===c);
+    if(!cr.length) return;
+    const rv=cr.reduce((a,r)=>a+r.rev,0), nt=cr.reduce((a,r)=>a+r.n,0);
+    cTotRev+=rv; cTotNights+=nt; cTotRes+=cr.length;
+    cRows += `<tr><td>${c}</td><td>${fmtMoney(rv)}</td><td>${nt}</td><td>${cr.length}</td><td>${fmtMoney2(nt?rv/nt:0)}</td><td>${fmtMoney(cr.length?rv/cr.length:0)}</td></tr>`;
+  });
+  cRows += `<tr><td>Total</td><td>${fmtMoney(cTotRev)}</td><td>${cTotNights}</td><td>${cTotRes}</td><td>${fmtMoney2(cTotNights?cTotRev/cTotNights:0)}</td><td>${fmtMoney(cTotRes?cTotRev/cTotRes:0)}</td></tr>`;
+  document.getElementById('chanTable').querySelector('tbody').innerHTML = cRows;
+}
+
 function setPreset(kind){
   document.querySelectorAll('.preset').forEach(b=>b.classList.remove('active'));
-  if(kind==='last12') document.getElementById('presetLast12').classList.add('active');
+  const now = new Date(TODAY_MS);
+  let from, to, btnIdx;
+  if(kind==='ytd'){ from = new Date(Date.UTC(now.getUTCFullYear(),0,1)); to = now; btnIdx=0; }
+  else if(kind==='last12'){ to = now; from = new Date(now.getTime()-365*86400000); btnIdx=1; }
+  else if(kind==='upcoming'){ from = now; to = new Date(now.getTime()+365*86400000); btnIdx=2; }
+  else { from = new Date('2025-03-01T00:00:00Z'); to = now; btnIdx=3; }
+  document.querySelectorAll('.preset')[btnIdx].classList.add('active');
+  document.getElementById('fFrom').value = toDMY(from);
+  document.getElementById('fTo').value = toDMY(to);
+  computeAndRender();
 }
+
+document.getElementById('fFrom').addEventListener('change', ()=>{document.querySelectorAll('.preset').forEach(b=>b.classList.remove('active')); computeAndRender();});
+document.getElementById('fTo').addEventListener('change', ()=>{document.querySelectorAll('.preset').forEach(b=>b.classList.remove('active')); computeAndRender();});
+document.getElementById('fProp').addEventListener('change', computeAndRender);
+document.getElementById('fChan').addEventListener('change', computeAndRender);
+document.querySelectorAll('[data-preset]').forEach(function(b){ b.addEventListener('click', function(){ setPreset(b.getAttribute('data-preset')); }); });
+document.getElementById('themeBtn').addEventListener('click', toggleTheme);
+computeAndRender();
+
 
 Chart.defaults.color = '#8b98a9';
 Chart.defaults.borderColor = 'rgba(139,152,169,.15)';
