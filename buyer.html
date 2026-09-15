@@ -60,6 +60,11 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:var(--font);}
 @media(max-width:900px){.cards2{grid-template-columns:1fr;}}
 .card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px 20px;}
 .card h3{margin:0 0 4px;font-size:15px;}
+details.card summary{cursor:pointer;list-style:none;}
+details.card summary::-webkit-details-marker{display:none;}
+details.card summary h3{display:inline-flex;align-items:center;gap:8px;}
+details.card summary h3::before{content:'\25B6';font-size:11px;color:var(--teal);transition:transform .15s;display:inline-block;}
+details.card[open] summary h3::before{transform:rotate(90deg);}
 .card .desc{color:var(--muted);font-size:12.5px;margin:0 0 12px;line-height:1.5;}
 .card p{line-height:1.65;font-size:13.5px;}
 .card h4{font-size:14px;margin:14px 0 6px;color:var(--teal);}
@@ -145,8 +150,8 @@ footer{margin-top:36px;padding-top:16px;border-top:1px solid var(--border);color
   <p class="desc" style="margin-top:8px;">Business operating surplus &mdash; excludes owner drawings &amp; financing &middot; Sep-25 &ndash; Sep-26</p>
 
   <div class="section-hdr"><div class="bar"></div><h2>Market Position &amp; Growth</h2></div>
-  <div class="card">
-    <h3>Market position and growth opportunity</h3>
+  <details class="card" open>
+    <summary><h3>Market position and growth opportunity</h3></summary>
     <p class="desc">How the two cottages sit against the local market, and where the runway is.</p>
     <p>The Wakatipu Basin is one of the country&rsquo;s tightest short-stay markets. Demand holds up through the year on the strength of Queenstown and Arrowtown tourism, while supply is held back by the district plan, which lets a property like this take paying guests for only 90 nights a year without a specific consent. That scarcity keeps nightly rates firm: across the local comparable set, one-bedroom homes clear a median of about $220 a night and two-bedroom homes about $366, with the stronger listings well above that.</p>
 <h4>Where the cottages sit</h4>
@@ -158,9 +163,9 @@ footer{margin-top:36px;padding-top:16px;border-top:1px solid var(--border);color
 <p>The studio and gallery building carries its own commercial consent, currently framed around a previous owner&rsquo;s use. Planning advice on file sets out that those conditions can be varied, with council approval, to operate a small caf&eacute;, gallery and bike hire from the building as a compact tourist node, or the space can be leased to an operator instead. The property sits directly on the Queenstown Trail, the Arrow River Bridges Ride that runs from Arrowtown toward the Gibbston Valley, so it is well placed for passing cycle and visitor trade. The network is about to grow again, with the Kawarau Gorge Trail opening in September or October 2026: <a href="https://southernlakestrails.nz/kawarau-gorge-trail" style="color:var(--teal)">southernlakestrails.nz/kawarau-gorge-trail</a>.</p>
 <p>The property draws water from a nearby spring with an allowed take of up to 24,000 litres a day, well beyond current property requirements.</p>
 <p class="desc">Figures reflect the latest booking data and the local market comparable set. Indicative only. <span class="tag">carried over &mdash; not refreshed this pass</span></p>
-  </div>
-  <div class="card" style="margin-top:16px;">
-    <h3>Cottage review</h3>
+  </details>
+  <details class="card" style="margin-top:16px;" open>
+    <summary><h3>Cottage review</h3></summary>
     <p class="desc">How each cottage is performing against its market, at the latest pricing review.</p>
     <h4>Stone Cottage &mdash; outperforming</h4>
 <p>Running near 78% occupancy at about $387 a night, close to the top of the one-bedroom bracket, and filling the forward calendar at roughly 1.5 to 1.9 times the market&rsquo;s pace. The pricing engine rates it as outperforming its market &mdash; a proven premium performer with room to keep lifting peak and weekend rates.</p>
@@ -169,7 +174,7 @@ footer{margin-top:36px;padding-top:16px;border-top:1px solid var(--border);color
 <h4>Together</h4>
 <p>One cottage proves the ceiling and the other shows the runway. Both are trading ahead of the neighbourhood; Stone is the finished article on rate and occupancy, while Cream is the value still being unlocked.</p>
 <p class="desc">Based on the dynamic-pricing tool&rsquo;s listing health, KPIs and the neighbourhood comparison, as at the latest review. Indicative only. <span class="tag">carried over &mdash; not refreshed this pass</span></p>
-  </div>
+  </details>
 
   <div class="section-hdr" id="sec-property"><div class="bar"></div><h2>Property Summary</h2></div>
   <div class="card">
