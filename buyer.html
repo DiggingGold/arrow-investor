@@ -49,6 +49,9 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:var(--font);}
 :root[data-theme="light"] .tile{background:#3f9088;border-color:#2a7268;}
 :root[data-theme="light"] .tile:hover{background:#49a396;}
 .jump-hint{color:var(--muted);font-size:11.5px;margin:-4px 0 12px 2px;}
+.top-link{float:right;font-size:11px;color:var(--muted);cursor:pointer;text-decoration:none;}
+.top-link:hover{color:var(--teal);}
+.card h3{overflow:auto;}
 .tile.hi{background:linear-gradient(135deg,var(--teal-dk),#0b5c56);border-color:var(--teal-dk);}
 .tile .lbl{display:flex;align-items:center;gap:5px;font-size:10.5px;letter-spacing:.02em;color:rgba(255,255,255,.85);text-transform:uppercase;margin-bottom:7px;}
 .tile .val{font-size:20px;font-weight:700;color:#fff;}
@@ -73,7 +76,7 @@ footer{margin-top:36px;padding-top:16px;border-top:1px solid var(--border);color
 </head>
 
 <body>
-<div class="wrap">
+<div class="wrap" id="top-anchor">
   <div class="top">
     <div class="title-block">
       <h1>45 Arrow Junction Road</h1>
@@ -183,8 +186,8 @@ footer{margin-top:36px;padding-top:16px;border-top:1px solid var(--border);color
 
   <div class="section-hdr" id="sec-annual"><div class="bar"></div><h2>Annual &amp; Quarterly Comparison</h2></div>
   <div class="cards2">
-    <div class="card"><h3>Quarterly revenue by year</h3><p class="desc">Revenue by quarter, selected range.</p><canvas id="chartQuarterly"></canvas></div>
-    <div class="card"><h3>Annual revenue</h3><p class="desc">Total revenue by calendar year (clipped to selected range).</p><canvas id="chartAnnual"></canvas></div>
+    <div class="card"><h3>Quarterly revenue by year <span class="top-link" data-jump="top-anchor">&uarr; Top</span></h3><p class="desc">Revenue by quarter, selected range.</p><canvas id="chartQuarterly"></canvas></div>
+    <div class="card"><h3>Annual revenue <span class="top-link" data-jump="top-anchor">&uarr; Top</span></h3><p class="desc">Total revenue by calendar year (clipped to selected range).</p><canvas id="chartAnnual"></canvas></div>
   </div>
   <div class="card" style="margin-top:16px;">
     <h3>Annual summary</h3>
@@ -196,7 +199,7 @@ footer{margin-top:36px;padding-top:16px;border-top:1px solid var(--border);color
     </tbody></table>
   </div>
   <div class="card" id="sec-costincome" style="margin-top:16px;">
-    <h3>Cost vs income by quarter <span class="tag">costs unchanged</span></h3>
+    <h3>Cost vs income by quarter <span class="tag">costs unchanged</span> <span class="top-link" data-jump="top-anchor">&uarr; Top</span></h3>
     <p class="desc">Revenue is refreshed; costs are carried over from the 2026-09-12 pull.</p>
     <table><thead><tr><th>Quarter</th><th>Revenue</th><th>Costs</th><th>Cost:Income</th></tr></thead><tbody>
 <tr><td>2025-Q3</td><td>$979</td><td>$339</td><td>35%</td></tr>
@@ -230,12 +233,12 @@ footer{margin-top:36px;padding-top:16px;border-top:1px solid var(--border);color
   </div>
 
   <div class="section-hdr" id="sec-revocc"><div class="bar"></div><h2>Revenue &amp; Occupancy</h2></div>
-  <div class="card"><h3>Revenue by month</h3><p class="desc">By check-in month, full booking history, split by property.</p><canvas id="chartMonthly"></canvas></div>
+  <div class="card"><h3>Revenue by month <span class="top-link" data-jump="top-anchor">&uarr; Top</span></h3><p class="desc">By check-in month, full booking history, split by property.</p><canvas id="chartMonthly"></canvas></div>
 
   <div class="section-hdr" id="sec-channels"><div class="bar"></div><h2>Channels &amp; Direct Bookings</h2></div>
   <div class="cards2">
-    <div class="card"><h3>Revenue by channel</h3><p class="desc">All-time booking revenue split by source.</p><canvas id="chartChannelRev"></canvas></div>
-    <div class="card"><h3>Nights per channel</h3><p class="desc">All-time nights booked broken down by source.</p><canvas id="chartChannelNights"></canvas></div>
+    <div class="card"><h3>Revenue by channel <span class="top-link" data-jump="top-anchor">&uarr; Top</span></h3><p class="desc">All-time booking revenue split by source.</p><canvas id="chartChannelRev"></canvas></div>
+    <div class="card"><h3>Nights per channel <span class="top-link" data-jump="top-anchor">&uarr; Top</span></h3><p class="desc">All-time nights booked broken down by source.</p><canvas id="chartChannelNights"></canvas></div>
   </div>
   <div class="card" style="margin-top:16px;">
     <h3>Channel summary &middot; selected range</h3>
@@ -248,12 +251,12 @@ footer{margin-top:36px;padding-top:16px;border-top:1px solid var(--border);color
 
     </tbody></table>
   </div>
-  <div class="card" style="margin-top:16px;"><h3>Direct booking share over time</h3><p class="desc">Commission-free (direct + OH) revenue as a % of total, by check-in month.</p><canvas id="chartDirectShare"></canvas></div>
+  <div class="card" style="margin-top:16px;"><h3>Direct booking share over time <span class="top-link" data-jump="top-anchor">&uarr; Top</span></h3><p class="desc">Commission-free (direct + OH) revenue as a % of total, by check-in month.</p><canvas id="chartDirectShare"></canvas></div>
 
   <div class="section-hdr" id="sec-guest"><div class="bar"></div><h2>Guest &amp; Booking Behaviour</h2></div>
   <div class="cards2">
-    <div class="card"><h3>Booking lead time</h3><p class="desc">Days between booking made and check-in, all-time.</p><canvas id="chartLeadTime"></canvas></div>
-    <div class="card"><h3>Reservation length</h3><p class="desc">Distribution of stay lengths (nights), all-time.</p><canvas id="chartStayLength"></canvas></div>
+    <div class="card"><h3>Booking lead time <span class="top-link" data-jump="top-anchor">&uarr; Top</span></h3><p class="desc">Days between booking made and check-in, all-time.</p><canvas id="chartLeadTime"></canvas></div>
+    <div class="card"><h3>Reservation length <span class="top-link" data-jump="top-anchor">&uarr; Top</span></h3><p class="desc">Distribution of stay lengths (nights), all-time.</p><canvas id="chartStayLength"></canvas></div>
   </div>
 
   <div class="section-hdr" id="sec-forward"><div class="bar"></div><h2>Forward Bookings</h2></div>
