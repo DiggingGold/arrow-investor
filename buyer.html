@@ -262,18 +262,6 @@ tbody tr:hover{background:#0f766e08}
       <div class="cfoot">Figures reflect the latest booking data and the local market comparable set. Indicative only.</div>
     </div>
 
-    <div class="commentary" id="cottagereview">
-      <h3>Cottage review</h3>
-      <div class="csub">How each cottage is performing against its market, at the latest pricing review.</div>
-      <h4 class="clead">Stone Cottage — outperforming</h4>
-      <p>Running near <b><span data-fill="stoneOcc">78%</span></b> occupancy at about <b><span data-fill="stoneADR">$386</span></b> a night, close to the top of the one-bedroom bracket, and filling the forward calendar at roughly <b>1.5 to 1.9 times</b> the market’s pace. The pricing engine rates it as outperforming its market — a proven premium performer with room to keep lifting peak and weekend rates.</p>
-      <h4 class="clead">Cream Cottage — catching up fast</h4>
-      <p>Trailing revenue is up about <b>59%</b> year on year and its nightly rate about <b>23%</b>, at roughly <b><span data-fill="ajcOcc">60%</span></b> occupancy and climbing over the last quarter. At about <b><span data-fill="ajcADR">$276</span></b> it still sits below the two-bedroom market’s lower quartile, so there is clear rate headroom toward the <b>$366</b> median and <b>$533</b> upper quartile as its pricing is lifted toward where the market clears.</p>
-      <h4 class="clead">Together</h4>
-      <p>One cottage proves the ceiling and the other shows the runway. Both are trading ahead of the neighbourhood; Stone is the finished article on rate and occupancy, while Cream is the value still being unlocked.</p>
-      <div class="cfoot">Based on the dynamic-pricing tool’s listing health, KPIs and the neighbourhood comparison, as at the latest review. Indicative only.</div>
-    </div>
-
     <div class="sec"><span>Property summary</span></div>
     <div class="grid">
       <div class="card full">
@@ -552,7 +540,7 @@ function initControls(){
   ['from','to','channel'].forEach(id=>document.getElementById(id).addEventListener('change',()=>{clearPreset();render();}));
   document.querySelectorAll('.chip').forEach(c=>c.addEventListener('click',()=>applyPreset(c.dataset.preset,c)));
   document.getElementById('asof').textContent='Data as of '+(USING_SNAPSHOT?new Date(SNAPSHOT_DATE+'T00:00:00'):new Date()).toLocaleDateString('en-NZ',{day:'numeric',month:'short',year:'numeric'});
-  /* buyer view: point-in-time snapshot footnote removed */
+  /* buyer view: snapshot footnote removed */
 }
 
 function buildPropMenu(){
