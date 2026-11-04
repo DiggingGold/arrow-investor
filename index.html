@@ -455,7 +455,7 @@ tbody tr:hover{background:#0f766e08}
       </div>
       <div class="card full">
         <h3>Indicative value bands</h3>
-        <div class="hint">Real Estate registered valuation — 18 Mar 2026. Range @ $3.85M – $4.15M. Transferable goodwill = Platform Listings + Tech Stack + Forward bookings. VA365 consent conveys with the property. Going concern = Valuation + Goodwill.</div>
+        <div class="hint">Real Estate registered valuation — 18 Mar 2026. Range @ $3.85M – $4.15M. The proven income, the booking and pricing systems and the VA365 consent (which conveys with the property) support pricing at the top of that range and a faster sale, not a premium on top.</div>
         <div class="chartbox" style="height:150px;margin-top:10px"><canvas id="chVal"></canvas></div>
         <div id="valBands" class="valout"></div>
       </div>
@@ -463,14 +463,14 @@ tbody tr:hover{background:#0f766e08}
         <h3>How the value is calculated</h3>
         <div class="hint">What sets the price, in plain terms.</div>
         <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:12px 0 6px">
-          <div style="flex:1;min-width:150px;text-align:center;background:#0f766e;color:#fff;border-radius:6px;padding:12px 8px"><div style="font-size:12px;opacity:.85">Real estate</div><div style="font-size:20px;font-weight:700">$4.0M</div><div style="font-size:11px;opacity:.85">registered value</div></div>
-          <div style="font-size:22px;color:#0f766e;font-weight:700">+</div>
-          <div style="flex:1;min-width:150px;text-align:center;background:#e6f0ef;color:#0f766e;border:1px dashed #0f766e;border-radius:6px;padding:12px 8px"><div style="font-size:12px;opacity:.85">Transferable goodwill</div><div style="font-size:20px;font-weight:700">~$0.35M&ndash;0.7M</div><div style="font-size:11px;opacity:.85">consent, systems, bookings</div></div>
+          <div style="flex:1;min-width:150px;text-align:center;background:#0f766e;color:#fff;border-radius:6px;padding:12px 8px"><div style="font-size:12px;opacity:.85">Property</div><div style="font-size:20px;font-weight:700">$4.0M</div><div style="font-size:11px;opacity:.85">registered &middot; $3.85M&ndash;$4.15M</div></div>
+          <div style="font-size:22px;color:#0f766e;font-weight:700">&rarr;</div>
+          <div style="flex:1;min-width:150px;text-align:center;background:#e6f0ef;color:#0f766e;border:1px dashed #0f766e;border-radius:6px;padding:12px 8px"><div style="font-size:12px;opacity:.85">Proven income, systems &amp; consent</div><div style="font-size:15px;font-weight:700;margin-top:3px">de-risks the buy</div><div style="font-size:11px;opacity:.85">covers costs, washes its face</div></div>
           <div style="font-size:22px;color:#0f766e;font-weight:700">=</div>
-          <div style="flex:1;min-width:150px;text-align:center;background:#0f766e;color:#fff;border-radius:6px;padding:12px 8px"><div style="font-size:12px;opacity:.85">Going concern</div><div style="font-size:20px;font-weight:700">$4.35M&ndash;4.7M</div><div style="font-size:11px;opacity:.85">property + business</div></div>
+          <div style="flex:1;min-width:150px;text-align:center;background:#0f766e;color:#fff;border-radius:6px;padding:12px 8px"><div style="font-size:12px;opacity:.85">Where it prices</div><div style="font-size:20px;font-weight:700">~$4.15M</div><div style="font-size:11px;opacity:.85">top of range, sold faster</div></div>
         </div>
         <p style="margin:10px 0 0;line-height:1.5">The value is the property. It is prime Arrowtown real estate on one freehold title, registered at $4.0M in March 2026. That figure is the anchor.</p>
-        <p style="margin:8px 0 0;line-height:1.5">The short-stay income comfortably covers the running and holding costs and leaves a surplus on top, so the property does not have to be priced on a yield. What transfers with the business adds value of its own: the VA365 right to let all year round, the booking and pricing systems (which include the direct-booking site), the repeat-guest base, and the forward bookings on the books. That takes the going-concern range to about $4.35M to $4.7M.</p>
+        <p style="margin:8px 0 0;line-height:1.5">The short-stay income comfortably covers the running and holding costs and leaves a surplus on top, so the property does not have to be priced on a yield. That proven record, with the turnkey booking and pricing systems, the direct-booking site, the repeat-guest base, the forward bookings already secured and the VA365 right to let all year round, is what lets the property hold the top of its registered range and sell faster. It is not a premium stacked on the land value. It is the reason a buyer pays up toward $4.15M rather than settling at the bottom of the range.</p>
         <p style="margin:8px 0 0;line-height:1.5">The Arrow Studios brand is a separate asset. It is included in this sale but can be sold on its own, so a buyer either brings their own brand or pays extra to keep Arrow Studios.</p>
         <p style="margin:8px 0 0;line-height:1.5">The studio and garage can add income of roughly $50k to $60k a year where the consent covers them, and the consent can be varied to match the intended use.</p>
         <div class="hint" style="margin-top:12px"><strong>Reading the data export:</strong> filtered to a property and period, the export reproduces the revenue, nights, ADR and occupancy shown here. The cost and margin lines come from the normalised operating model, so they track the owner&rsquo;s master cashflow rather than any single agent&rsquo;s assumptions. Forward months show only the bookings secured so far, so they read lower than a full-year forecast.</div>
@@ -1478,23 +1478,21 @@ const CBRK=[{"k":"Mar-25","s":1740787200000,"e":1743465599000,"b":"Actual","rev"
     var VAL=4000000;
     if(b){b.innerHTML=
       row('Registered valuation (QPVL, 18 Mar 2026)', '$3.85M – $4.15M  ·  assessed @ $4.0M')+
-      row('Transferable goodwill: 2× / 3× / 4× owner-earnings', nzf(noiStab*2)+'  ·  '+nzf(noiStab*3)+'  ·  '+nzf(noiStab*4))+
-      row('Indicative going concern — Valuation + Goodwill', nzf(VAL+noiStab*2)+'  –  '+nzf(VAL+noiStab*4));}
+      row('Stabilised operating surplus', nzf(noiStab)+' / yr  ·  '+pct(noiStab/VAL)+' net yield at the assessed value')+
+      row('Proven income and systems support', nzf(4150000)+'  ·  the top of the registered range');}
     setTimeout(function(){
       try{var vcv=document.getElementById('chVal'); if(!vcv||typeof Chart==='undefined')return;
         var ex=Chart.getChart(vcv); if(ex)ex.destroy();
         var light=document.documentElement.dataset.theme==='light', ink=light?'#0f1826':'#e6edf3', grid='#8892a611';
         new Chart(vcv,{type:'bar',
-          data:{labels:['Going concern'],datasets:[
-            {label:'Registered valuation ($4.0M)',data:[VAL],backgroundColor:'#0f766e',stack:'s',borderRadius:3,maxBarThickness:48},
-            {label:'Transferable goodwill (3× owner-earnings)',data:[noiStab*3],backgroundColor:hatch('#0f766e'),stack:'s',borderRadius:3,maxBarThickness:48}
+          data:{labels:['Low','Assessed','Top of range'],datasets:[
+            {label:'Registered value',data:[3850000,4000000,4150000],backgroundColor:['#8892a6','#0f766e','#14b8a6'],borderRadius:3,maxBarThickness:40}
           ]},
           options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
             plugins:{legend:{position:'top',labels:{boxWidth:12,color:ink,font:{size:11}}},
-              tooltip:{callbacks:{label:function(c){return c.dataset.label.replace(/ \(.*/,'')+': '+nzf(c.parsed.x);},
-                footer:function(it){var t=it.reduce(function(a,b){return a+b.parsed.x;},0);return 'Going concern: '+nzf(t);}}}},
-            scales:{x:{stacked:true,beginAtZero:true,grid:{color:grid},ticks:{color:ink,callback:function(v){return '$'+(v/1e6).toFixed(1)+'M';}}},
-              y:{stacked:true,grid:{display:false},ticks:{color:ink}}}}});
+              tooltip:{callbacks:{label:function(c){return c.label+': '+nzf(c.parsed.x);}}}},
+            scales:{x:{beginAtZero:false,min:3600000,grid:{color:grid},ticks:{color:ink,callback:function(v){return '$'+(v/1e6).toFixed(1)+'M';}}},
+              y:{grid:{display:false},ticks:{color:ink}}}}});
       }catch(e){}
     },60);
   }
