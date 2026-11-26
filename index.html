@@ -234,7 +234,7 @@ tbody tr:hover{background:#0f766e08}
     <div id="ajcNote" hidden style="margin:-2px 2px 12px;color:#f0b429;font-size:11.5px;font-weight:600">Mar–Nov 2025 is Arrow Junction Cottage only — Stone Cottage launched Dec 2025.</div>
 
     <div class="gstpanel card" id="gstPanel" hidden><div class="gsthead"><h3>Revenue with &amp; without GST <span id="gstPeriod" class="gstper"></span></h3><button class="gstx" id="gstClose" type="button" aria-label="Close">×</button></div><div id="gstGrid"></div><div class="gstnote"><b>Booking.com &amp; direct</b> bookings are GST-inclusive — I remit output GST to IRD (15%, i.e. 3/23 of the payout). <b>Airbnb</b> collects the 15% GST from the guest itself and, under NZ marketplace rules, pass an 8.5% flat-rate credit back in my payout while remitting the balance to IRD, so I have no output GST to account for on that income. Cost figures elsewhere on the dashboard are shown GST-inclusive as invoiced. Indicative.</div></div>
-    <div class="sec mpjump" id="mpTopLink" role="link" tabindex="0" style="cursor:pointer" title="Jump to the Market position &amp; growth write-up"><span>Market position &amp; growth opportunity <span style="font-weight:500;text-transform:none;letter-spacing:0;color:var(--muted2);font-size:12px;margin-left:8px">read the full write-up at the foot of the page &darr;</span></span></div>
+    <div class="sec mpjump" id="mpTopLink" role="link" tabindex="0" style="cursor:pointer" title="Jump to the Market position write-up"><span>Market position</span></div>
     <div class="sec"><span>Jump to a chart</span><span style="font-size:11px;color:var(--muted2);font-weight:500;text-transform:none;letter-spacing:0;margin-left:10px">click to jump · drag to reorder</span></div>
     <div class="chartnav" id="chartnav"></div>
 
@@ -245,15 +245,6 @@ tbody tr:hover{background:#0f766e08}
       <div class="kpi hero"><div class="top"><div class="ic" style="background:rgba(255,255,255,.2)"><svg viewBox="0 0 24 24" stroke="#fff">{ICONS_chart}</svg></div><div class="lab">Surplus / month</div></div><div class="val" id="oe4v">$14,531</div><div class="note" id="oe4n">avg / month over 15</div></div>
     </div>
     <div class="hint" id="oeCap" style="margin:6px 2px 2px;color:var(--muted2);font-size:11.5px">Business operating surplus — excludes owner drawings &amp; financing</div>
-
-    <div class="sec"><span>Property summary</span></div>
-    <div class="grid">
-      <div class="card full">
-        <h3>Per-property performance</h3>
-        <div class="hint">Revenue, nights, reservations, ADR and average stay for the selected range.</div>
-        <table id="tblProp"><thead></thead><tbody></tbody></table>
-      </div>
-    </div>
 
     <div class="sec"><span>Annual &amp; quarterly comparison</span></div>
     <div class="grid">
@@ -425,7 +416,16 @@ tbody tr:hover{background:#0f766e08}
 #valPanel .valpriceline{margin:10px 0 4px;font-size:13px;color:var(--muted2,#93a4b8)}
 .valout{margin-top:8px}
 </style>
-<div class="sec"><span>Market position &amp; growth</span></div>
+<div class="sec"><span>Property summary</span></div>
+    <div class="grid">
+      <div class="card full">
+        <h3>Per-property performance</h3>
+        <div class="hint">Revenue, nights, reservations, ADR and average stay for the selected range.</div>
+        <table id="tblProp"><thead></thead><tbody></tbody></table>
+      </div>
+    </div>
+
+    <div class="sec"><span>Market position &amp; growth</span></div>
     <div class="commentary" id="commentary">
       <h3>Market position and growth opportunity</h3>
       <div class="csub">How the two cottages sit against the local market, and where the runway is.</div>
