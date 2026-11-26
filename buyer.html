@@ -190,7 +190,7 @@ tbody tr:hover{background:#0f766e08}
 .full{grid-column:1/-1}
 .err{color:#b91c1c}
 .foot{color:var(--muted2);font-size:11.5px;margin-top:26px;text-align:center;line-height:1.6;padding-top:16px;border-top:1px solid var(--line)}
-</style>
+.mpjump:hover span{color:var(--teal,#0f766e)!important}.mpjump:hover{opacity:.9}</style>
 </head>
 <body>
 <div class="wrap">
@@ -233,6 +233,7 @@ tbody tr:hover{background:#0f766e08}
     </div>
     <div id="ajcNote" hidden style="margin:-2px 2px 12px;color:#f0b429;font-size:11.5px;font-weight:600">Mar–Nov 2025 is Arrow Junction Cottage only — Stone Cottage launched Dec 2025.</div>
 
+    <div class="sec mpjump" id="mpTopLink" role="link" tabindex="0" style="cursor:pointer" title="Jump to the Market position &amp; growth write-up"><span>Market position &amp; growth opportunity <span style="font-weight:500;text-transform:none;letter-spacing:0;color:var(--muted2);font-size:12px;margin-left:8px">read the full write-up at the foot of the page &darr;</span></span></div>
     <div class="sec"><span>Jump to a chart</span><span style="font-size:11px;color:var(--muted2);font-weight:500;text-transform:none;letter-spacing:0;margin-left:10px">click to jump · drag to reorder</span></div>
     <div class="chartnav" id="chartnav"></div>
 
@@ -540,7 +541,7 @@ function initControls(){
   ['from','to','channel'].forEach(id=>document.getElementById(id).addEventListener('change',()=>{clearPreset();render();}));
   document.querySelectorAll('.chip').forEach(c=>c.addEventListener('click',()=>applyPreset(c.dataset.preset,c)));
   document.getElementById('asof').textContent='Data as of '+(USING_SNAPSHOT?new Date(SNAPSHOT_DATE+'T00:00:00'):new Date()).toLocaleDateString('en-NZ',{day:'numeric',month:'short',year:'numeric'});
-  /* buyer view: snapshot footnote removed */
+  /* buyer view: point-in-time snapshot footnote removed */
 }
 
 function buildPropMenu(){
@@ -1599,6 +1600,7 @@ function xlsxOf(D){var k=D.kpi,m=D.meta,R=Math.round;var summary=[['45 Arrow Jun
   if(document.readyState!=='loading') wire(); else document.addEventListener('DOMContentLoaded',wire);
 })();
 </script>
+<script>(function(){var t=document.getElementById("mpTopLink");if(!t)return;function go(){var c=document.getElementById("commentary");if(c)c.scrollIntoView({behavior:"smooth",block:"start"});}t.addEventListener("click",go);t.addEventListener("keydown",function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();go();}});})();</script>
 </body>
 
 </html>
