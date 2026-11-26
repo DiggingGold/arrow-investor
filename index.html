@@ -1359,7 +1359,7 @@ const CBRK=[{"k":"Mar-25","s":1740787200000,"e":1743465599000,"b":"Actual","rev"
       A.clean+=(sel.s?m.clean[0]:0)+(sel.a?m.clean[1]:0);
       A.elec+=m.elec*w; A.gas+=m.gas*w; A.supplies+=m.supplies*w; A.maint+=m.maint*w; A.ins+=m.ins*w; A.rates+=m.rates*w; A.bband+=m.bband*w; A.pms+=m.pms*w; A.dyn+=m.dyn*w; A.solar+=m.solar*w;
     });
-    var comm=A.comm;var items=[['Cleaning',A.clean,'#0f766e'],['Electricity',A.elec,'#d97706'],['Gas',A.gas,'#eab308'],['Supplies',A.supplies,'#e11d48'],['Maintenance',A.maint,'#ec4899'],['Insurance',A.ins,'#8b5cf6'],['Rates',A.rates,'#16a34a'],['Broadband',A.bband,'#06b6d4'],['PMS',A.pms,'#c026d3'],['Dynamic pricing',A.dyn,'#4f46e5'],['Solar lease',A.solar,'#64748b']];
+    var comm=A.comm;var items=[['Cleaning',A.clean,'#94a3b8'],['Electricity',A.elec,'#d97706'],['Gas',A.gas,'#eab308'],['Supplies',A.supplies,'#e11d48'],['Maintenance',A.maint,'#ec4899'],['Insurance',A.ins,'#8b5cf6'],['Rates',A.rates,'#16a34a'],['Broadband',A.bband,'#06b6d4'],['PMS',A.pms,'#c026d3'],['Dynamic pricing',A.dyn,'#4f46e5'],['Solar lease',A.solar,'#64748b']];
     items.sort(function(a,b){return b[1]-a[1];});
     var ovTot=items.reduce(function(s,x){return s+x[1];},0);var allTot=ovTot+comm;
     var rden=totRev||1;var ovP=Math.round(ovTot/rden*100),cmP=Math.round(comm/rden*100),suP=Math.max(0,100-Math.round(allTot/rden*100));var _ct=document.getElementById('costTot');if(_ct){_ct.innerHTML='<span class="ctseg"><b>'+ovP+'%</b>operating overheads<small>'+fmt(Math.round(ovTot))+'</small></span><span class="ctseg"><b>'+cmP+'%</b>channel commission<small>'+fmt(Math.round(comm))+' \u00b7 zero on direct</small></span><span class="ctseg ctsurp"><b>'+suP+'%</b>operating surplus<small>of revenue</small></span>';}
