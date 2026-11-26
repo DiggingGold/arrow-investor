@@ -1674,7 +1674,6 @@ function xlsxOf(D){var k=D.kpi,m=D.meta,R=Math.round;var summary=[['45 Arrow Jun
     H+='<h4>By cottage</h4>'+tbl(['Cottage','Turnover','Nights','ADR','% of revenue'],D.perProp.map(function(p){return [p.name,M(p.rev),p.nights,M(p.adr),Math.round(p.pct)+'%'];}));
     H+='<h4>Operating costs (% of revenue)</h4>'+tbl(['Category','Amount','% of revenue'],D.costs.slice(0,8).map(function(c){return [c.cat,M(c.amount),Math.round(c.pct)+'%'];}));
     H+='<h4>Revenue with &amp; without GST</h4>'+tbl(['Revenue source','Incl GST','GST to IRD','Ex-GST'],[['Booking.com &amp; direct',M(D.gst.gi),M(D.gst.og),M(D.gst.ex)],['Airbnb / marketplace',M(D.gst.mk),'—',M(D.gst.mk)],['Total revenue',M(D.gst.ti),M(D.gst.og),M(D.gst.te)]]);
-    var com=$('commentary'); if(com){var clone=com.cloneNode(true); clone.removeAttribute('id'); H+='<div style="margin-top:16px">'+clone.outerHTML+'</div>';}
     var rev=$('cottagereview'); if(rev){var rc=rev.cloneNode(true); rc.removeAttribute('id'); H+='<div style="margin-top:16px">'+rc.outerHTML+'</div>';}
     return H;
   }
