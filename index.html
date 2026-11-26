@@ -174,7 +174,7 @@ h1{font-size:20px;margin:0;font-weight:750;letter-spacing:-.01em}
 .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;box-shadow:var(--sh);transition:box-shadow .15s;min-width:0}
 .card:hover{box-shadow:var(--sh2)}
 .card h3{margin:0 0 3px;font-size:14.5px;font-weight:700;letter-spacing:-.01em}
-.card .hint{color:#48566a;font-size:12.65px;margin-bottom:12px;line-height:1.5}
+.card .hint{color:#48566a;font-size:12.65px;margin-bottom:12px;line-height:1.5}.hintul{margin:7px 0 2px;padding-left:18px}.hintul li{margin:3px 0}.hintsum{margin-top:8px;padding-top:7px;border-top:1px solid var(--line)}
 [data-theme="dark"] .card .hint{color:#b3c1d1}
 .chartbox{position:relative;height:250px;min-width:0}
 canvas{max-width:100%!important}
@@ -265,7 +265,7 @@ tbody tr:hover{background:#0f766e08}
       </div>
       <div class="card">
         <h3>Operating cost breakdown</h3>
-        <div class="hint">Operating overheads over the selected period, each as a share of revenue. Cleaning is actual per cottage; shared site costs (electricity, gas, rates, insurance, broadband, PMS, pricing, solar) are allocated by revenue share when one cottage is selected. Channel commission &mdash; the OTA booking fee, which is zero on direct bookings &mdash; is a pass-through, so it sits in the split below rather than among the overheads. Figures are GST-inclusive; as a GST-registered business the GST is reclaimed, so the real cost is about 13% lower.</div>
+        <div class="hint"><div>Each bar is an operating overhead for the selected period, shown as a share of revenue.</div><ul class="hintul"><li><b>Cleaning</b> is the actual figure per cottage.</li><li><b>Shared site costs</b> &mdash; power, gas, rates, insurance, broadband, PMS, pricing and solar &mdash; are split by revenue share when a single cottage is selected.</li><li><b>Channel commission is kept out of the bars.</b> It is the OTA booking fee: it rises and falls with bookings and is zero on direct, so it sits in the split below, not among the overheads.</li><li>Figures are <b>GST-inclusive</b>. As a GST-registered business the GST is reclaimed, so the true cost is about 13% lower.</li></ul><div class="hintsum"><b>In short:</b> the bars are the fixed cost of running the place, about a third of revenue; commission is a separate, booking-linked cost, shown below.</div></div>
         <div class="chartbox"><canvas id="chCostMix"></canvas></div>
         <div class="costtot" id="costTot"></div>
       </div>
@@ -1362,7 +1362,7 @@ const CBRK=[{"k":"Mar-25","s":1740787200000,"e":1743465599000,"b":"Actual","rev"
     var comm=A.comm;var items=[['Cleaning',A.clean,'#0f766e'],['Electricity',A.elec,'#d97706'],['Gas',A.gas,'#eab308'],['Supplies',A.supplies,'#e11d48'],['Maintenance',A.maint,'#ec4899'],['Insurance',A.ins,'#8b5cf6'],['Rates',A.rates,'#16a34a'],['Broadband',A.bband,'#06b6d4'],['PMS',A.pms,'#c026d3'],['Dynamic pricing',A.dyn,'#4f46e5'],['Solar lease',A.solar,'#64748b']];
     items.sort(function(a,b){return b[1]-a[1];});
     var ovTot=items.reduce(function(s,x){return s+x[1];},0);var allTot=ovTot+comm;
-    var rden=totRev||1;var ovP=Math.round(ovTot/rden*100),cmP=Math.round(comm/rden*100),suP=Math.max(0,100-Math.round(allTot/rden*100));var _ct=document.getElementById('costTot');if(_ct){_ct.innerHTML='<span class="ctseg"><b>'+ovP+'%</b>operating overheads<small>'+fmt(Math.round(ovTot))+'</small></span><span class="ctseg"><b>'+cmP+'%</b>channel commission<small>'+fmt(Math.round(comm))+' \u00b7 pass-through</small></span><span class="ctseg ctsurp"><b>'+suP+'%</b>operating surplus<small>of revenue</small></span>';}
+    var rden=totRev||1;var ovP=Math.round(ovTot/rden*100),cmP=Math.round(comm/rden*100),suP=Math.max(0,100-Math.round(allTot/rden*100));var _ct=document.getElementById('costTot');if(_ct){_ct.innerHTML='<span class="ctseg"><b>'+ovP+'%</b>operating overheads<small>'+fmt(Math.round(ovTot))+'</small></span><span class="ctseg"><b>'+cmP+'%</b>channel commission<small>'+fmt(Math.round(comm))+' \u00b7 zero on direct</small></span><span class="ctseg ctsurp"><b>'+suP+'%</b>operating surplus<small>of revenue</small></span>';}
     var labels=items.map(function(x){return x[0]+'  ('+Math.round(x[1]/rden*100)+'% of rev)';});
     var ex=Chart.getChart(el); if(ex)ex.destroy();
     new Chart(el,{type:'bar',
